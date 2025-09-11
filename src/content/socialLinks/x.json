@@ -1,6 +1,0 @@
-{
-	"$schema": "../../../.astro/collections/socialLinks.schema.json",
-	"icon": "simple-icons:x",
-	"name": "X",
-	"url": "https://x.com/"
-}

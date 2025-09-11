@@ -1,7 +1,7 @@
 ---
 import { Image } from 'astro:assets';
 
-import avatarSrc from '~/assets/avatar.jpeg';
+// import avatarSrc from '~/assets/avatar.jpeg';
 import { cn } from '~/utils/cn';
 
 export interface Props {
@@ -18,7 +18,7 @@ const { className, height, width } = Astro.props;
 		alt='A photo of myself'
 		class='z-10 h-full w-full rounded-full'
 		height={height}
-		src={avatarSrc}
+		src={'https://avatars.githubusercontent.com/u/29958503?v=4'}
 		width={width}
 	/>
 

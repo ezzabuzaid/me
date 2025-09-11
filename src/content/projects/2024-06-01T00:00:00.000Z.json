@@ -1,7 +1,0 @@
-{
-	"$schema": "../../../.astro/collections/projects.schema.json",
-	"date": "2024-06-01T00:00:00.000Z",
-	"icon": "ShoppingBag",
-	"title": "Created this theme",
-	"url": "https://butterythemes.com/buy/959f821b-3729-4c56-8247-5dc8496171b3"
-}

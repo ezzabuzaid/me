@@ -1,0 +1,6 @@
+{
+	"$schema": "../../../.astro/collections/socialLinks.schema.json",
+	"icon": "simple-icons:linkedin",
+	"name": "LinkedIn",
+	"url": "https://linkedin.com/in/ezzabuzaid"
+}

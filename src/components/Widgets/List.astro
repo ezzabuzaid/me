@@ -51,7 +51,7 @@ const anchorProps = hasUrl ? { href } : {};
 
 				const hasUrl = !!item.href;
 				const Component = hasUrl ? 'a' : 'div';
-				
+
 				return (
 					<>
 						<li>
@@ -77,9 +77,9 @@ const anchorProps = hasUrl ? { href } : {};
 							</Component>
 						</li>
 
-						{index !== items.length - 1 && (
+						{/* {index !== items.length - 1 && (
 							<hr class="border border-gray-100 dark:border-gray-900 mb-0" />
-						)}
+						)} */}
 					</>
 				)
 			})}

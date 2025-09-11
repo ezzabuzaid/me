@@ -3,9 +3,9 @@
 
 export const SITE_TITLE = `Ezz's Blog`;
 export const SITE_DESCRIPTION =
-	'I like building tools and experimenting with new technologies.';
+	'Empirical Engineer. Creating tools is my hobby.';
 
 export const HOME = {
-	title: `Welcome to Ezz's Blog`,
+	title: `Ezz's Blog`,
 	subtitle: SITE_DESCRIPTION,
 };

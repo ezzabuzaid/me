@@ -130,7 +130,7 @@ export async function ImageResponse(
 		? 'no-cache, no-store'
 		: ['public', 'immutable', 'no-transform', 'max-age=31536000'].join(', ');
 
-	return new Response(image, {
+	return new Response(image as any, {
 		headers: {
 			'Content-Type': 'image/png',
 			'Cache-Control': cacheControl,

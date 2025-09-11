@@ -4,18 +4,6 @@ import * as Icons from 'lucide-preact';
 
 const IconKeys = Object.keys(Icons) as [string, ...Array<string>];
 
-const events = defineCollection({
-	type: 'data',
-	schema: z
-		.object({
-			$schema: z.string().optional(),
-			date: z.coerce.date(),
-			icon: z.enum(IconKeys),
-			title: z.string(),
-			url: z.string().optional(),
-		})
-		.strict(),
-});
 
 const posts = defineCollection({
 	type: 'content',
@@ -41,6 +29,7 @@ const projects = defineCollection({
 			icon: z.enum(IconKeys),
 			title: z.string(),
 			url: z.string().optional(),
+			status: z.enum(['idea', 'development', 'maintenance', 'archived']).optional(),
 		})
 		.strict(),
 });
@@ -59,7 +48,6 @@ const socialLinks = defineCollection({
 });
 
 export const collections = {
-	events,
 	posts,
 	projects,
 	socialLinks,
