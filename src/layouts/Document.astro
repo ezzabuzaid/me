@@ -1,22 +1,31 @@
 ---
-import { ClientRouter } from 'astro:transitions';
+import { ClientRouter } from "astro:transitions";
 
-import '@fontsource/inter';
+import "@fontsource-variable/geist-mono";
+import "@fontsource/geist";
 
-import { Meteors } from '~/components/Meteors';
+import { Meteors } from "~/components/Meteors";
 
-import '~/styles/global.css';
+import "~/styles/global.css";
 ---
 
 <!doctype html>
-<html class='scroll-smooth antialiased selection:bg-primary-500 selection:text-white' lang='en'>
-	<head>
-		<slot name='head' />
-		<ClientRouter />
-	</head>
+<html
+  class="scroll-smooth antialiased selection:bg-primary-500 selection:text-white"
+  lang="en"
+>
+  <head>
+    <slot name="head" />
+    <ClientRouter />
+    <script
+      defer
+      src="https://assets.onedollarstats.com/stonks.js"></script>
+  </head>
 
-	<body class='bg-white font-sans text-gray-800 dark:bg-gray-950 dark:text-gray-100'>
-		<Meteors client:only="preact" number={15} />
-		<slot />
-	</body>
+  <body
+    class="bg-white font-sans text-gray-800 dark:bg-gray-950 dark:text-gray-100"
+  >
+    <Meteors client:only="preact" number={15} />
+    <slot />
+  </body>
 </html>

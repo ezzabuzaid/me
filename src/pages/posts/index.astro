@@ -1,69 +1,82 @@
 ---
-import { getCollection } from 'astro:content';
-import { ArrowLeft } from 'lucide-preact';
+import { getCollection } from "astro:content";
+import { ArrowLeft } from "lucide-preact";
 
-import Footer from '~/components/Footer.astro';
-import Head from '~/components/Head.astro';
-import Hero from '~/components/Hero.astro';
-import List from '~/components/Widgets/List.astro';
-import { SITE_TITLE } from '~/constants';
-import Document from '~/layouts/Document.astro';
-import { filterPosts, mapPostToListItem, sortPostsByFeatured } from '~/utils/content';
+import Footer from "~/components/Footer.astro";
+import Head from "~/components/Head.astro";
+import Hero from "~/components/Hero.astro";
+import List from "~/components/Widgets/List.astro";
+import { SITE_TITLE } from "~/constants";
+import Document from "~/layouts/Document.astro";
+import {
+  filterPosts,
+  mapPostToListItem,
+  sortPostsByFeatured,
+} from "~/utils/content";
 
 const [posts, archivedPosts] = await Promise.all([
-	getCollection('posts').then((posts) =>
-		posts
-			.filter(filterPosts({ archived: false }))
-			.sort(sortPostsByFeatured)
-			.map(mapPostToListItem),
-	),
+  getCollection("posts").then((posts) =>
+    posts
+      .filter(filterPosts({ archived: false }))
+      .sort(sortPostsByFeatured)
+      .map(mapPostToListItem),
+  ),
 
-	getCollection('posts').then((posts) =>
-		posts
-			.filter((post) => post.data.archived)
-			.sort(sortPostsByFeatured)
-			.map(mapPostToListItem),
-	),
+  getCollection("posts").then((posts) =>
+    posts
+      .filter((post) => post.data.archived)
+      .sort(sortPostsByFeatured)
+      .map(mapPostToListItem),
+  ),
 ]);
 ---
 
 <Head title={`${SITE_TITLE} ─ posts`} />
 
 <Document>
-	<main class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8">
-		<Hero />
+  <main
+    class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8"
+  >
+    <Hero />
 
-		<div class="grid grid-cols-1 gap-6 z-10">
-			<List
-				class="md:col-span-2 max-h-80 min-h-48 md:min-h-80"
-				id="posts"
-				items={posts}
-				title="Posts"
-			/>
-			<List
-				class="md:col-span-2 max-h-80 min-h-48 md:min-h-80"
-				empty={{
-					title: 'No posts archived yet',
-					description: 'Stay tuned for more content soon'
-				}}
-				id="archived"
-				items={archivedPosts}
-				title="Archived"
-			/>
-		</div>
-	</main>
+    <div class="grid grid-cols-1 gap-6 z-10">
+      <List
+        class="md:col-span-2 min-h-48 md:min-h-80"
+        href="/posts/all"
+        id="posts"
+        items={posts}
+      />
+      {
+        archivedPosts.length > 0 ? (
+          <List
+            class="md:col-span-2 max-h-80 min-h-48 md:min-h-80"
+            empty={{
+              title: "No posts archived yet",
+              description: "Stay tuned for more content soon",
+            }}
+            href="/posts/all#archived-all"
+            id="archived"
+            items={archivedPosts}
+            title="Archived"
+          />
+        ) : null
+      }
+    </div>
+  </main>
 
-	<Footer class="max-w-4xl">
-		<div class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0">
-			<a
-				class='default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-400 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-500 dark:hover:text-gray-400'
-				href='/'
-			>
-				<ArrowLeft
-					class='w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-500 dark:group-hover:text-gray-400'
-				/>
-				<span>Go back</span>
-			</a>
-		</div>
-	</Footer>
+  <Footer class="max-w-4xl">
+    <div
+      class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
+    >
+      <a
+        class="default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-400 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-500 dark:hover:text-gray-400"
+        href="/"
+      >
+        <ArrowLeft
+          class="w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-500 dark:group-hover:text-gray-400"
+        />
+        <span>Go back</span>
+      </a>
+    </div>
+  </Footer>
 </Document>

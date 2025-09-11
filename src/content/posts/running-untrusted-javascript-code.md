@@ -5,7 +5,11 @@ description: 'Strategies to safely run user JS/TS: eval pitfalls, Workers, isola
 featured: 0
 ---
 
-**IMPORTANT**: _This is about running JavaScript and TypeScript code only. That being said, the writing might also be the direction to run other code in other languages._
+
+
+> [!NOTE]
+> This is about running JavaScript and TypeScript code only. That being said, the writing might also be the direction to run other code in other languages.
+
 
 Allowing users to execute their code within your application opens up a world of customization and functionality, yet it also exposes your platform to significant security threats.
 

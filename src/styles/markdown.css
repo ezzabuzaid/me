@@ -89,6 +89,132 @@ figcaption + pre {
 
 /** ------------------------------------------------------------------------------ */
 
+/* GitHub-style callouts (admonitions) */
+.prose blockquote.callout,
+.prose .callout {
+  @apply not-italic my-6 rounded-md border p-4;
+  @apply bg-gray-100/25 text-gray-600 border-gray-100;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose blockquote.callout,
+  .prose .callout {
+    @apply bg-gray-900/40 text-gray-300 border-gray-800;
+  }
+}
+
+/* Improve paragraph wrapping to avoid large word gaps */
+.prose p {
+  hyphens: auto;
+  overflow-wrap: anywhere;
+  text-wrap-style: pretty;
+}
+
+/* Title */
+.prose blockquote.callout > h5,
+.prose .callout > h5 {
+  @apply m-0 mb-2 flex items-center gap-2 text-sm font-semibold leading-5;
+  @apply text-gray-800;
+}
+
+@media (prefers-color-scheme: dark) {
+  .prose blockquote.callout > h5,
+  .prose .callout > h5 {
+    @apply text-gray-100;
+  }
+}
+
+/* Body */
+.prose blockquote.callout > div :where(p, ul, ol):first-child,
+.prose .callout > div :where(p, ul, ol):first-child {
+  @apply mt-0;
+}
+
+.prose blockquote.callout > div :where(p, ul, ol):last-child,
+.prose .callout > div :where(p, ul, ol):last-child {
+  @apply mb-0;
+}
+
+/* Remove typographic quote marks that Tailwind Typography adds to blockquotes */
+.prose blockquote.callout :where(p):first-child::before,
+.prose .callout :where(p):first-child::before,
+.prose blockquote.callout :where(p):last-child::after,
+.prose .callout :where(p):last-child::after {
+  content: none;
+}
+
+/* Variants: left-accent and heading color + icon */
+/* NOTE */
+.prose blockquote.callout.note,
+.prose .callout.note {
+  @apply border-l-4;
+  border-left-color: var(--color-primary-400);
+}
+.prose blockquote.callout.note > h5,
+.prose .callout.note > h5 {
+  @apply text-primary-600;
+}
+.prose blockquote.callout.note > h5::before,
+.prose .callout.note > h5::before {
+  content: none;
+}
+
+/* TIP */
+.prose blockquote.callout.tip,
+.prose .callout.tip {
+  @apply border-l-4 border-green-400;
+}
+.prose blockquote.callout.tip > h5,
+.prose .callout.tip > h5 {
+  @apply text-green-600;
+}
+.prose blockquote.callout.tip > h5::before,
+.prose .callout.tip > h5::before {
+  content: none;
+}
+
+/* IMPORTANT */
+.prose blockquote.callout.important,
+.prose .callout.important {
+  @apply border-l-4 border-purple-400;
+}
+.prose blockquote.callout.important > h5,
+.prose .callout.important > h5 {
+  @apply text-purple-600;
+}
+.prose blockquote.callout.important > h5::before,
+.prose .callout.important > h5::before {
+  content: none;
+}
+
+/* WARNING */
+.prose blockquote.callout.warning,
+.prose .callout.warning {
+  @apply border-l-4 border-amber-400;
+}
+.prose blockquote.callout.warning > h5,
+.prose .callout.warning > h5 {
+  @apply text-amber-600;
+}
+.prose blockquote.callout.warning > h5::before,
+.prose .callout.warning > h5::before {
+  content: none;
+}
+
+/* CAUTION */
+.prose blockquote.callout.caution,
+.prose .callout.caution {
+  @apply border-l-4 border-red-400;
+}
+.prose blockquote.callout.caution > h5,
+.prose .callout.caution > h5 {
+  @apply text-red-600;
+}
+.prose blockquote.callout.caution > h5::before,
+.prose .callout.caution > h5::before {
+  content: none;
+}
+
 figcaption[data-language="js"],
 figcaption[data-language="javascript"] {
   &::before {

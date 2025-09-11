@@ -11,6 +11,7 @@ import type { RehypePlugins, RemarkPlugins } from 'astro';
 import type { Options as RehypeAutolinkHeadingsOptions } from 'rehype-autolink-headings';
 import type { Options as RehypeExternalLinksOptions } from 'rehype-external-links';
 import type { Options as RehypePrettyCodeOptions } from 'rehype-pretty-code';
+import { remarkCustomCallouts } from './remark.mjs';
 
 // Note: Ordering of plugins DOES matter
 export const rehypePlugins: RehypePlugins = [
@@ -49,6 +50,7 @@ export const rehypePlugins: RehypePlugins = [
 ];
 
 export const remarkPlugins: RemarkPlugins = [
+	remarkCustomCallouts,
 	// Get the last modified time of a file
 	// https://docs.astro.build/en/recipes/modified-time/
 	() =>

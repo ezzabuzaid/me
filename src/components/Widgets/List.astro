@@ -20,7 +20,7 @@ export interface Props {
   href?: string;
   id: string;
   items: Array<Item>;
-  title: string;
+  title?: string;
 }
 
 const {
@@ -39,20 +39,25 @@ const anchorProps = hasUrl ? { href } : {};
 
 <section
   class={cn(
-    "bg-white dark:bg-gray-950 rounded-xl border-2 border-gray-100 dark:border-gray-900 px-2 pb-2 overflow-auto",
+    "bg-white dark:bg-gray-950 rounded-xl overflow-auto",
+    title && "border-2 border-gray-100 dark:border-gray-900 px-2 pb-2",
     className,
   )}
   id={id}
 >
-  <TitleComponent
-    class={cn(
-      "absolute -translate-y-3 inline-flex transform-gpu items-center bg-white dark:bg-gray-950 rounded-full px-4 mx-4 border-2 border-gray-100 dark:border-gray-900 font-bold text-gray-600 dark:text-white text-sm",
-      hasUrl ? "default-transition default-focus" : "",
-    )}
-    {...anchorProps}
-  >
-    {title}
-  </TitleComponent>
+  {
+    title && (
+      <TitleComponent
+        class={cn(
+          "absolute -translate-y-3 inline-flex transform-gpu items-center bg-white dark:bg-gray-950 rounded-full px-4 mx-4 border-2 border-gray-100 dark:border-gray-900 font-bold text-gray-600 dark:text-white text-sm",
+          hasUrl ? "default-transition default-focus" : "",
+        )}
+        {...anchorProps}
+      >
+        {title}
+      </TitleComponent>
+    )
+  }
 
   {
     items.length > 0 ? (

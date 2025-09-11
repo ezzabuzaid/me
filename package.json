@@ -22,6 +22,8 @@
 		"@astrojs/rss": "^4.0.11",
 		"@astrojs/sitemap": "^3.4.0",
 		"@astrojs/vercel": "^8.2.7",
+		"@fontsource-variable/geist-mono": "^5.2.6",
+		"@fontsource/geist": "^5.2.6",
 		"@fontsource/inter": "^5.2.5",
 		"@iconify-json/simple-icons": "^1.2.35",
 		"@nanostores/preact": "^1.0.0",
