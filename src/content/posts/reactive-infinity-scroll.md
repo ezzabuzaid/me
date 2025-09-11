@@ -1,10 +1,8 @@
 ---
 title: Build Infinity Scroll Using RxJS
 description: 'Learn how to build infinite scrolling using RxJS. Improve user experience, optimize resource usage, and fetch data incrementally!'
+featured: 20
 publishedAt: '2023-09-10T00:00:00.00Z'
-
-
-
 ---
 
 Have you ever experienced slow loading or lag on a webpage while trying to load a large amount of data? If so, you're not alone. An effective solution to improve the experience is to use infinite scrolling, which works similarly to how your Twitter feed continuously loads more tweets as you scroll down.
@@ -66,7 +64,7 @@ Take a look at the following observable:
 
 ```ts
 const source$ = from([1, 2, 3, 4, 5]);
-source$.subscribe(event => console.log(event));
+source$.subscribe((event) => console.log(event));
 ```
 
 The result would be 1 2 3 4 5. -Each in a new line-
@@ -77,7 +75,9 @@ To only log odd numbers
 
 ```ts
 const source$ = from([1, 2, 3, 4, 5]);
-source$.pipe(filter(event => event % 2)).subscribe(event => console.log(event));
+source$
+	.pipe(filter((event) => event % 2))
+	.subscribe((event) => console.log(event));
 ```
 
 Say there's a possibility that the `source$` might emit a `null` value. You can use a `filter` to stop it from passing through the rest of the sequence.
@@ -85,8 +85,8 @@ Say there's a possibility that the `source$` might emit a `null` value. You can 
 ```ts
 const source$ = from([1, 2, 3, null, 5]);
 source$
-  .pipe(filter(event => event !== null))
-  .subscribe(event => console.log(event));
+	.pipe(filter((event) => event !== null))
+	.subscribe((event) => console.log(event));
 ```
 
 #### map
@@ -95,8 +95,8 @@ To change the sequence of events, you can use the `map` operator.
 
 ```ts
 source$
-  .pipe(map(event => (event > 3 ? `Large number` : 'Good enough')))
-  .subscribe(event => console.log(event));
+	.pipe(map((event) => (event > 3 ? `Large number` : 'Good enough')))
+	.subscribe((event) => console.log(event));
 ```
 
 What if I want to inspect an event without changing the source sequence
@@ -105,13 +105,13 @@ What if I want to inspect an event without changing the source sequence
 
 ```ts
 source$
-  .pipe(
-    tap(event => {
-      logger.log('log an event in the console');
-      // you can perform any operation as well, however return statment are ignore in tap function
-    })
-  )
-  .subscribe(event => console.log(event));
+	.pipe(
+		tap((event) => {
+			logger.log('log an event in the console');
+			// you can perform any operation as well, however return statment are ignore in tap function
+		})
+	)
+	.subscribe((event) => console.log(event));
 ```
 
 #### finalize
@@ -168,14 +168,14 @@ You could rewrite the previous example to be as follows
 const timezoneInputController = new Subject<string>();
 const timezoneInputValue$ = timezoneInputController.asObservable();
 timezoneInput.addEventListener('input', () =>
-  subject.next(timezoneInputController.value)
+	subject.next(timezoneInputController.value)
 );
 
 const source$ = timezoneInputValue$.pipe(
-  map(event => event.target.value),
-  startWith(defaultTimezone)
+	map((event) => event.target.value),
+	startWith(defaultTimezone)
 );
-source$.subscribe(event => console.log(event));
+source$.subscribe((event) => console.log(event));
 ```
 
 Thanks to RxJS you can use `fromEvent` that will encapsulate that boilerplate, all you need to do is to say which event to listen to and from what element. Of course `fromEvent` returns an observable 🙂
@@ -210,13 +210,13 @@ import { pipe } from 'rxjs'; // add it to not to be confused with Observable.pip
 
 // Create a reusable custom operator using `pipe`
 const doubleOddNumbers = pipe<number>(
-  filter(n => n % 2 === 1),
-  map(n => n * 2)
+	filter((n) => n % 2 === 1),
+	map((n) => n * 2)
 );
 
 const source$ = from([1, 2, 3, 4, 5]);
 
-source$.pipe(doubleOddNumbers).subscribe(x => console.log(x));
+source$.pipe(doubleOddNumbers).subscribe((x) => console.log(x));
 // result: 1, 6, 10
 ```
 
@@ -234,12 +234,12 @@ Like a regular map, the `switchMap` operator uses a project function that return
 const source$ = from([1, 2, 3, 4, 5]);
 
 function fetchData(id: number) {
-  return from(fetch(`https://jsonplaceholder.typicode.com/todos/{id}`));
+	return from(fetch(`https://jsonplaceholder.typicode.com/todos/{id}`));
 }
 
 source$
-  .pipe(switchMap(event => fetchData(event)))
-  .subscribe(event => console.log(event));
+	.pipe(switchMap((event) => fetchData(event)))
+	.subscribe((event) => console.log(event));
 ```
 
 In this sample, only the todo with id 5 will be logged because `switchMap` works by **switching** the priority to the recent event as explained above. `from([...])` will emit the events after each other immediately thereby `switchMap` will switch (subscribe) to the next event inner observable as soon as it arrives without regard to the previous inner observable subscription. The switch operation essentially means unsubscribing from the previous inner observable and subscribing to the new one.
@@ -250,8 +250,8 @@ It blocks new events from going through the source sequence unless the inner obs
 
 ```ts
 source$
-  .pipe(concatMap(event => fetchData(event)))
-  .subscribe(event => console.log(event));
+	.pipe(concatMap((event) => fetchData(event)))
+	.subscribe((event) => console.log(event));
 ```
 
 This sample will log all todos in order. Essentially what happens is `concatMap` blocks the source sequance till the inner observable at hand completes.
@@ -262,8 +262,8 @@ It doesn't cancel the previous subscription nor blocks the source sequence. `mer
 
 ```ts
 source$
-  .pipe(mergeMap(event => fetchData(event)))
-  .subscribe(event => console.log(event));
+	.pipe(mergeMap((event) => fetchData(event)))
+	.subscribe((event) => console.log(event));
 ```
 
 This sample will log all todos but in uncertain order, for instance, the second request might resolve before the first one and `mergeMap` doesn't care about the order, If that is important then use `concatMap`.
@@ -274,8 +274,8 @@ The final one and the most important in this writing is `exhaustMap`: it is like
 
 ```ts
 source$
-  .pipe(exhaustMap(event => fetchData(event)))
-  .subscribe(event => console.log(event));
+	.pipe(exhaustMap((event) => fetchData(event)))
+	.subscribe((event) => console.log(event));
 ```
 
 This sample will only log the first todo as the first todo request hasn't been completed yet other events came through therefore they've been ignored.
@@ -309,11 +309,11 @@ The `scroll` event fires while an element is being scrolled and `scrollend` fire
 
 ```ts
 element.addEventListener('scroll', () => {
-  console.log(`I'm being scrolled`);
+	console.log(`I'm being scrolled`);
 });
 
 element.addEventListener('scrollend', () => {
-  console.log(`User stopped scrolling`);
+	console.log(`User stopped scrolling`);
 });
 ```
 
@@ -346,10 +346,10 @@ Let's take the following example, Calculate the remaining pixels from the user's
 
 ```ts
 function calculateDistanceFromBottom(element: HTMLElement) {
-  const scrollPosition = element.scrollTop;
-  const clientHeight = element.clientHeight;
-  const totalHeight = element.scrollHeight;
-  return totalHeight - (scrollPosition + clientHeight);
+	const scrollPosition = element.scrollTop;
+	const clientHeight = element.clientHeight;
+	const totalHeight = element.scrollHeight;
+	return totalHeight - (scrollPosition + clientHeight);
 }
 ```
 
@@ -364,10 +364,10 @@ A similar formula when calculating the remaining distance to the end horizontall
 
 ```ts
 function calculateRemainingDistanceOnXAxis(element: HTMLElement): number {
-  const scrollPosition = Math.abs(element.scrollLeft);
-  const clientWidth = element.clientWidth;
-  const totalWidth = element.scrollWidth;
-  return totalWidth - (scrollPosition + clientWidth);
+	const scrollPosition = Math.abs(element.scrollLeft);
+	const clientWidth = element.clientWidth;
+	const totalWidth = element.scrollWidth;
+	return totalWidth - (scrollPosition + clientWidth);
 }
 ```
 
@@ -382,14 +382,14 @@ Side tip: Using the information you have about the element's sizes, you can also
 type InfinityScrollDirection = 'horizontal' | 'vertical';
 
 function isScrollable(
-  element: HTMLElement,
-  direction: InfinityScrollDirection = 'vertical'
+	element: HTMLElement,
+	direction: InfinityScrollDirection = 'vertical'
 ) {
-  if (direction === 'horizontal') {
-    return element.scrollWidth > element.clientWidth;
-  } else {
-    return element.scrollHeight > element.clientHeight;
-  }
+	if (direction === 'horizontal') {
+		return element.scrollWidth > element.clientWidth;
+	} else {
+		return element.scrollHeight > element.clientHeight;
+	}
 }
 ```
 
@@ -401,36 +401,36 @@ I know you've been looking around to find this section, finally, we'll put all t
 
 ```ts
 export interface InfinityScrollOptions<T> {
-  /**
-   * The element that is scrollable.
-   */
-  element: HTMLElement;
-  /**
-   * A BehaviorSubject that emits true when loading and false when not loading.
-   */
-  loading: BehaviorSubject<boolean>;
-  /**
-   * Indicates how far from the end of the scrollable element the user must be
-   * before the loadFn is called.
-   */
-  threshold: number;
-  /**
-   * The initial page index to start loading from.
-   */
-  initialPageIndex: number;
-  /**
-   * The direction of the scrollable element.
-   */
-  scrollDirection?: InfinityScrollDirection;
-  /**
-   * The function that is called when the user scrolls to the end of the
-   * scrollable element with respect to the threshold.
-   */
-  loadFn: (result: InfinityScrollResult) => ObservableInput<T>;
+	/**
+	 * The element that is scrollable.
+	 */
+	element: HTMLElement;
+	/**
+	 * A BehaviorSubject that emits true when loading and false when not loading.
+	 */
+	loading: BehaviorSubject<boolean>;
+	/**
+	 * Indicates how far from the end of the scrollable element the user must be
+	 * before the loadFn is called.
+	 */
+	threshold: number;
+	/**
+	 * The initial page index to start loading from.
+	 */
+	initialPageIndex: number;
+	/**
+	 * The direction of the scrollable element.
+	 */
+	scrollDirection?: InfinityScrollDirection;
+	/**
+	 * The function that is called when the user scrolls to the end of the
+	 * scrollable element with respect to the threshold.
+	 */
+	loadFn: (result: InfinityScrollResult) => ObservableInput<T>;
 }
 
 function infinityScroll<T extends any[]>(options: InfinityScrollOptions<T>) {
-  // Logic
+	// Logic
 }
 ```
 
@@ -438,11 +438,11 @@ As promised, you now can customize the infinite scroll function to your liking. 
 
 ```ts
 function infinityScroll<T extends any[]>(options: InfinityScrollOptions<T>) {
-  return fromEvent(options.element, 'scroll').pipe(
-    startWith(null),
-    ensureScrolled,
-    fetchData
-  );
+	return fromEvent(options.element, 'scroll').pipe(
+		startWith(null),
+		ensureScrolled,
+		fetchData
+	);
 }
 ```
 
@@ -455,26 +455,26 @@ function infinityScroll<T extends any[]>(options: InfinityScrollOptions<T>) {
 
 ```ts
 const ensureScrolled = pipe(
-  filter(() => !options.loading.value), // ignore scroll event if already loading
-  debounceTime(100), // debounce scroll event to prevent lagginess on heavy scroll pages
-  filter(() => {
-    const remainingDistance = calculateRemainingDistance(
-      options.element,
-      options.scrollDirection
-    );
-    return remainingDistance <= options.threshold;
-  })
+	filter(() => !options.loading.value), // ignore scroll event if already loading
+	debounceTime(100), // debounce scroll event to prevent lagginess on heavy scroll pages
+	filter(() => {
+		const remainingDistance = calculateRemainingDistance(
+			options.element,
+			options.scrollDirection
+		);
+		return remainingDistance <= options.threshold;
+	})
 );
 
 function calculateRemainingDistance(
-  element: HTMLElement,
-  direction: InfinityScrollDirection = 'vertical'
+	element: HTMLElement,
+	direction: InfinityScrollDirection = 'vertical'
 ) {
-  if (direction === 'horizontal') {
-    return calculateRemainingDistanceOnXAxis(element);
-  } else {
-    return calculateRemainingDistanceToBottom(element);
-  }
+	if (direction === 'horizontal') {
+		return calculateRemainingDistanceOnXAxis(element);
+	} else {
+		return calculateRemainingDistanceToBottom(element);
+	}
 }
 ```
 
@@ -486,15 +486,15 @@ function calculateRemainingDistance(
 
 ```ts
 const fetchData = pipe(
-  exhaustMap((_, index) => {
-    options.loading.next(true);
-    return options.loadFn({
-      pageIndex: options.initialPageIndex + index,
-    });
-  }),
-  tap(() => options.loading.next(false)),
-  // stop loading if error or explicitly completed (no more data)
-  finalize(() => options.loading.next(false))
+	exhaustMap((_, index) => {
+		options.loading.next(true);
+		return options.loadFn({
+			pageIndex: options.initialPageIndex + index,
+		});
+	}),
+	tap(() => options.loading.next(false)),
+	// stop loading if error or explicitly completed (no more data)
+	finalize(() => options.loading.next(false))
 );
 ```
 
@@ -508,11 +508,11 @@ The real piece of code; incrementing the page index to fetch the next patch of d
 
 ```ts
 exhaustMap((_, index) => {
-  // ...code
-  return options.loadFn({
-    pageIndex: options.initialPageIndex + index,
-    // ...code
-  });
+	// ...code
+	return options.loadFn({
+		pageIndex: options.initialPageIndex + index,
+		// ...code
+	});
 });
 ```
 
@@ -620,12 +620,12 @@ That being said, a simple workaround would be to explicitly ignore any scroll ev
 
 ```ts
 const fetchData = pipe(
-  filter(() => options.loading.value === false),
-  // mergeMap, switchMap and concatMap should work now.
-  exaustMap((_, index) => {
-    // ...
-  })
-  // ...
+	filter(() => options.loading.value === false),
+	// mergeMap, switchMap and concatMap should work now.
+	exaustMap((_, index) => {
+		// ...
+	})
+	// ...
 );
 ```
 

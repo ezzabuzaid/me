@@ -1,102 +1,138 @@
 ---
-import { format } from 'date-fns';
-import { FlagTriangleRight } from 'lucide-preact';
+import { format } from "date-fns";
+import { FlagTriangleRight } from "lucide-preact";
 
-import { cn } from '~/utils/cn';
-import { loadIcon } from '~/utils/icon';
+import { cn } from "~/utils/cn";
+import { loadIcon } from "~/utils/icon";
 
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 
-type Project = CollectionEntry<'projects'>;
+type Project = CollectionEntry<"projects">;
 
 export interface Props {
-	class?: string;
-	projects: Array<Project['data']>;
-	id: string;
-	title: string;
+  class?: string;
+  projects: Array<Project["data"]>;
+  id: string;
+  title: string;
 }
 
 const { class: className, projects, id, title } = Astro.props;
 ---
 
-<section class={cn('bg-white dark:bg-gray-950 rounded-xl border-2 border-gray-100 dark:border-gray-900 px-2 pb-2 overflow-auto', className)} id={id}>
-	<h3 class='absolute -translate-y-3 inline-flex transform-gpu items-center bg-white dark:bg-gray-950 rounded-full px-4 mx-4 border-2 border-gray-100 dark:border-gray-900 font-bold text-gray-600 dark:text-white text-sm z-30'>
-		{title}
-	</h3>
+<section
+  class={cn(
+    "bg-white dark:bg-gray-950 rounded-xl border-2 border-gray-100 dark:border-gray-900 px-2 pb-2 overflow-auto",
+    className,
+  )}
+  id={id}
+>
+  <h3
+    class="absolute -translate-y-3 inline-flex transform-gpu items-center bg-white dark:bg-gray-950 rounded-full px-4 mx-4 border-2 border-gray-100 dark:border-gray-900 font-bold text-gray-600 dark:text-white text-sm z-30"
+  >
+    {title}
+  </h3>
 
-	{projects.length > 0 ? (
-		<ul class="flow-root mt-6" role="list">
-			{projects.map(async (project, index) => {
-				const Icon = await loadIcon(project.icon);
+  {
+    projects.length > 0 ? (
+      <ul class="flow-root mt-6" role="list">
+        {projects.map(async (project, index) => {
+          const Icon = await loadIcon(project.icon);
 
-				const hasUrl = !!project.url;
-				const Component = hasUrl ? 'a' : 'div';
+          const hasUrl = !!project.url;
+          const Component = hasUrl ? "a" : "div";
 
-				const anchorProps = hasUrl
-					? {
-							href: project.url,
-							target: '_blank',
-							rel: 'noopener noreferrer',
-						}
-					: {};
+          const anchorProps = hasUrl
+            ? {
+                href: project.url,
+                target: "_blank",
+                rel: "noopener noreferrer",
+              }
+            : {};
 
-				const showConnector = index+1 !== projects.length;
+          const showConnector = index + 1 !== projects.length;
 
-				return (
-					<li class="group relative pb-3">
-						{showConnector ? <span aria-hidden={true} class="absolute left-6 top-4 -ml-px h-full w-0.5 bg-gray-100 dark:bg-gray-900 z-0" /> : null}
-						
-						<Component
-							class="relative flex space-x-3 default-transition default-focus rounded-md px-2"
-							{...anchorProps}
-						>
-							<div
-								class={cn(
-									"text-gray-400 group-hover:text-gray-500 dark:text-gray-300 dark:group-hover:text-white h-8 w-8 rounded-md flex items-center justify-center ring-2 ring-white dark:ring-gray-950 border-2 border-gray-100 dark:border-gray-900 bg-white dark:bg-gray-950 z-20 default-transition",
-									{ 'group-hover:border-gray-200 dark:group-hover:border-gray-800': hasUrl }
-								)}
-							>
-								<Icon class="h-4 w-4" />
-							</div>
-							
-							<div
-								class={cn(
-									"text-gray-400 dark:text-gray-300 flex min-w-0 flex-1 justify-between space-x-4 pt-1.5 default-transition",
-									{ 'group-hover:text-gray-500 dark:group-hover:text-white': hasUrl }
-								)}
-							>
-								<div>
-									<p class="font-semibold text-xs line-clamp-1" title={project.title}>{project.title}</p>
-								</div>
+          return (
+            <li class="group relative pb-3">
+              {showConnector ? (
+                <span
+                  aria-hidden={true}
+                  class="absolute left-6 top-4 -ml-px h-full w-0.5 bg-gray-100 dark:bg-gray-900 z-0"
+                />
+              ) : null}
 
-								<div class="whitespace-nowrap text-right text-sm">
-									<time
-										class="font-normal"
-										datetime={project.date.toISOString()}
-										title={format(project.date, 'PPP')}
-									>
-										{format(project.date, 'dd-MM-yyyy')}
-									</time>
-								</div>
-							</div>
-						</Component>
-					</li>
-				)
-			})}
-		</ul>
-	) : (
-		<div class="h-full flex items-center justify-center">
-			<div class="space-y-2 text-center">
-				<FlagTriangleRight class='mx-auto' />
+              <Component
+                class="relative flex space-x-3 default-transition default-focus rounded-md px-2"
+                {...anchorProps}
+              >
+                <div
+                  class={cn(
+                    "text-gray-400 group-hover:text-gray-500 dark:text-gray-300 dark:group-hover:text-white h-8 w-8 rounded-md flex items-center justify-center ring-2 ring-white dark:ring-gray-950 border-2 border-gray-100 dark:border-gray-900 bg-white dark:bg-gray-950 z-20 default-transition",
+                    {
+                      "group-hover:border-gray-200 dark:group-hover:border-gray-800":
+                        hasUrl,
+                    },
+                  )}
+                >
+                  <Icon class="h-4 w-4" />
+                </div>
 
-				<h3 class='font-semibold text-gray-900 text-md dark:text-gray-200'>
-					No projects here yet
-				</h3>
+                <div
+                  class={cn(
+                    "text-gray-400 dark:text-gray-300 flex min-w-0 flex-1 justify-between space-x-4 default-transition",
+                    {
+                      "group-hover:text-gray-500 dark:group-hover:text-white":
+                        hasUrl,
+                    },
+                  )}
+                >
+                  <div>
+                    <div class="flex items-center justify-between">
+                      <p
+                        class="font-semibold text-xs line-clamp-1"
+                        title={project.title}
+                      >
+                        {project.title}
+                      </p>
+                      <div class="whitespace-nowrap text-right text-sm">
+                        <time
+                          class="font-normal"
+                          datetime={project.date.toISOString()}
+                          title={format(project.date, "PPP")}
+                        >
+                          {format(project.date, "dd-MM-yyyy")}
+                        </time>
+                      </div>
+                    </div>
+                    {project.description && (
+                      <p
+                        class="text-xs mt-1 line-clamp-2 opacity-75"
+                        style="font-size: 12px;"
+                        title={project.description}
+                      >
+                        {project.description}
+                      </p>
+                    )}
+                  </div>
+                </div>
+              </Component>
+            </li>
+          );
+        })}
+      </ul>
+    ) : (
+      <div class="h-full flex items-center justify-center">
+        <div class="space-y-2 text-center">
+          <FlagTriangleRight class="mx-auto" />
 
-				<p class='text-gray-400 text-sm dark:text-gray-600'>
-					More projects coming soon
-				</p>
-			</div>
-		</div>
-	)}
+          <h3 class="font-semibold text-gray-900 text-md dark:text-gray-200">
+            No projects here yet
+          </h3>
+
+          <p class="text-gray-400 text-sm dark:text-gray-600">
+            More projects coming soon
+          </p>
+        </div>
+      </div>
+    )
+  }
 </section>

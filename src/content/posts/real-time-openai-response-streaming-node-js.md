@@ -1,10 +1,8 @@
 ---
 title: Real-time OpenAI Response Streaming with Node.js
-description: "Do what ChatGPT does: continuously stream results as they become available; don’t wait for completion—render tokens in real time."
+description: 'Do what ChatGPT does: continuously stream results as they become available; don’t wait for completion—render tokens in real time.'
+featured: 10
 publishedAt: '2023-10-25T12:51:21.697Z'
-
-
-
 ---
 
 You know how ChatGPT continuously show the results as it becomes available -generated-, It doesn't wait for the whole response to get together, rather it shows what the model is generating right away.
@@ -47,15 +45,15 @@ const server = http.createServer();
 server.listen(3000);
 
 server.on('request', async (req, res) => {
-  switch (req.url) {
-    case '/':
-      res.write('Hello World');
-      res.end();
-      break;
-    default:
-      res.statusCode = 404;
-      res.end();
-  }
+	switch (req.url) {
+		case '/':
+			res.write('Hello World');
+			res.end();
+			break;
+		default:
+			res.statusCode = 404;
+			res.end();
+	}
 });
 ```
 
@@ -64,18 +62,18 @@ The `res.write` will send data to the client, it can be called many times only b
 ```ts
 import OpenAI from 'openai';
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+	apiKey: process.env.OPENAI_API_KEY,
 });
 
 const config = {
-  model: 'gpt-4',
-  stream: true,
-  messages: [
-    {
-      content: 'Once upon a time',
-      role: 'user',
-    },
-  ],
+	model: 'gpt-4',
+	stream: true,
+	messages: [
+		{
+			content: 'Once upon a time',
+			role: 'user',
+		},
+	],
 };
 const completion = await openai.chat.completions.create(config);
 ```
@@ -86,7 +84,7 @@ The `completion` object implements the `AsyncIterable` interface, which means yo
 
 ```ts
 for await (const chunk of completion) {
-  console.log(chunk);
+	console.log(chunk);
 }
 ```
 
@@ -97,43 +95,43 @@ import OpenAI from 'openai';
 import http from 'http';
 
 const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
+	apiKey: process.env.OPENAI_API_KEY,
 });
 
 const server = http.createServer();
 server.listen(3000);
 
 server.on('request', async (req, res) => {
-  switch (req.url) {
-    case '/':
-      const config = {
-        model: 'gpt-4',
-        stream: true,
-        messages: [
-          {
-            content: 'Once upon a time',
-            role: 'user',
-          },
-        ],
-      };
-      const completion = await openai.chat.completions.create(config);
+	switch (req.url) {
+		case '/':
+			const config = {
+				model: 'gpt-4',
+				stream: true,
+				messages: [
+					{
+						content: 'Once upon a time',
+						role: 'user',
+					},
+				],
+			};
+			const completion = await openai.chat.completions.create(config);
 
-      res.writeHead(200, {
-        'Content-Type': 'text/plain; charset=utf-8',
-      });
+			res.writeHead(200, {
+				'Content-Type': 'text/plain; charset=utf-8',
+			});
 
-      for await (const chunk of completion) {
-        const [choice] = chunk.choices;
-        const { content } = choice.delta;
-        res.write(content);
-      }
+			for await (const chunk of completion) {
+				const [choice] = chunk.choices;
+				const { content } = choice.delta;
+				res.write(content);
+			}
 
-      res.end();
-      break;
-    default:
-      res.statusCode = 404;
-      res.end();
-  }
+			res.end();
+			break;
+		default:
+			res.statusCode = 404;
+			res.end();
+	}
 });
 ```
 
@@ -161,15 +159,15 @@ const inputEl = document.querySelector('input');
 const resultEl = document.querySelector('p');
 
 inputEl.addEventListener('input', async () => {
-  const response = await fetch('http://localhost:3000');
+	const response = await fetch('http://localhost:3000');
 
-  let total = '';
-  const decoder = new TextDecoder();
-  for await (const chunk of response.body!) {
-    const decodedValue = decoder.decode(chunk);
-    total += decodedValue;
-    resultEl.textContent = total;
-  }
+	let total = '';
+	const decoder = new TextDecoder();
+	for await (const chunk of response.body!) {
+		const decodedValue = decoder.decode(chunk);
+		total += decodedValue;
+		resultEl.textContent = total;
+	}
 });
 ```
 
@@ -182,20 +180,20 @@ const inputEl = document.querySelector('input');
 const resultEl = document.querySelector('p');
 
 inputEl.addEventListener('input', async () => {
-  const response = await fetch('http://localhost:3000');
+	const response = await fetch('http://localhost:3000');
 
-  // Using While Loop
-  let total = '';
-  const reader = response.body!.getReader();
-  const decoder = new TextDecoder();
-  while (true) {
-    const { done, value: chunk } = await reader.read();
-    if (done) break;
+	// Using While Loop
+	let total = '';
+	const reader = response.body!.getReader();
+	const decoder = new TextDecoder();
+	while (true) {
+		const { done, value: chunk } = await reader.read();
+		if (done) break;
 
-    const decodedValue = decoder.decode(chunk);
-    total += decodedValue;
-    resultEl.textContent = total;
-  }
+		const decodedValue = decoder.decode(chunk);
+		total += decodedValue;
+		resultEl.textContent = total;
+	}
 });
 ```
 
@@ -204,14 +202,14 @@ inputEl.addEventListener('input', async () => {
 ```ts
 const inputEl = document.querySelector('input');
 fromEvent(inputEl, 'input')
-  .pipe(
-    switchMap(() => fetch('http://localhost:3000')),
-    switchMap(response => response.body.pipeThrough(new TextDecoderStream())),
-    scan((acc, chunk) => acc + chunk, '')
-  )
-  .subscribe(total => {
-    resultEl.textContent = total;
-  });
+	.pipe(
+		switchMap(() => fetch('http://localhost:3000')),
+		switchMap((response) => response.body.pipeThrough(new TextDecoderStream())),
+		scan((acc, chunk) => acc + chunk, '')
+	)
+	.subscribe((total) => {
+		resultEl.textContent = total;
+	});
 ```
 
 RxJS is a great library, but it is a bit overkill for this use case, unless you're already using it in your project.
@@ -247,11 +245,11 @@ let total = '';
 const decoderTransformStream = new TextDecoderStream();
 const reader = response.body.pipeThrough(decoderTransformStream).getReader();
 while (true) {
-  const { done, value } = await reader.read();
-  if (done) break;
+	const { done, value } = await reader.read();
+	if (done) break;
 
-  total += value;
-  resultEl.textContent = total;
+	total += value;
+	resultEl.textContent = total;
 }
 ```
 
@@ -267,19 +265,19 @@ To cancel the request in progress, you need to use the `AbortController` API.
 let controller = new AbortController();
 let inProgress = false;
 inputEl.addEventListener('input', async () => {
-  if (inProgress) {
-    controller.abort();
-    controller = new AbortController();
-  }
+	if (inProgress) {
+		controller.abort();
+		controller = new AbortController();
+	}
 
-  inProgress = true;
+	inProgress = true;
 
-  const response = await fetch('http://localhost:3000', {
-    signal: controller.signal,
-  });
-  // ... rest of the code
+	const response = await fetch('http://localhost:3000', {
+		signal: controller.signal,
+	});
+	// ... rest of the code
 
-  inProgress = false;
+	inProgress = false;
 });
 ```
 
@@ -289,9 +287,9 @@ inputEl.addEventListener('input', async () => {
 const stopGenerationButtonEl = document.querySelector('button');
 
 stopGenerationButtonEl.addEventListener('click', () => {
-  if (inProgress) {
-    controller.abort();
-  }
+	if (inProgress) {
+		controller.abort();
+	}
 });
 ```
 
@@ -304,12 +302,12 @@ To deliberately cancel the request in progress, you can use `takeUntil` operator
 ```ts
 const stopGeneration$ = new Subject();
 fromEvent(inputEl, 'input').pipe(
-  switchMap(() =>
-    fetch('http://localhost:3000').pipe(
-      takeUntil(fromEvent(stopGenerationButtonEl, 'click'))
-    )
-  )
-  // ... rest of the code
+	switchMap(() =>
+		fetch('http://localhost:3000').pipe(
+			takeUntil(fromEvent(stopGenerationButtonEl, 'click'))
+		)
+	)
+	// ... rest of the code
 );
 ```
 
@@ -321,7 +319,7 @@ Aborting the request is one of the reasons a connection might close, of other re
 
 ```ts
 req.on('close', () => {
-  completion.controller.abort();
+	completion.controller.abort();
 });
 ```
 
@@ -346,13 +344,13 @@ To commuincate the errors to the client, you're going to prefix the error with `
 
 ```ts
 try {
-  const completion = await openai.chat.completions.create(config);
+	const completion = await openai.chat.completions.create(config);
 } catch (error) {
-  if (error instanceof RateLimitError) {
-    res.end('ERROR:rate_limit_exceeded');
-  } else if (error instanceof InternalServerError) {
-    res.end('ERROR:internal_server_error');
-  }
+	if (error instanceof RateLimitError) {
+		res.end('ERROR:rate_limit_exceeded');
+	} else if (error instanceof InternalServerError) {
+		res.end('ERROR:internal_server_error');
+	}
 }
 ```
 
@@ -360,14 +358,14 @@ try {
 
 ```ts
 for await (const chunk of completion) {
-  const [choice] = chunk.choices;
-  const { content } = choice.delta;
+	const [choice] = chunk.choices;
+	const { content } = choice.delta;
 
-  if (choice.finish_reason === 'length') {
-    res.write('ERROR:token_limit_reached');
-  } else {
-    res.write(content);
-  }
+	if (choice.finish_reason === 'length') {
+		res.write('ERROR:token_limit_reached');
+	} else {
+		res.write(content);
+	}
 }
 ```
 
@@ -375,28 +373,28 @@ for await (const chunk of completion) {
 
 ```ts
 while (true) {
-  const { done, value: chunk } = await reader.read();
-  if (done) break;
+	const { done, value: chunk } = await reader.read();
+	if (done) break;
 
-  const decodedValue = decoder.decode(chunk);
+	const decodedValue = decoder.decode(chunk);
 
-  switch (decodedValue) {
-    case 'ERROR:rate_limit_exceeded':
-      resultEl.textContent = 'Rate Limit Exceeded';
-      break;
-    case 'ERROR:internal_server_error':
-      resultEl.textContent = 'Internal Server Error';
-      break;
-    case 'ERROR:token_limit_reached':
-      resultEl.textContent = 'Token Limit Reached';
-      break;
-    default:
-      total += decodedValue;
-      resultEl.textContent = total;
-  }
+	switch (decodedValue) {
+		case 'ERROR:rate_limit_exceeded':
+			resultEl.textContent = 'Rate Limit Exceeded';
+			break;
+		case 'ERROR:internal_server_error':
+			resultEl.textContent = 'Internal Server Error';
+			break;
+		case 'ERROR:token_limit_reached':
+			resultEl.textContent = 'Token Limit Reached';
+			break;
+		default:
+			total += decodedValue;
+			resultEl.textContent = total;
+	}
 
-  total += decodedValue;
-  resultEl.textContent = total;
+	total += decodedValue;
+	resultEl.textContent = total;
 }
 ```
 
@@ -412,7 +410,7 @@ In Node.js you can check if the client is ready to receive more data by checking
 // ... rest of the code
 const bufferFull = res.write(content) === false;
 if (bufferFull) {
-  await new Promise(resolve => res.once('drain', resolve));
+	await new Promise((resolve) => res.once('drain', resolve));
 }
 ```
 

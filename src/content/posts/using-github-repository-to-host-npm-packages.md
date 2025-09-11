@@ -2,6 +2,7 @@
 publishedAt: '2024-10-04T00:00:00'
 title: 'Using Github Repository To Host NPM Packages'
 description: "Work around npm scope issues by hosting tarballs on GitHub; pros/cons, caching gotchas, scripts, and future improvements."
+featured: 100
 
 
 

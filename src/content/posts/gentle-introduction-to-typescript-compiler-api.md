@@ -1,10 +1,8 @@
 ---
 description: Dive deep into the inner workings of the TypeScript Compiler API and discover how it can enhance your development workflow. From manual type checking to code generation and transformation, this guide provides a detailed walkthrough of the API's functionalities.
+featured: 50
 title: Gentle Introduction To Typescript Compiler API
 publishedAt: '2023-11-17T11:00:00.00Z'
-
-
-
 ---
 
 TypeScript extends JavaScript by adding types, thereby enhancing code quality and understandability through static type checking which enables developers to catch errors at compile-time rather than runtime.
@@ -37,12 +35,12 @@ function IAmAwesome() {}
 ```json
 // tsconfig.json
 {
-  "compilerOptions": {
-    "target": "es5",
-    "module": "commonjs",
-    "outDir": "./dist",
-    "strict": true
-  }
+	"compilerOptions": {
+		"target": "es5",
+		"module": "commonjs",
+		"outDir": "./dist",
+		"strict": true
+	}
 }
 ```
 
@@ -126,44 +124,44 @@ _Hint: I strongly recommend you check the code again before going to the next us
 const tsconfigPath = './tsconfig.json'; // path to your tsconfig.json
 const tsConfigParseResult = parseTsConfig(tsconfigPath);
 const program = ts.createProgram({
-  options: tsConfigParseResult.options,
-  rootNames: tsConfigParseResult.fileNames,
-  projectReferences: tsConfigParseResult.projectReferences,
-  configFileParsingDiagnostics: tsConfigParseResult.errors,
+	options: tsConfigParseResult.options,
+	rootNames: tsConfigParseResult.fileNames,
+	projectReferences: tsConfigParseResult.projectReferences,
+	configFileParsingDiagnostics: tsConfigParseResult.errors,
 });
 
 /**
  * Apply class per file rule
  */
 function classPerFile(file: ts.SourceFile) {
-  const classList: ts.ClassDeclaration[] = [];
+	const classList: ts.ClassDeclaration[] = [];
 
-  // file.forEachChild is a function that takes a callback and
-  // calls it for each direct child of the node
+	// file.forEachChild is a function that takes a callback and
+	// calls it for each direct child of the node
 
-  // Loops over all nodes in the file and push classes to classList
-  file.forEachChild(node => {
-    if (ts.isClassDeclaration(node)) {
-      classList.push(node);
-    }
-  });
+	// Loops over all nodes in the file and push classes to classList
+	file.forEachChild((node) => {
+		if (ts.isClassDeclaration(node)) {
+			classList.push(node);
+		}
+	});
 
-  // If there is more than one class in the file, throw an error
-  if (classList.length > 1) {
-    throw new Error(`
+	// If there is more than one class in the file, throw an error
+	if (classList.length > 1) {
+		throw new Error(`
       Only one class per file is allowed.
       Found ${classList.length} classes in ${file.fileName}
       File: ${file.fileName}
 	`);
-  }
+	}
 }
 
 const files = program.getSourceFiles();
 
 // Loops over all files in the program and apply classPerFile rule
 files
-  .filter(file => !file.isDeclarationFile)
-  .forEach(file => classPerFile(file));
+	.filter((file) => !file.isDeclarationFile)
+	.forEach((file) => classPerFile(file));
 ```
 
 In this code you're doing the following:
@@ -197,10 +195,10 @@ const tsconfigPath = './tsconfig.json'; // path to your tsconfig.json
 const tsConfigParseResult = parseTsConfig(tsconfigPath);
 
 const program = ts.createProgram({
-  options: tsConfigParseResult.options,
-  rootNames: tsConfigParseResult.fileNames,
-  projectReferences: tsConfigParseResult.projectReferences,
-  configFileParsingDiagnostics: tsConfigParseResult.errors,
+	options: tsConfigParseResult.options,
+	rootNames: tsConfigParseResult.fileNames,
+	projectReferences: tsConfigParseResult.projectReferences,
+	configFileParsingDiagnostics: tsConfigParseResult.errors,
 });
 ```
 
@@ -288,7 +286,7 @@ A declaration is a node that declares something, it could be a variable, functio
 
 ```ts
 class Test {
-  runner: string = 'jest';
+	runner: string = 'jest';
 }
 ```
 
@@ -337,8 +335,8 @@ More advanced example
 
 ```ts
 const first = 1,
-  second = 2 + 3,
-  third = whatIsThird();
+	second = 2 + 3,
+	third = whatIsThird();
 ```
 
 - The whole code is a `VariableStatement` node.
@@ -368,7 +366,7 @@ Let's take another example to recap what you've learned so far. You're going to 
 
 ```ts
 function addFn(a: number, b: number) {
-  return a + b;
+	return a + b;
 }
 ```
 
@@ -376,7 +374,7 @@ function addFn(a: number, b: number) {
 
 ```ts
 let addFnExpression = function addFn(a: number, b: number) {
-  return a + b;
+	return a + b;
 };
 ```
 
@@ -384,37 +382,37 @@ You need to ensure only the first one is allowed.
 
 ```ts
 type Transformer = (
-  file: ts.SourceFile
+	file: ts.SourceFile
 ) => ts.TransformerFactory<ts.SourceFile>;
-const transformer: Transformer = file => {
-  return function (context) {
-    const visit: ts.Visitor = node => {
-      if (ts.isVariableDeclaration(node)) {
-        if (node.initializer && ts.isFunctionExpression(node.initializer)) {
-          throw new Error(`
+const transformer: Transformer = (file) => {
+	return function (context) {
+		const visit: ts.Visitor = (node) => {
+			if (ts.isVariableDeclaration(node)) {
+				if (node.initializer && ts.isFunctionExpression(node.initializer)) {
+					throw new Error(`
           No function expression allowed.
           Found function expression: ${node.name.getText(file)}
           File: ${file.fileName}
         `);
-        }
-      }
+				}
+			}
 
-      // visit each child in this node (look at the visitor node parameter)
-      return ts.visitEachChild(node, visit, context);
-    };
+			// visit each child in this node (look at the visitor node parameter)
+			return ts.visitEachChild(node, visit, context);
+		};
 
-    // visit each node in the file
-    return node => ts.visitEachChild(node, visit, context);
-  };
+		// visit each node in the file
+		return (node) => ts.visitEachChild(node, visit, context);
+	};
 };
 
 const files = program.getSourceFiles();
 
 files
-  .filter(file => !file.isDeclarationFile)
-  .forEach(file =>
-    ts.transform(file, [transformer(file)], program.getCompilerOptions())
-  );
+	.filter((file) => !file.isDeclarationFile)
+	.forEach((file) =>
+		ts.transform(file, [transformer(file)], program.getCompilerOptions())
+	);
 ```
 
 I know this isn't like the first example, but it's similar.
@@ -460,83 +458,83 @@ _[See how the AST for the function expression looks like](https://ts-ast-viewer.
 
 ```ts
 const transformer: Transformer = function (file) {
-  return function (context) {
-    const visit: ts.Visitor = node => {
-      if (ts.isVariableStatement(node)) {
-        const varList: ts.VariableDeclaration[] = [];
-        const functionList: ts.FunctionExpression[] = [];
+	return function (context) {
+		const visit: ts.Visitor = (node) => {
+			if (ts.isVariableStatement(node)) {
+				const varList: ts.VariableDeclaration[] = [];
+				const functionList: ts.FunctionExpression[] = [];
 
-        // collect function expression and variable declaration
-        for (const declaration of node.declarationList.declarations) {
-          // the initializer is expression after assignment operator
-          if (declaration.initializer) {
-            if (ts.isFunctionExpression(declaration.initializer)) {
-              functionList.push(declaration.initializer);
-            } else {
-              varList.push(declaration);
-            }
-          }
-        }
+				// collect function expression and variable declaration
+				for (const declaration of node.declarationList.declarations) {
+					// the initializer is expression after assignment operator
+					if (declaration.initializer) {
+						if (ts.isFunctionExpression(declaration.initializer)) {
+							functionList.push(declaration.initializer);
+						} else {
+							varList.push(declaration);
+						}
+					}
+				}
 
-        for (const functionExpression of functionList) {
-          // create function declaration out of function expression
-          const functionDeclaration = ts.factory.createFunctionDeclaration(
-            functionExpression.modifiers,
-            functionExpression.asteriskToken,
-            functionExpression.name as ts.Identifier,
-            functionExpression.typeParameters,
-            functionExpression.parameters,
-            functionExpression.type,
-            functionExpression.body
-          );
+				for (const functionExpression of functionList) {
+					// create function declaration out of function expression
+					const functionDeclaration = ts.factory.createFunctionDeclaration(
+						functionExpression.modifiers,
+						functionExpression.asteriskToken,
+						functionExpression.name as ts.Identifier,
+						functionExpression.typeParameters,
+						functionExpression.parameters,
+						functionExpression.type,
+						functionExpression.body
+					);
 
-          // hoist the function declaration to the top of the containing scope (file)
-          context.hoistFunctionDeclaration(functionDeclaration);
-        }
+					// hoist the function declaration to the top of the containing scope (file)
+					context.hoistFunctionDeclaration(functionDeclaration);
+				}
 
-        // if the varList (non function expression) is same as the original variable statement, return the node as is.
-        // it means there is no function expression in the variable statement
-        if (varList.length === node.declarationList.declarations.length) {
-          return node;
-        }
+				// if the varList (non function expression) is same as the original variable statement, return the node as is.
+				// it means there is no function expression in the variable statement
+				if (varList.length === node.declarationList.declarations.length) {
+					return node;
+				}
 
-        // if the varList (non function expression) is empty, return undefined to remove the variable statement node
-        if (varList.length === 0) {
-          return undefined;
-        }
+				// if the varList (non function expression) is empty, return undefined to remove the variable statement node
+				if (varList.length === 0) {
+					return undefined;
+				}
 
-        return ts.factory.updateVariableStatement(
-          node,
-          node.modifiers,
-          ts.factory.createVariableDeclarationList(varList)
-        );
-      }
+				return ts.factory.updateVariableStatement(
+					node,
+					node.modifiers,
+					ts.factory.createVariableDeclarationList(varList)
+				);
+			}
 
-      return ts.visitEachChild(node, visit, context);
-    };
+			return ts.visitEachChild(node, visit, context);
+		};
 
-    return node => {
-      // Start a new lexical environment when beginning to process the source file.
-      context.startLexicalEnvironment();
+		return (node) => {
+			// Start a new lexical environment when beginning to process the source file.
+			context.startLexicalEnvironment();
 
-      // visit each node in the file.
-      const updatedNode = ts.visitEachChild(node, visit, context);
+			// visit each node in the file.
+			const updatedNode = ts.visitEachChild(node, visit, context);
 
-      // End the lexical environment and collect any declarations (function declarations, variable declarations, etc) that were added.
-      const declarations = context.endLexicalEnvironment() ?? [];
-      const statements = [...declarations, ...updatedNode.statements];
+			// End the lexical environment and collect any declarations (function declarations, variable declarations, etc) that were added.
+			const declarations = context.endLexicalEnvironment() ?? [];
+			const statements = [...declarations, ...updatedNode.statements];
 
-      return ts.factory.updateSourceFile(
-        node,
-        statements,
-        node.isDeclarationFile,
-        node.referencedFiles,
-        node.typeReferenceDirectives,
-        node.hasNoDefaultLib,
-        node.libReferenceDirectives
-      );
-    };
-  };
+			return ts.factory.updateSourceFile(
+				node,
+				statements,
+				node.isDeclarationFile,
+				node.referencedFiles,
+				node.typeReferenceDirectives,
+				node.hasNoDefaultLib,
+				node.libReferenceDirectives
+			);
+		};
+	};
 };
 ```
 
@@ -575,49 +573,49 @@ These methods ensure that the transformer has a mechanism to correctly manage sc
 The last use case is a bit more complex, you're going to use the Typescript Compiler API to detect third-party classes used as superclasses, not to do anything about it, just detect them which means you don't need to use the transformer function.
 
 ```ts
-const trackThirdPartyClassesUsedAsSuperClass: ts.Visitor = node => {
-  if (ts.isClassDeclaration(node)) {
-    const superClass = (node.heritageClauses ?? []).find(
-      heritageClause => heritageClause.token === ts.SyntaxKind.ExtendsKeyword
-    );
+const trackThirdPartyClassesUsedAsSuperClass: ts.Visitor = (node) => {
+	if (ts.isClassDeclaration(node)) {
+		const superClass = (node.heritageClauses ?? []).find(
+			(heritageClause) => heritageClause.token === ts.SyntaxKind.ExtendsKeyword
+		);
 
-    // Not intrested in classes that don't have super class.
-    if (!superClass) {
-      return node;
-    }
+		// Not intrested in classes that don't have super class.
+		if (!superClass) {
+			return node;
+		}
 
-    // in case of class declaration, there will always be one heritage clause (extends)
-    const superClassType = superClass.types[0].expression;
+		// in case of class declaration, there will always be one heritage clause (extends)
+		const superClassType = superClass.types[0].expression;
 
-    // Get the type checker
-    const typeChecker = program.getTypeChecker();
+		// Get the type checker
+		const typeChecker = program.getTypeChecker();
 
-    const symbol = typeChecker.getSymbolAtLocation(superClassType);
-    if (!symbol) {
-      return undefined;
-    }
+		const symbol = typeChecker.getSymbolAtLocation(superClassType);
+		if (!symbol) {
+			return undefined;
+		}
 
-    const superClassDeclaration = (symbol.declarations ?? []).find(
-      ts.isClassDeclaration
-    );
+		const superClassDeclaration = (symbol.declarations ?? []).find(
+			ts.isClassDeclaration
+		);
 
-    if (!superClassDeclaration) {
-      // In this case this should never happen (more on that later),
-      // but it's here just to satisfy typescript.
-      return node;
-    }
+		if (!superClassDeclaration) {
+			// In this case this should never happen (more on that later),
+			// but it's here just to satisfy typescript.
+			return node;
+		}
 
-    const thisSourceCodeFile = node.getSourceFile();
-    const sourceCodeInfo = {
-      fileName: thisSourceCodeFile.fileName,
-      className: node.name?.text,
-      ...ts.getLineAndCharacterOfPosition(thisSourceCodeFile, node.pos),
-    };
-    const thirdPartyCodeInfo = {
-      fileName: superClassDeclaration.getSourceFile().fileName,
-      className: superClassType.getText(),
-    };
-    console.log(`
+		const thisSourceCodeFile = node.getSourceFile();
+		const sourceCodeInfo = {
+			fileName: thisSourceCodeFile.fileName,
+			className: node.name?.text,
+			...ts.getLineAndCharacterOfPosition(thisSourceCodeFile, node.pos),
+		};
+		const thirdPartyCodeInfo = {
+			fileName: superClassDeclaration.getSourceFile().fileName,
+			className: superClassType.getText(),
+		};
+		console.log(`
         Class: "${sourceCodeInfo.className}"
         Filename: "${sourceCodeInfo.fileName}"
         SuperClass: "${thirdPartyCodeInfo.className}"
@@ -625,19 +623,19 @@ const trackThirdPartyClassesUsedAsSuperClass: ts.Visitor = node => {
         Line: "${sourceCodeInfo.line}"
         Column: "${sourceCodeInfo.character}"
   `);
-  }
+	}
 
-  // visit each child in this node
-  return ts.forEachChild(node, trackThirdPartyClassesUsedAsSuperClass);
+	// visit each child in this node
+	return ts.forEachChild(node, trackThirdPartyClassesUsedAsSuperClass);
 };
 
 const files = program.getSourceFiles();
 
 files
-  .filter(file => !file.isDeclarationFile)
-  .forEach(file => {
-    ts.forEachChild(file, trackThirdPartyClassesUsedAsSuperClass);
-  });
+	.filter((file) => !file.isDeclarationFile)
+	.forEach((file) => {
+		ts.forEachChild(file, trackThirdPartyClassesUsedAsSuperClass);
+	});
 ```
 
 Key terms that you need to know:
@@ -655,8 +653,8 @@ When you extend a class or implement an interface, you use a clause called a her
 
 ```ts
 interface HeritageClause {
-  readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
-  readonly types: NodeArray<ExpressionWithTypeArguments>;
+	readonly token: SyntaxKind.ExtendsKeyword | SyntaxKind.ImplementsKeyword;
+	readonly types: NodeArray<ExpressionWithTypeArguments>;
 }
 ```
 
@@ -675,8 +673,8 @@ A `Type` object is associated with a `Symbol` to represent the type of the symbo
 
 ```ts
 interface Type {
-  flags: TypeFlags;
-  symbol: Symbol;
+	flags: TypeFlags;
+	symbol: Symbol;
 }
 ```
 
@@ -714,13 +712,13 @@ A symbol is represented by the `Symbol` interface, which has the following prope
 
 ```ts
 interface Symbol {
-  flags: SymbolFlags;
-  escapedName: __String;
-  declarations?: Declaration[];
-  valueDeclaration?: Declaration;
-  members?: SymbolTable;
-  exports?: SymbolTable;
-  globalExports?: SymbolTable;
+	flags: SymbolFlags;
+	escapedName: __String;
+	declarations?: Declaration[];
+	valueDeclaration?: Declaration;
+	members?: SymbolTable;
+	exports?: SymbolTable;
+	globalExports?: SymbolTable;
 }
 ```
 
@@ -736,7 +734,7 @@ Let's take the following example
 
 ```ts
 class Test {
-  runner: string = 'jest';
+	runner: string = 'jest';
 }
 ```
 
@@ -792,14 +790,14 @@ Will return
 
 ```json
 [
-  {
-    "start": 0,
-    "length": 8,
-    "code": 2322,
-    "category": 1,
-    "messageText": "Type 'number' is not assignable to type 'string'.",
-    "relatedInformation": undefined
-  }
+	{
+		"start": 0,
+		"length": 8,
+		"code": 2322,
+		"category": 1,
+		"messageText": "Type 'number' is not assignable to type 'string'.",
+		"relatedInformation": undefined
+	}
 ]
 ```
 
@@ -817,14 +815,14 @@ Will return
 
 ```json
 [
-  {
-    "start": 0,
-    "length": 1,
-    "messageText": "Expression expected.",
-    "category": 1,
-    "code": 1109,
-    "reportsUnnecessary": undefined
-  }
+	{
+		"start": 0,
+		"length": 1,
+		"messageText": "Expression expected.",
+		"category": 1,
+		"code": 1109,
+		"reportsUnnecessary": undefined
+	}
 ]
 ```
 
@@ -839,18 +837,18 @@ Here's a snippet that demonstrates how to retrieve diagnostics for a given TypeS
 const allDiagnostics = ts.getPreEmitDiagnostics(program);
 
 // Iterate over diagnostics and log them
-allDiagnostics.forEach(diagnostic => {
-  if (diagnostic.file) {
-    let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
-      diagnostic.start!
-    );
-    let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
-    console.log(
-      `${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
-    );
-  } else {
-    console.log(ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'));
-  }
+allDiagnostics.forEach((diagnostic) => {
+	if (diagnostic.file) {
+		let { line, character } = diagnostic.file.getLineAndCharacterOfPosition(
+			diagnostic.start!
+		);
+		let message = ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n');
+		console.log(
+			`${diagnostic.file.fileName} (${line + 1},${character + 1}): ${message}`
+		);
+	} else {
+		console.log(ts.flattenDiagnosticMessageText(diagnostic.messageText, '\n'));
+	}
 });
 ```
 
@@ -864,15 +862,15 @@ TypeScript provides a printer API that can be used to generate source code from 
 
 ```ts
 function print(file: ts.Node, result: ts.TransformationResult<ts.SourceFile>) {
-  const printer = ts.createPrinter({
-    newLine: ts.NewLineKind.LineFeed,
-  });
-  const transformedSource = printer.printNode(
-    ts.EmitHint.Unspecified,
-    result.transformed[0],
-    file
-  );
-  return transformedSource;
+	const printer = ts.createPrinter({
+		newLine: ts.NewLineKind.LineFeed,
+	});
+	const transformedSource = printer.printNode(
+		ts.EmitHint.Unspecified,
+		result.transformed[0],
+		file
+	);
+	return transformedSource;
 }
 ```
 
@@ -920,24 +918,24 @@ The module/function that does this is called the **Scanner**/**Tokenizer** which
 
 ```ts
 function scan(sourceCode: string) {
-  const tokens: Token[] = [];
-  let currentChar: string;
-  let index = -1;
-  do {
-    index = index + 1;
-    currentChar = sourceCode[index];
-  } while (index < sourceCode.length);
-  {
-    switch (currentChar) {
-      case '{':
-        // ...
-        break;
-      case '}':
-        // ...
-        break;
-      // ...
-    }
-  }
+	const tokens: Token[] = [];
+	let currentChar: string;
+	let index = -1;
+	do {
+		index = index + 1;
+		currentChar = sourceCode[index];
+	} while (index < sourceCode.length);
+	{
+		switch (currentChar) {
+			case '{':
+				// ...
+				break;
+			case '}':
+				// ...
+				break;
+			// ...
+		}
+	}
 }
 ```
 
@@ -1007,13 +1005,13 @@ The function to create such a table could be as follows:
 
 ```ts
 export function createSymbolTable(symbols?: readonly Symbol[]): SymbolTable {
-  const result = new Map<__String, Symbol>();
-  if (symbols) {
-    for (const symbol of symbols) {
-      result.set(symbol.escapedName, symbol);
-    }
-  }
-  return result;
+	const result = new Map<__String, Symbol>();
+	if (symbols) {
+		for (const symbol of symbols) {
+			result.set(symbol.escapedName, symbol);
+		}
+	}
+	return result;
 }
 ```
 

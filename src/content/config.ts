@@ -12,6 +12,7 @@ const posts = defineCollection({
 			archived: z.boolean().optional().default(false),
 			description: z.string(),
 			draft: z.boolean().optional().default(false),
+			featured: z.number(),
 			icon: z.enum(IconKeys).default('Newspaper'),
 			lastModifiedAt: z.coerce.date().optional(),
 			publishedAt: z.coerce.date(),
@@ -28,6 +29,7 @@ const projects = defineCollection({
 			date: z.coerce.date(),
 			icon: z.enum(IconKeys),
 			title: z.string(),
+			description: z.string().optional(),
 			url: z.string().optional(),
 			status: z.enum(['idea', 'development', 'maintenance', 'archived']).optional(),
 		})

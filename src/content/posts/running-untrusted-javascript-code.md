@@ -1,10 +1,8 @@
 ---
 publishedAt: '2024-07-16T00:00:00'
 title: 'Running Untrusted JavaScript Code'
-description: "Strategies to safely run user JS/TS: eval pitfalls, Workers, isolated-vm, WASM, Docker, static analysis, and timeboxing."
-
-
-
+description: 'Strategies to safely run user JS/TS: eval pitfalls, Workers, isolated-vm, WASM, Docker, static analysis, and timeboxing.'
+featured: 0
 ---
 
 **IMPORTANT**: _This is about running JavaScript and TypeScript code only. That being said, the writing might also be the direction to run other code in other languages._
@@ -12,12 +10,6 @@ description: "Strategies to safely run user JS/TS: eval pitfalls, Workers, isola
 Allowing users to execute their code within your application opens up a world of customization and functionality, yet it also exposes your platform to significant security threats.
 
 January features an editor that allows users to write CanonLang, an internal TypeScript DSL. This DSL defines and shapes users’ APIs through the concept of workflows and is later executed to create a data structure that the compiler can understand.
-
----
-
-> You can try January [for free](https://app.january.sh) (_no sign-up required_)
-
----
 
 We have searched for the best way to execute the code securely for quite some time. Given that it is user code, everything is expected, from halting the servers (it could be infinity loops) to stealing sensitive information.
 
@@ -85,24 +77,24 @@ Time box execution can be done by running the code in a web worker and using `se
 
 ```ts
 async function timebox(code, timeout = 5000) {
-  const worker = new Worker('user-runner-worker.js');
-  worker.postMessage(code);
+	const worker = new Worker('user-runner-worker.js');
+	worker.postMessage(code);
 
-  const timerId = setTimeout(() => {
-    worker.terminate();
-    reject(new Error('Code execution timed out'));
-  }, timeout);
+	const timerId = setTimeout(() => {
+		worker.terminate();
+		reject(new Error('Code execution timed out'));
+	}, timeout);
 
-  return new Promise((resolve, reject) => {
-    worker.onmessage = event => {
-      clearTimeout(timerId);
-      resolve(event.data);
-    };
-    worker.onerror = error => {
-      clearTimeout(timerId);
-      reject(error);
-    };
-  });
+	return new Promise((resolve, reject) => {
+		worker.onmessage = (event) => {
+			clearTimeout(timerId);
+			resolve(event.data);
+		};
+		worker.onerror = (error) => {
+			clearTimeout(timerId);
+			reject(error);
+		};
+	});
 }
 
 await timebox('while (true) {}');
@@ -125,9 +117,9 @@ The function constructor can’t access the enclosing scope so that the followin
 
 ```ts
 function fnConstructorCannotUseMyScope() {
-  let localVar = 'local value';
-  const userFunction = new Function('return localVar');
-  return userFunction();
+	let localVar = 'local value';
+	const userFunction = new Function('return localVar');
+	return userFunction();
 }
 ```
 
@@ -138,12 +130,6 @@ But it can access the global scope so the `fetch` example from above works.
 You can run `“Function Constructor` and `eval` on a WebWorker, which is a bit safer due to the fact that there is no DOM access.
 
 To put more restrictions in place, consider disallowing using global objects like `fetch, XMLHttpRequest, sendBeacon` [Check this writing about how you can do that.](https://www.meziantou.net/executing-untrusted-javascript-code-in-a-browser.htm)
-
----
-
-> We want to help you start your project or support your existing one for free. Whether you need technical consultation or an API development, drop us a message at chat@january.sh (Node.js only at the moment).
-
----
 
 ### Isolated-VM
 
@@ -174,10 +160,10 @@ What is fascinating about it is that you’ll use ￼`eval`￼ to run the code, 
 
 ```ts
 function evaluate() {
-  const { code, input } = JSON.parse(Host.inputString());
-  const func = eval(code);
-  const result = func(input).toString();
-  Host.outputString(result);
+	const { code, input } = JSON.parse(Host.inputString());
+	const func = eval(code);
+	const result = func(input).toString();
+	Host.outputString(result);
 }
 
 module.exports = { evaluate };
@@ -187,8 +173,8 @@ You'll have to compile the above code first using Extism, which will output a Wa
 
 ```ts
 const message = {
-  input: '1,2,3,4,5',
-  code: `
+	input: '1,2,3,4,5',
+	code: `
         const sum = (str) => str
           .split(',')
           .reduce((acc, curr) => acc + parseInt(curr), 0);
@@ -211,24 +197,24 @@ const docker = new Docker();
 
 const code = `console.log("hello world")`;
 const container = await docker.createContainer({
-  Image: 'node:latest',
-  Cmd: ['node', '-e', code],
-  User: 'node',
-  WorkingDir: '/app',
-  AttachStdout: true,
-  AttachStderr: true,
-  OpenStdin: false,
-  AttachStdin: false,
-  Tty: true,
-  NetworkDisabled: true,
-  HostConfig: {
-    AutoRemove: true,
-    ReadonlyPaths: ['/'],
-    ReadonlyRootfs: true,
-    CapDrop: ['ALL'],
-    Memory: 8 * 1024 * 1024,
-    SecurityOpt: ['no-new-privileges'],
-  },
+	Image: 'node:latest',
+	Cmd: ['node', '-e', code],
+	User: 'node',
+	WorkingDir: '/app',
+	AttachStdout: true,
+	AttachStderr: true,
+	OpenStdin: false,
+	AttachStdin: false,
+	Tty: true,
+	NetworkDisabled: true,
+	HostConfig: {
+		AutoRemove: true,
+		ReadonlyPaths: ['/'],
+		ReadonlyRootfs: true,
+		CapDrop: ['ALL'],
+		Memory: 8 * 1024 * 1024,
+		SecurityOpt: ['no-new-privileges'],
+	},
 });
 ```
 
@@ -254,30 +240,30 @@ Well, same story with one (could be optional) extra step: Transpile the code to 
 
 ```ts
 async function build(userCode: string) {
-  const result = await esbuild.build({
-    stdin: {
-      contents: `${userCode}`,
-      loader: 'ts',
-      resolveDir: __dirname,
-    },
-    inject: [
-      // In case you want to inject some code
-    ],
-    platform: 'node',
-    write: false,
-    treeShaking: false,
-    sourcemap: false,
-    minify: false,
-    drop: ['debugger', 'console'],
-    keepNames: true,
-    format: 'cjs',
-    bundle: true,
-    target: 'es2022',
-    plugins: [
-      nodeExternalsPlugin(), // make all the non-native modules external
-    ],
-  });
-  return result.outputFiles![0].text;
+	const result = await esbuild.build({
+		stdin: {
+			contents: `${userCode}`,
+			loader: 'ts',
+			resolveDir: __dirname,
+		},
+		inject: [
+			// In case you want to inject some code
+		],
+		platform: 'node',
+		write: false,
+		treeShaking: false,
+		sourcemap: false,
+		minify: false,
+		drop: ['debugger', 'console'],
+		keepNames: true,
+		format: 'cjs',
+		bundle: true,
+		target: 'es2022',
+		plugins: [
+			nodeExternalsPlugin(), // make all the non-native modules external
+		],
+	});
+	return result.outputFiles![0].text;
 }
 ```
 

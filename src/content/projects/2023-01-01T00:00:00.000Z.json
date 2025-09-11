@@ -1,0 +1,8 @@
+{
+	"$schema": "../../../.astro/collections/projects.schema.json",
+	"date": "2023-01-01T00:00:00.000Z",
+	"icon": "Rocket",
+	"title": "January",
+	"description": "Next generation backend experience for developers",
+	"url": "https://january-website-irvsr04sf-ezzabuzaids-projects.vercel.app/"
+}

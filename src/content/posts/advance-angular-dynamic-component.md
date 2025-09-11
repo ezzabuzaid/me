@@ -1,9 +1,8 @@
 ---
 publishedAt: '2021-08-06T00:00:00'
 title: Advance Angular Dynamic Component
-description: "Create Angular components dynamically with inputs, outputs, and ngOnChanges support, including validation, binding, and cleanup patterns for v13+."
-
-
+description: 'Create Angular components dynamically with inputs, outputs, and ngOnChanges support, including validation, binding, and cleanup patterns for v13+.'
+featured: 80
 ---
 
 In this article, I will show you how you can still use inputs and outputs and support OnChanges lifecycle while creating dynamic components.
@@ -82,11 +81,11 @@ type Color = 'red' | 'blue' | 'green';
 
 ```typescript
 function assertNotNullOrUndefined<T>(
-  value: T
+	value: T
 ): asserts value is NonNullable<T> {
-  if (value === null || value === undefined) {
-    throw new Error(`cannot be undefined or null.`);
-  }
+	if (value === null || value === undefined) {
+		throw new Error(`cannot be undefined or null.`);
+	}
 }
 ```
 
@@ -94,14 +93,14 @@ function assertNotNullOrUndefined<T>(
 
 ```typescript
 @Directive({
-  selector: '[dynamic-component]',
+	selector: '[dynamic-component]',
 })
 export class DynamicComponentDirective implements OnDestroy, OnChanges {
-  @Input('dynamic-component') component!: Type<any>;
-  @Input() outputs?: UserOutputs = {};
-  @Input() inputs?: UserInputs = {};
-  ngOnChanges(changes: SimpleChanges) {}
-  ngOnDestroy() {}
+	@Input('dynamic-component') component!: Type<any>;
+	@Input() outputs?: UserOutputs = {};
+	@Input() inputs?: UserInputs = {};
+	ngOnChanges(changes: SimpleChanges) {}
+	ngOnDestroy() {}
 }
 ```
 
@@ -361,28 +360,28 @@ Here's a simple component that displays a color based on input and emits an even
 
 ```typescript
 import {
-  Component,
-  EventEmitter,
-  Input,
-  OnChanges,
-  Output,
-  SimpleChanges,
+	Component,
+	EventEmitter,
+	Input,
+	OnChanges,
+	Output,
+	SimpleChanges,
 } from '@angular/core';
 
 @Component({
-  selector: 'app-color-box',
-  template: `<div
-    style="height: 250px; width: 250px;"
-    [style.background-color]="backgroundColor"
-  ></div>`,
+	selector: 'app-color-box',
+	template: `<div
+		style="height: 250px; width: 250px;"
+		[style.background-color]="backgroundColor"
+	></div>`,
 })
 export class ColorBoxComponent implements OnChanges {
-  @Input() backgroundColor: Color = 'red';
-  @Output() backgroundColorChanges = new EventEmitter<Color>();
+	@Input() backgroundColor: Color = 'red';
+	@Output() backgroundColorChanges = new EventEmitter<Color>();
 
-  ngOnChanges(changes: SimpleChanges): void {
-    this.backgroundColorChanges.next(changes.backgroundColor);
-  }
+	ngOnChanges(changes: SimpleChanges): void {
+		this.backgroundColorChanges.next(changes.backgroundColor);
+	}
 }
 ```
 
@@ -398,29 +397,29 @@ import { Component } from '@angular/core';
 import { ColorBoxComponent } from './color-box.component';
 
 @Component({
-  selector: 'app-root',
-  template: `
-    <ng-template
-      [dynamic-component]="component"
-      [inputs]="{ backgroundColor: backgroundColor }"
-      [outputs]="{ backgroundColorChanges: onColorChange }"
-    >
-    </ng-template>
-    <button (click)="changeColor()">Change Color</button>
-  `,
-  styleUrls: ['./app.component.css'],
+	selector: 'app-root',
+	template: `
+		<ng-template
+			[dynamic-component]="component"
+			[inputs]="{ backgroundColor: backgroundColor }"
+			[outputs]="{ backgroundColorChanges: onColorChange }"
+		>
+		</ng-template>
+		<button (click)="changeColor()">Change Color</button>
+	`,
+	styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-  component = ColorBoxComponent;
-  backgroundColor: Color = 'green';
+	component = ColorBoxComponent;
+	backgroundColor: Color = 'green';
 
-  onColorChange = (value: Color) => {
-    console.log(value, this.backgroundColor);
-  };
+	onColorChange = (value: Color) => {
+		console.log(value, this.backgroundColor);
+	};
 
-  changeColor() {
-    this.backgroundColor = 'blue';
-  }
+	changeColor() {
+		this.backgroundColor = 'blue';
+	}
 }
 ```
 

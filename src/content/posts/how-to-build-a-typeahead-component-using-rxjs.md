@@ -1,10 +1,8 @@
 ---
 title: 'How To Build a Typeahead Component Using RxJS'
 description: 'Learn how to build a typeahead component using RxJS. Improve the user experience and performance of your application.'
+featured: 30
 publishedAt: '2023-09-19T17:00:00.00Z'
-
-
-
 ---
 
 You know when you start typing in a search box and it starts suggesting things to you? That's called typeahead. It's a great way to help users find what they're looking for. In this article, you'll learn how to build a typeahead component using RxJS.
@@ -21,17 +19,17 @@ Here is how it'll be used in the end:
 
 ```ts
 const search$ = fromEvent(searchInputEl, 'input').pipe(
-  map(event => event.target.value),
-  typeahead({
-    minLength: 3,
-    debounceTime: 250,
-    loadFn: searchTerm => {
-      const searchQuery = searchTerm ? `?title_like=^${searchTerm}` : '';
-      return fetch(`https://jsonplaceholder.typicode.com/posts${searchTerm}`);
-    },
-  }),
-  // convert the response to json
-  switchMap(response => response.json())
+	map((event) => event.target.value),
+	typeahead({
+		minLength: 3,
+		debounceTime: 250,
+		loadFn: (searchTerm) => {
+			const searchQuery = searchTerm ? `?title_like=^${searchTerm}` : '';
+			return fetch(`https://jsonplaceholder.typicode.com/posts${searchTerm}`);
+		},
+	}),
+	// convert the response to json
+	switchMap((response) => response.json())
 );
 ```
 
@@ -53,26 +51,26 @@ You'll write a custom operator that will take an object with the following prope
 
 ```ts
 interface ITypeaheadOperatorOptions<Out> {
-  /**
-   * The minimum length of the allowed search term.
-   */
-  minLength: number;
-  /**
-   * The amount of time between key presses before making a request.
-   */
-  debounceTime: number;
-  /**
-   * Whether to allow empty string to be treated as a valid search term.
-   * Useful for when you want to show defaul results when the user clears the search box
-   *
-   * @default true
-   */
-  allowEmptyString?: boolean;
+	/**
+	 * The minimum length of the allowed search term.
+	 */
+	minLength: number;
+	/**
+	 * The amount of time between key presses before making a request.
+	 */
+	debounceTime: number;
+	/**
+	 * Whether to allow empty string to be treated as a valid search term.
+	 * Useful for when you want to show defaul results when the user clears the search box
+	 *
+	 * @default true
+	 */
+	allowEmptyString?: boolean;
 
-  /**
-   * The function that will be called to load the results.
-   */
-  loadFn: (searchTerm: string) => ObservableInput<Out>;
+	/**
+	 * The function that will be called to load the results.
+	 */
+	loadFn: (searchTerm: string) => ObservableInput<Out>;
 }
 ```
 
@@ -80,14 +78,14 @@ interface ITypeaheadOperatorOptions<Out> {
 
 ```ts
 export function typeahead<Out>(
-  options: ITypeaheadOperatorOptions<Out>
+	options: ITypeaheadOperatorOptions<Out>
 ): OperatorFunction<string, Out> {
-  return source => {
-    return source.pipe(
-      ...operators
-      // The implementation goes here
-    );
-  };
+	return (source) => {
+		return source.pipe(
+			...operators
+			// The implementation goes here
+		);
+	};
 }
 ```
 
@@ -105,16 +103,16 @@ _Note: Valid search term is a search term that have been still for a certain amo
 
 ```ts
 return source.pipe(
-  debounceTime(options.debounceTime),
-  filter(value => typeof value === 'string'),
-  filter(value => {
-    if (value === '') {
-      return options.allowEmptyString ?? true;
-    }
-    return value.length >= options.minLength;
-  }),
-  distinctUntilChanged(),
-  switchMap(searchTerm => options.loadFn(searchTerm))
+	debounceTime(options.debounceTime),
+	filter((value) => typeof value === 'string'),
+	filter((value) => {
+		if (value === '') {
+			return options.allowEmptyString ?? true;
+		}
+		return value.length >= options.minLength;
+	}),
+	distinctUntilChanged(),
+	switchMap((searchTerm) => options.loadFn(searchTerm))
 );
 ```
 
@@ -139,22 +137,22 @@ You can do that by caching the in-flight observables using the `shareReplay` ope
 ```ts
 const cache: Record<string, Observable<Out>> = {};
 return source.pipe(
-  // ... same operators
-  switchMap(searchTerm => {
-    // Initialize Observable in cache if it doesn't exist
-    if (!cache[searchTerm]) {
-      cache[searchTerm] = options.loadFn(searchTerm).pipe(
-        shareReplay({
-          bufferSize: 1,
-          refCount: false,
-          windowTime: 5000,
-        })
-      );
-    }
+	// ... same operators
+	switchMap((searchTerm) => {
+		// Initialize Observable in cache if it doesn't exist
+		if (!cache[searchTerm]) {
+			cache[searchTerm] = options.loadFn(searchTerm).pipe(
+				shareReplay({
+					bufferSize: 1,
+					refCount: false,
+					windowTime: 5000,
+				})
+			);
+		}
 
-    // Return the cached observable
-    return cache[searchTerm];
-  })
+		// Return the cached observable
+		return cache[searchTerm];
+	})
 );
 ```
 
@@ -181,25 +179,25 @@ In most cases you'll be fine with the previous implementation, but there is an e
 ```ts
 let shouldAllowSameValue = false; // -> 1
 return source.pipe(
-  distinctUntilChanged((prev, current) => {
-    if (shouldAllowSameValue /** -> 3 */) {
-      shouldAllowSameValue = false;
-      return false;
-    }
-    return prev === current; // -> 4
-  }),
-  switchMap(searchTerm =>
-    // -> 5
-    from(options.loadFn(searchTerm)).pipe(
-      takeUntil(
-        source.pipe(
-          tap(() => {
-            shouldAllowSameValue = true; // -> 2
-          })
-        )
-      )
-    )
-  )
+	distinctUntilChanged((prev, current) => {
+		if (shouldAllowSameValue /** -> 3 */) {
+			shouldAllowSameValue = false;
+			return false;
+		}
+		return prev === current; // -> 4
+	}),
+	switchMap((searchTerm) =>
+		// -> 5
+		from(options.loadFn(searchTerm)).pipe(
+			takeUntil(
+				source.pipe(
+					tap(() => {
+						shouldAllowSameValue = true; // -> 2
+					})
+				)
+			)
+		)
+	)
 );
 ```
 
@@ -220,39 +218,39 @@ Complete code
 
 ```ts
 export function typeahead<Out>(
-  options: ITypeaheadOperatorOptions<Out>
+	options: ITypeaheadOperatorOptions<Out>
 ): OperatorFunction<string, Out> {
-  let shouldAllowSameValue = false;
-  return source => {
-    return source.pipe(
-      debounceTime(options.debounceTime),
-      filter(value => typeof value === 'string'),
-      filter(value => {
-        if (value === '') {
-          return options.allowEmptyString ?? true;
-        }
-        return value.length >= options.minLength;
-      }),
-      distinctUntilChanged((prev, current) => {
-        if (shouldAllowSameValue) {
-          shouldAllowSameValue = false;
-          return false;
-        }
-        return prev === current;
-      }),
-      switchMap(searchTerm =>
-        from(options.loadFn(searchTerm)).pipe(
-          takeUntil(
-            source.pipe(
-              tap(() => {
-                shouldAllowSameValue = true;
-              })
-            )
-          )
-        )
-      )
-    );
-  };
+	let shouldAllowSameValue = false;
+	return (source) => {
+		return source.pipe(
+			debounceTime(options.debounceTime),
+			filter((value) => typeof value === 'string'),
+			filter((value) => {
+				if (value === '') {
+					return options.allowEmptyString ?? true;
+				}
+				return value.length >= options.minLength;
+			}),
+			distinctUntilChanged((prev, current) => {
+				if (shouldAllowSameValue) {
+					shouldAllowSameValue = false;
+					return false;
+				}
+				return prev === current;
+			}),
+			switchMap((searchTerm) =>
+				from(options.loadFn(searchTerm)).pipe(
+					takeUntil(
+						source.pipe(
+							tap(() => {
+								shouldAllowSameValue = true;
+							})
+						)
+					)
+				)
+			)
+		);
+	};
 }
 ```
 
@@ -263,33 +261,33 @@ export function typeahead<Out>(
 ```ts
 import { fromEvent } from 'rxjs';
 import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  switchMap,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	switchMap,
 } from 'rxjs/operators';
 
 const searchInputEl = document.getElementById('search-input');
 const resultsContainerEl = document.getElementById('results-container');
 
 const search$ = fromEvent(searchInputEl, 'input').pipe(
-  map(event => searchInputEl.value),
-  typeahead({
-    minLength: 3,
-    debounceTime: 1000,
-    loadFn: searchTerm => {
-      const searchQuery = searchTerm ? `?title_like=^${searchTerm}` : '';
-      return fetch(`https://jsonplaceholder.typicode.com/posts${searchTerm}`);
-    },
-  }),
-  // convert the response to json
-  switchMap(response => response.json())
+	map((event) => searchInputEl.value),
+	typeahead({
+		minLength: 3,
+		debounceTime: 1000,
+		loadFn: (searchTerm) => {
+			const searchQuery = searchTerm ? `?title_like=^${searchTerm}` : '';
+			return fetch(`https://jsonplaceholder.typicode.com/posts${searchTerm}`);
+		},
+	}),
+	// convert the response to json
+	switchMap((response) => response.json())
 );
 
-search$.subscribe(results => {
-  resultsContainerEl.innerHTML = results
-    .map(result => `<li>${result.title}</li>`)
-    .join('');
+search$.subscribe((results) => {
+	resultsContainerEl.innerHTML = results
+		.map((result) => `<li>${result.title}</li>`)
+		.join('');
 });
 ```
 
@@ -312,39 +310,39 @@ import { HttpClient } from '@angular/common/http';
 import { FormControl } from '@angular/forms';
 import { Observable } from 'rxjs';
 import {
-  debounceTime,
-  distinctUntilChanged,
-  filter,
-  switchMap,
+	debounceTime,
+	distinctUntilChanged,
+	filter,
+	switchMap,
 } from 'rxjs/operators';
 
 @Component({
-  selector: 'app-search-bar',
-  template: `
-    <input type="text" [formControl]="searchControl" />
-    <ul>
-      <li *ngFor="let result of results$ | async">{{ result.title }}</li>
-    </ul>
-  `,
+	selector: 'app-search-bar',
+	template: `
+		<input type="text" [formControl]="searchControl" />
+		<ul>
+			<li *ngFor="let result of results$ | async">{{ result.title }}</li>
+		</ul>
+	`,
 })
 export class SearchBarComponent {
-  searchControl = new FormControl();
-  results$: Observable<any[]>;
+	searchControl = new FormControl();
+	results$: Observable<any[]>;
 
-  constructor(private http: HttpClient) {
-    this.results$ = this.searchControl.valueChanges.pipe(
-      typeahead({
-        minLength: 3,
-        debounceTime: 300,
-        loadFn: searchTerm => {
-          const searchQuery = searchTerm ? `?title_like=^${searchTerm}` : '';
-          return this.#http.get<any[]>(
-            `https://jsonplaceholder.typicode.com/posts${searchQuery}`
-          );
-        },
-      })
-    );
-  }
+	constructor(private http: HttpClient) {
+		this.results$ = this.searchControl.valueChanges.pipe(
+			typeahead({
+				minLength: 3,
+				debounceTime: 300,
+				loadFn: (searchTerm) => {
+					const searchQuery = searchTerm ? `?title_like=^${searchTerm}` : '';
+					return this.#http.get<any[]>(
+						`https://jsonplaceholder.typicode.com/posts${searchQuery}`
+					);
+				},
+			})
+		);
+	}
 }
 ```
 

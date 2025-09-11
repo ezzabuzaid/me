@@ -1,0 +1,8 @@
+{
+  "$schema": "../../../.astro/collections/projects.schema.json",
+  "date": "2024-01-01T00:00:00.000Z",
+  "icon": "Sparkles",
+  "title": "Serverize",
+  "description": "Make your development setup accessible worldwide",
+  "url": "https://serverize.sh"
+}

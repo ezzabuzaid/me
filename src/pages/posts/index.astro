@@ -8,20 +8,20 @@ import Hero from '~/components/Hero.astro';
 import List from '~/components/Widgets/List.astro';
 import { SITE_TITLE } from '~/constants';
 import Document from '~/layouts/Document.astro';
-import { filterPosts, mapPostToListItem, sortPostsByPublishedAt } from '~/utils/content';
+import { filterPosts, mapPostToListItem, sortPostsByFeatured } from '~/utils/content';
 
 const [posts, archivedPosts] = await Promise.all([
 	getCollection('posts').then((posts) =>
 		posts
 			.filter(filterPosts({ archived: false }))
-			.sort(sortPostsByPublishedAt)
+			.sort(sortPostsByFeatured)
 			.map(mapPostToListItem),
 	),
 
 	getCollection('posts').then((posts) =>
 		posts
 			.filter((post) => post.data.archived)
-			.sort(sortPostsByPublishedAt)
+			.sort(sortPostsByFeatured)
 			.map(mapPostToListItem),
 	),
 ]);

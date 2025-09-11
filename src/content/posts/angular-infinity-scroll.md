@@ -1,10 +1,8 @@
 ---
 description: 'Implement Infinity Scroll in Angular using Directive and Pipe and see the pros and cons of each approach.'
+featured: 100
 title: Implementing Infinity Scroll In Angular
 publishedAt: '2023-09-15T00:00:00Z'
-
-
-
 ---
 
 We already covered all about how to build [Reactive Infinite Scroll](/posts/reactive-infinity-scroll) in vanilla JavaScript, now let's see how to implement it in Angular.
@@ -29,12 +27,12 @@ You're going to implement Infinity Scroll as Directive and Pipe, and see the pro
  * Infinity Scroll Options excluding the element
  */
 export interface InfinityScrollDirectiveOptions<T>
-  extends Omit<InfinityScrollOptions<T>, 'element'> {
-  /**
-   * User defined Observable that
-   * tells if all data had been loaded.
-   */
-  noMoreData$: Observable<any>;
+	extends Omit<InfinityScrollOptions<T>, 'element'> {
+	/**
+	 * User defined Observable that
+	 * tells if all data had been loaded.
+	 */
+	noMoreData$: Observable<any>;
 }
 ```
 
@@ -44,22 +42,22 @@ You need to store the data in a buffer, so that you can accumulate it when the u
 
 ```ts
 @Directive({
-  selector: '[infinityScroll]',
-  // export the directive instance to the host template
-  exportAs: 'infinityScroll',
-  standalone: true,
+	selector: '[infinityScroll]',
+	// export the directive instance to the host template
+	exportAs: 'infinityScroll',
+	standalone: true,
 })
 export class InfinityScrollDirective<T> {
-  #elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
-  /**
-   * The data buffer that will be used to accumulate data
-   * and emit it as a single array.
-   */
-  #dataBuffer = new BehaviorSubject<T[]>([]);
-  /**
-   * The data buffer exposed as an Observable
-   */
-  data$ = this.#dataBuffer.asObservable();
+	#elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
+	/**
+	 * The data buffer that will be used to accumulate data
+	 * and emit it as a single array.
+	 */
+	#dataBuffer = new BehaviorSubject<T[]>([]);
+	/**
+	 * The data buffer exposed as an Observable
+	 */
+	data$ = this.#dataBuffer.asObservable();
 }
 ```
 
@@ -68,29 +66,29 @@ Let's use `@Input` to pass the `InfinityScrollOptions` to the directive (you can
 ```ts
 // ... InfinityScrollDirective
 export class InfinityScrollDirective<T> {
-  #destroy = new Subject<void>();
+	#destroy = new Subject<void>();
 
-  @Input({ required: true, alias: 'infinityScroll' })
-  set options(options: InfinityScrollDirectiveOptions<T[]>) {
-    // ensures that previous infinityScroll subscription is unsubscribed
-    this.#destroy.next();
+	@Input({ required: true, alias: 'infinityScroll' })
+	set options(options: InfinityScrollDirectiveOptions<T[]>) {
+		// ensures that previous infinityScroll subscription is unsubscribed
+		this.#destroy.next();
 
-    // reset the data buffer
-    this.#dataBuffer.next([]);
+		// reset the data buffer
+		this.#dataBuffer.next([]);
 
-    infinityScroll({
-      ...options,
-      element: this.#elementRef.nativeElement,
-    })
-      .pipe(
-        scan((acc, data) => [...acc, ...data], [] as T[]),
-        takeUntil(options.noMoreData$),
-        takeUntil(this.#destroy)
-      )
-      .subscribe(data => {
-        this.#dataBuffer.next(data);
-      });
-  }
+		infinityScroll({
+			...options,
+			element: this.#elementRef.nativeElement,
+		})
+			.pipe(
+				scan((acc, data) => [...acc, ...data], [] as T[]),
+				takeUntil(options.noMoreData$),
+				takeUntil(this.#destroy)
+			)
+			.subscribe((data) => {
+				this.#dataBuffer.next(data);
+			});
+	}
 }
 ```
 
@@ -114,14 +112,14 @@ The `ngOnDestroy` lifecycle hook is used to unsubscribe from the infinity scroll
 ```html
 <!-- alias to infinity scroll directive instance -->
 <div
-  [infinityScroll]="infinityScrollOptions"
-  #infinityScroll="infinityScroll"
-  style="max-width: 15rem;max-height: 10rem; overflow: auto"
+	[infinityScroll]="infinityScrollOptions"
+	#infinityScroll="infinityScroll"
+	style="max-width: 15rem;max-height: 10rem; overflow: auto"
 >
-  <ul>
-    <!-- loop over the data source -->
-    <li *ngFor="let item of infinityScroll.data$ | async">{{ item.title }}</li>
-  </ul>
+	<ul>
+		<!-- loop over the data source -->
+		<li *ngFor="let item of infinityScroll.data$ | async">{{ item.title }}</li>
+	</ul>
 </div>
 
 <p *ngIf="infinityScrollOptions.loading | async">Loading..</p>
@@ -133,34 +131,34 @@ Configure Infinity Scroll
 
 ```ts
 interface Todo {
-  title: string;
+	title: string;
 }
 
 const PAGE_SIZE = 10;
 
 @Component({
-  templateUrl: './app.component.html',
-  standalone: true,
-  imports: [CommonModule, InfinityScrollDirective],
+	templateUrl: './app.component.html',
+	standalone: true,
+	imports: [CommonModule, InfinityScrollDirective],
 })
 export class AppComponent {
-  #lastBatchLength = new BehaviorSubject<number>(
-    PAGE_SIZE /** Default to Page Size */
-  );
-  /**
-   * An observable that signals if all data had been loaded
-   *
-   * It detects whether all data is loaded or not by comparing
-   * the last batch length with the current batch length.
-   *
-   * I'm assuming that the page length is constant, therefore,
-   * if the last batch length is the not same as the current batch length,
-   * then we approach the end
-   */
-  noMoreData$ = this.#lastBatchLength.asObservable().pipe(
-    pairwise(),
-    filter(([prev, curr]) => prev !== curr)
-  );
+	#lastBatchLength = new BehaviorSubject<number>(
+		PAGE_SIZE /** Default to Page Size */
+	);
+	/**
+	 * An observable that signals if all data had been loaded
+	 *
+	 * It detects whether all data is loaded or not by comparing
+	 * the last batch length with the current batch length.
+	 *
+	 * I'm assuming that the page length is constant, therefore,
+	 * if the last batch length is the not same as the current batch length,
+	 * then we approach the end
+	 */
+	noMoreData$ = this.#lastBatchLength.asObservable().pipe(
+		pairwise(),
+		filter(([prev, curr]) => prev !== curr)
+	);
 }
 ```
 
@@ -169,28 +167,28 @@ Before configuring the infinity scroll, you need to know when to stop it, it mig
 ```ts
 // ... AppComponent
 export class AppComponent {
-  // ... other code
-  #http = inject(HttpClient);
-  infinityScrollOptions: InfinityScrollDirectiveOptions<Todo[]> = {
-    initialPageIndex: 1,
-    threshold: 50,
-    loading: new BehaviorSubject(false),
-    noMoreData$: this.noMoreData$,
-    loadFn: (result: InfinityScrollResult) => {
-      return this.#http
-        .get<Todo[]>(`https://jsonplaceholder.typicode.com/todos`, {
-          params: {
-            _start: result.pageIndex,
-            _limit: PAGE_SIZE,
-          },
-        })
-        .pipe(
-          tap(todos => {
-            this.#lastBatchLength.next(todos.length);
-          })
-        );
-    },
-  };
+	// ... other code
+	#http = inject(HttpClient);
+	infinityScrollOptions: InfinityScrollDirectiveOptions<Todo[]> = {
+		initialPageIndex: 1,
+		threshold: 50,
+		loading: new BehaviorSubject(false),
+		noMoreData$: this.noMoreData$,
+		loadFn: (result: InfinityScrollResult) => {
+			return this.#http
+				.get<Todo[]>(`https://jsonplaceholder.typicode.com/todos`, {
+					params: {
+						_start: result.pageIndex,
+						_limit: PAGE_SIZE,
+					},
+				})
+				.pipe(
+					tap((todos) => {
+						this.#lastBatchLength.next(todos.length);
+					})
+				);
+		},
+	};
 }
 ```
 
@@ -211,22 +209,22 @@ The infinity scroll options are pretty much the same as the ones used in the van
 
 ```ts
 @Pipe({
-  name: 'infinityScroll',
-  standalone: true,
+	name: 'infinityScroll',
+	standalone: true,
 })
 export class InfinityScrollPipe<T> implements PipeTransform {
-  transform(
-    options: InfinityScrollDirectiveOptions<T[]>,
-    element: HTMLElement
-  ): Observable<T[]> {
-    return infinityScroll({
-      ...options,
-      element,
-    }).pipe(
-      scan((acc, data) => [...acc, ...data], [] as T[]),
-      takeUntil(options.noMoreData$)
-    );
-  }
+	transform(
+		options: InfinityScrollDirectiveOptions<T[]>,
+		element: HTMLElement
+	): Observable<T[]> {
+		return infinityScroll({
+			...options,
+			element,
+		}).pipe(
+			scan((acc, data) => [...acc, ...data], [] as T[]),
+			takeUntil(options.noMoreData$)
+		);
+	}
 }
 ```
 
@@ -238,21 +236,21 @@ export class InfinityScrollPipe<T> implements PipeTransform {
 
 ```html
 <div
-  #infinityScrollPipeEl
-  style="max-width: 15rem;max-height: 10rem; overflow: auto"
+	#infinityScrollPipeEl
+	style="max-width: 15rem;max-height: 10rem; overflow: auto"
 >
-  <ul>
-    <li
-      class="border"
-      *ngFor="
+	<ul>
+		<li
+			class="border"
+			*ngFor="
         let item of infinityScrollOptions
           | infinityScroll : infinityScrollPipeEl
           | async
       "
-    >
-      {{ item.title }}
-    </li>
-  </ul>
+		>
+			{{ item.title }}
+		</li>
+	</ul>
 </div>
 ```
 

@@ -1,39 +1,48 @@
 ---
-import { Icon } from 'astro-icon/components';
-import { getCollection } from 'astro:content';
-import Avatar from '~/components/Avatar.astro';
-import { HOME } from '~/constants';
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
+import Avatar from "~/components/Avatar.astro";
+import { HOME } from "~/constants";
 
-const socialLinks = await getCollection('socialLinks').then((arr) =>
-	// Sort the social links alphabetically by name
-	arr.sort((a, b) => a.data.name.localeCompare(b.data.name)),
+const socialLinks = await getCollection("socialLinks").then((arr) =>
+  // Sort the social links alphabetically by name
+  arr.sort((a, b) => a.data.name.localeCompare(b.data.name)),
 );
 ---
 
-<section class='sm:flex gap-8 space-y-4 sm:space-y-0 z-10' id='hero'>
-	<div
-		class='max-w-3xl space-y-4 font-semibold not-italic leading-9 tracking-tighter grow'
-	>
-		<div class='flex items-center gap-4'>
-			<h1 class='text-4xl text-black dark:text-white'>
-				{HOME.title}
-			</h1>
-				<div class="flex justify-center space-x-2 md:order-2">
-			{socialLinks.map(async ({ data: socialLink }) => (
-				<a aria-label={socialLink.name} class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-100 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 rounded-md p-2 default-transition default-focus" href={socialLink.url} rel="noreferrer" target="_blank" title={socialLink.name}>
-					<span class="sr-only">{socialLink.name}</span>
-					<Icon class="h-5 w-5" name={socialLink.icon} />
-				</a>
-			))}
-		</div>
-		</div>
+<section class="sm:flex gap-8 space-y-4 sm:space-y-0 z-10" id="hero">
+  <div
+    class="max-w-4xl space-y-4 font-semibold not-italic leading-9 tracking-tighter grow"
+  >
+    <div class="flex items-center gap-4">
+      <h1 class="text-4xl text-black dark:text-white">
+        {HOME.title}
+      </h1>
+      <div class="flex justify-center space-x-2 md:order-2">
+        {
+          socialLinks.map(async ({ data: socialLink }) => (
+            <a
+              aria-label={socialLink.name}
+              class="text-gray-400 hover:text-gray-500 dark:hover:text-gray-100 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 rounded-md p-1.5 default-transition default-focus"
+              href={socialLink.url}
+              rel="noreferrer"
+              target="_blank"
+              title={socialLink.name}
+            >
+              <span class="sr-only">{socialLink.name}</span>
+              <Icon class="size-4" name={socialLink.icon} />
+            </a>
+          ))
+        }
+      </div>
+    </div>
 
-		<h2 class='text-2xl text-gray-400 dark:text-gray-600 md:max-w-md'>
-			{HOME.subtitle}
-		</h2>
-	</div>
+    <h2 class="text-2xl text-gray-400 dark:text-gray-600 md:max-w-lg">
+      {HOME.subtitle}
+    </h2>
+  </div>
 
-	<div class="hidden sm:block">
-		<Avatar className="h-24 w-24 lg:h-32 lg:w-32" width={128} height={128}  />
-	</div>
+  <div class="hidden sm:block">
+    <Avatar className="h-24 w-24 lg:h-32 lg:w-32" width={128} height={128} />
+  </div>
 </section>

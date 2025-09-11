@@ -1,10 +1,8 @@
 ---
 title: React Context In Angular
 description: 'Mimic React Context API in Angular'
+featured: 30
 publishedAt: '2021-09-10T00:00:00.000'
-
-
-
 ---
 
 In this article, I'm going to show you how to mimic **React Context API** in **Angular**, I'll start by defining **React Context**, talk about what problem is meant to solve, and a possible implementation in Angular.
@@ -33,11 +31,11 @@ Here's 4 components (AppComponent, Parent, Child, Grandchild), the **AppComponen
 
 ```typescript title="app.component.ts"
 @Component({
-  selector: 'app-root',
-  template: '<app-parent [familyName]="familyNameValue"></app-parent>',
+	selector: 'app-root',
+	template: '<app-parent [familyName]="familyNameValue"></app-parent>',
 })
 export class AppComponent {
-  familyNameValue = 'The Angulars';
+	familyNameValue = 'The Angulars';
 }
 ```
 
@@ -45,11 +43,11 @@ AppComponent passes the value to the Parent component
 
 ```typescript title="parent.component.ts"
 @Component({
-  selector: 'app-parent',
-  template: '<app-child [familyName]="familyName"></app-child>',
+	selector: 'app-parent',
+	template: '<app-child [familyName]="familyName"></app-child>',
 })
 export class ParentComponent {
-  @Input() familyName: string;
+	@Input() familyName: string;
 }
 ```
 
@@ -57,11 +55,11 @@ Parent component passes the value to the Child component
 
 ```typescript title="child.component.ts"
 @Component({
-  selector: 'app-child',
-  template: '<app-grandchild [familyName]="familyName"></app-grandchild>',
+	selector: 'app-child',
+	template: '<app-grandchild [familyName]="familyName"></app-grandchild>',
 })
 export class ChildComponent {
-  @Input() familyName: string;
+	@Input() familyName: string;
 }
 ```
 
@@ -69,11 +67,11 @@ Child component passes the value to the Grandchild component
 
 ```typescript title="grandchild.component.ts"
 @Component({
-  selector: 'app-grandchild',
-  template: 'Family Name: {{familyName}}',
+	selector: 'app-grandchild',
+	template: 'Family Name: {{familyName}}',
 })
 export class GrandchildComponent {
-  @Input() familyName: string;
+	@Input() familyName: string;
 }
 ```
 
@@ -93,15 +91,15 @@ What if you can remove the inputs and only have a generic one that could be acce
 
 ```typescript
 @Component({
-  selector: 'app-root',
-  template: `
-    <context name="FamilyContext">
-      <provider name="FamilyContext" [value]="familyNameValue">
-        // This part
-        <app-grandchild> </app-grandchild>
-      </provider>
-    </context>
-  `,
+	selector: 'app-root',
+	template: `
+		<context name="FamilyContext">
+			<provider name="FamilyContext" [value]="familyNameValue">
+				// This part
+				<app-grandchild> </app-grandchild>
+			</provider>
+		</context>
+	`,
 })
 export class AppComponent {}
 ```
@@ -110,12 +108,12 @@ And for the component that needs the value
 
 ```typescript
 @Component({
-  selector: 'app-grandchild',
-  template: `
-    <consumer name="FamilyContext">
-      <ng-template let-value> Family Name: {{ value }} </ng-template>
-    </consumer>
-  `,
+	selector: 'app-grandchild',
+	template: `
+		<consumer name="FamilyContext">
+			<ng-template let-value> Family Name: {{ value }} </ng-template>
+		</consumer>
+	`,
 })
 export class GrandchildComponent {}
 ```
@@ -144,11 +142,11 @@ The provider have `value` props that will passed down to the consumers.
 
 ```jsx
 function App() {
-  return (
-    <MyContext.Provider value="valueToBeConsumedByDescendantsConsumer">
-      <ComponentThatHaveConsumerAsChild />
-    </MyContext.Provider>
-  );
+	return (
+		<MyContext.Provider value="valueToBeConsumedByDescendantsConsumer">
+			<ComponentThatHaveConsumerAsChild />
+		</MyContext.Provider>
+	);
 }
 ```
 
@@ -156,7 +154,7 @@ The consumer takes a function with the Provider value as an argument, the functi
 
 ```jsx
 function ComponentThatHaveConsumerAsChild() {
-  return <MyContext.Consumer>{value => <h1>{value}</h1>}</MyContext.Consumer>;
+	return <MyContext.Consumer>{(value) => <h1>{value}</h1>}</MyContext.Consumer>;
 }
 ```
 
@@ -180,27 +178,27 @@ and ended up using them like this
 
 ```typescript
 @Component({
-  selector: 'app-root',
-  template: `
-    <context name="FamilyContext">
-      // (1) -----> The Context Component
-      <provider name="FamilyContext" [value]="familyNameValue">
-        // (2) -----> The Provider Component
-        <app-parent> </app-parent>
-      </provider>
-    </context>
-  `,
+	selector: 'app-root',
+	template: `
+		<context name="FamilyContext">
+			// (1) -----> The Context Component
+			<provider name="FamilyContext" [value]="familyNameValue">
+				// (2) -----> The Provider Component
+				<app-parent> </app-parent>
+			</provider>
+		</context>
+	`,
 })
 export class AppComponent {}
 
 @Component({
-  selector: 'app-grandchild',
-  template: `
-    <consumer name="FamilyContext">
-      // (3) -----> The Consumer Component
-      <ng-template let-value> Family Name: {{ value }} </ng-template>
-    </consumer>
-  `,
+	selector: 'app-grandchild',
+	template: `
+		<consumer name="FamilyContext">
+			// (3) -----> The Consumer Component
+			<ng-template let-value> Family Name: {{ value }} </ng-template>
+		</consumer>
+	`,
 })
 export class GrandchildComponent {}
 ```
@@ -211,24 +209,24 @@ I'll explain each component in detail soon.
 
 ```typescript
 export function assertNotNullOrUndefined<T>(
-  value: T,
-  debugLabel: string
+	value: T,
+	debugLabel: string
 ): asserts value is NonNullable<T> {
-  if (value === null || value === undefined) {
-    throw new Error(`${debugLabel} is undefined or null.`);
-  }
+	if (value === null || value === undefined) {
+		throw new Error(`${debugLabel} is undefined or null.`);
+	}
 }
 
 export function assertStringIsNotEmpty(
-  value: any,
-  debugLabel: string
+	value: any,
+	debugLabel: string
 ): asserts value is string {
-  if (typeof value !== 'string') {
-    throw new Error(`${debugLabel} is not string`);
-  }
-  if (value.trim() === '') {
-    throw new Error(`${debugLabel} cannot be empty`);
-  }
+	if (typeof value !== 'string') {
+		throw new Error(`${debugLabel} is not string`);
+	}
+	if (value.trim() === '') {
+		throw new Error(`${debugLabel} cannot be empty`);
+	}
 }
 ```
 
@@ -255,28 +253,28 @@ _Initial Implementation_
 
 ```typescript
 @Component({
-  selector: 'context',
-  template: '<ng-content></ng-content>', // ----> (1)
+	selector: 'context',
+	template: '<ng-content></ng-content>', // ----> (1)
 })
 export class ContextComponent implements OnInit, OnChanges {
-  @Input() name!: string; // ----> (2)
-  @Input() defaultValue?: any; // ----> (3)
+	@Input() name!: string; // ----> (2)
+	@Input() defaultValue?: any; // ----> (3)
 
-  constructor() {}
+	constructor() {}
 
-  ngOnInit(): void {
-    assertStringIsNotEmpty(this.name, 'Context name'); // ----> (4)
-  }
+	ngOnInit(): void {
+		assertStringIsNotEmpty(this.name, 'Context name'); // ----> (4)
+	}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const nameChange = changes.name;
-    if (nameChange && !nameChange.isFirstChange()) {
-      const { currentValue, previousValue } = nameChange;
-      throw new Error(
-        `Context name can be initialized only once.\n Original name ${previousValue}\n New name ${currentValue}`
-      );
-    }
-  }
+	ngOnChanges(changes: SimpleChanges): void {
+		const nameChange = changes.name;
+		if (nameChange && !nameChange.isFirstChange()) {
+			const { currentValue, previousValue } = nameChange;
+			throw new Error(
+				`Context name can be initialized only once.\n Original name ${previousValue}\n New name ${currentValue}`
+			);
+		}
+	}
 }
 ```
 
@@ -299,31 +297,31 @@ _Initial Implementation_
 
 ```typescript
 @Component({
-  selector: 'provider',
-  template: '<ng-content></ng-content>',
+	selector: 'provider',
+	template: '<ng-content></ng-content>',
 })
 export class ProviderComponent implements OnInit {
-  @Input() name!: string; // ----> (1)
-  @Input() value?: any; // ----> (2)
+	@Input() name!: string; // ----> (1)
+	@Input() value?: any; // ----> (2)
 
-  ngOnInit(): void {
-    assertStringIsNotEmpty(this.name, 'Provider context name');
+	ngOnInit(): void {
+		assertStringIsNotEmpty(this.name, 'Provider context name');
 
-    if (this.value === undefined) {
-      // ----> (3)
-      throw new Error(`Provider without value is worthless.`);
-    }
-  }
+		if (this.value === undefined) {
+			// ----> (3)
+			throw new Error(`Provider without value is worthless.`);
+		}
+	}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const nameChange = changes.name;
-    if (nameChange && !nameChange.isFirstChange()) {
-      const { currentValue, previousValue } = nameChange;
-      throw new Error(
-        `Context name can be initialized only once.\n Original name ${previousValue}\n New name ${currentValue}`
-      );
-    }
-  }
+	ngOnChanges(changes: SimpleChanges): void {
+		const nameChange = changes.name;
+		if (nameChange && !nameChange.isFirstChange()) {
+			const { currentValue, previousValue } = nameChange;
+			throw new Error(
+				`Context name can be initialized only once.\n Original name ${previousValue}\n New name ${currentValue}`
+			);
+		}
+	}
 }
 ```
 
@@ -339,12 +337,12 @@ before digging into it, let's see the example usage first.
 
 ```typescript
 @Component({
-  selector: 'app-grandchild',
-  template: `
-    <consumer name="FamilyContext">
-      <ng-template let-value> Family Name: {{ value }} </ng-template>
-    </consumer>
-  `,
+	selector: 'app-grandchild',
+	template: `
+		<consumer name="FamilyContext">
+			<ng-template let-value> Family Name: {{ value }} </ng-template>
+		</consumer>
+	`,
 })
 export class GrandchildComponent {}
 ```
@@ -355,34 +353,34 @@ _Initial Implementation_
 
 ```typescript
 @Component({
-  selector: 'consumer',
-  template: '<ng-content></ng-content>',
+	selector: 'consumer',
+	template: '<ng-content></ng-content>',
 })
 export class ConsumerComponent implements OnInit {
-  @Input() name!: string; // ----> (1)
-  @ContentChild(TemplateRef, { static: true }) templateRef!: TemplateRef<any>; // ----> (2)
+	@Input() name!: string; // ----> (1)
+	@ContentChild(TemplateRef, { static: true }) templateRef!: TemplateRef<any>; // ----> (2)
 
-  ngOnInit(): void {
-    assertStringIsNotEmpty(this.name, 'Consumer context name');
+	ngOnInit(): void {
+		assertStringIsNotEmpty(this.name, 'Consumer context name');
 
-    if (this.templateRef === undefined) {
-      // ----> (3)
-      throw new Error(`
+		if (this.templateRef === undefined) {
+			// ----> (3)
+			throw new Error(`
         Cannot find <ng-template>, you may forget to put the content in <ng-template>.
         If you do not want to put the content in context then no point in using it.
       `);
-    }
-  }
+		}
+	}
 
-  ngOnChanges(changes: SimpleChanges): void {
-    const nameChange = changes.name;
-    if (nameChange && !nameChange.isFirstChange()) {
-      const { currentValue, previousValue } = nameChange;
-      throw new Error(
-        `Context name can be initialized only once.\n Original name ${previousValue}\n New name ${currentValue}`
-      );
-    }
-  }
+	ngOnChanges(changes: SimpleChanges): void {
+		const nameChange = changes.name;
+		if (nameChange && !nameChange.isFirstChange()) {
+			const { currentValue, previousValue } = nameChange;
+			throw new Error(
+				`Context name can be initialized only once.\n Original name ${previousValue}\n New name ${currentValue}`
+			);
+		}
+	}
 }
 ```
 
@@ -703,9 +701,9 @@ Change the root component to include the InjectionToken
 ```typescript
 const FamilyNameToken = new InjectionToken('FamilyName');
 @Component({
-  selector: 'app-root',
-  template: `<app-grandchild> </app-grandchild>`,
-  providers: [{ provide: FamilyNameToken, useValue: 'The Angulars' }],
+	selector: 'app-root',
+	template: `<app-grandchild> </app-grandchild>`,
+	providers: [{ provide: FamilyNameToken, useValue: 'The Angulars' }],
 })
 export class AppComponent {}
 ```
@@ -714,11 +712,11 @@ And for the component that needs the value to inject the InjectionToken
 
 ```typescript
 @Component({
-  selector: 'app-grandchild',
-  template: `Family Name: {{ familyNameValue }}`,
+	selector: 'app-grandchild',
+	template: `Family Name: {{ familyNameValue }}`,
 })
 export class GrandchildComponent {
-  constructor(@Inject(FamilyNameToken) public familyNameValue: string) {}
+	constructor(@Inject(FamilyNameToken) public familyNameValue: string) {}
 }
 ```
 
@@ -726,13 +724,13 @@ That might look easy and simple at first, but the catch is when you want to upda
 
 ```typescript
 class FamilyName {
-  private state = new ReplaySubject(1);
-  public setName(value: string) {
-    this.state.next(value);
-  }
-  public getName() {
-    return this.state.asObservable();
-  }
+	private state = new ReplaySubject(1);
+	public setName(value: string) {
+		this.state.next(value);
+	}
+	public getName() {
+		return this.state.asObservable();
+	}
 }
 ```
 
@@ -740,14 +738,14 @@ The root component will inject the class and sets the value.
 
 ```typescript
 @Component({
-  selector: 'app-root',
-  template: `<app-grandchild> </app-grandchild>`,
-  providers: [FamilyName],
+	selector: 'app-root',
+	template: `<app-grandchild> </app-grandchild>`,
+	providers: [FamilyName],
 })
 export class AppComponent {
-  constructor(public familyName: FamilyName) {
-    $familyNameState = this.familyName.setName('The Angulars');
-  }
+	constructor(public familyName: FamilyName) {
+		$familyNameState = this.familyName.setName('The Angulars');
+	}
 }
 ```
 
@@ -755,12 +753,12 @@ And for the component that needs the value to inject the `FamilyName` class and 
 
 ```typescript
 @Component({
-  selector: 'app-grandchild',
-  template: `Family Name: {{ $familyNameState | async }}`,
+	selector: 'app-grandchild',
+	template: `Family Name: {{ $familyNameState | async }}`,
 })
 export class GrandchildComponent {
-  $familyNameState = this.familyName.getName();
-  constructor(public familyName: FamilyName) {}
+	$familyNameState = this.familyName.getName();
+	constructor(public familyName: FamilyName) {}
 }
 ```
 
@@ -779,14 +777,14 @@ Uses consumer to obtain the message
 
 ```typescript
 @Component({
-  selector: 'app-chat-message',
-  template: `
-    <consumer name="ChatContext">
-      <ng-template let-value>
-        <h4>{{ value.message }}</h4>
-      </ng-template>
-    </consumer>
-  `,
+	selector: 'app-chat-message',
+	template: `
+		<consumer name="ChatContext">
+			<ng-template let-value>
+				<h4>{{ value.message }}</h4>
+			</ng-template>
+		</consumer>
+	`,
 })
 export class ChatMessageComponent {}
 ```
@@ -796,15 +794,15 @@ Uses consumer to obtain the avatar. notice the `changeDetection` is changed to `
 
 ```typescript
 @Component({
-  selector: 'app-chat-avatar',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `
-    <consumer name="ChatContext">
-      <ng-template let-value>
-        <img width="50" [src]="value.avatar" />
-      </ng-template>
-    </consumer>
-  `,
+	selector: 'app-chat-avatar',
+	changeDetection: ChangeDetectionStrategy.OnPush,
+	template: `
+		<consumer name="ChatContext">
+			<ng-template let-value>
+				<img width="50" [src]="value.avatar" />
+			</ng-template>
+		</consumer>
+	`,
 })
 export class ColorAvatarComponent {}
 ```
@@ -814,16 +812,16 @@ Group the other components and perhaps for styling and aligning. it uses the pro
 
 ```typescript
 @Component({
-  selector: 'app-chat-container',
-  template: `
-    <div style="display: flex;">
-      <app-chat-avatar></app-chat-avatar>
-      <app-chat-message></app-chat-message>
-      <provider name="ChatContext" [value]="{ name: 'Nested Provider Value' }">
-        <app-chat-message></app-chat-message>
-      </provider>
-    </div>
-  `,
+	selector: 'app-chat-container',
+	template: `
+		<div style="display: flex;">
+			<app-chat-avatar></app-chat-avatar>
+			<app-chat-message></app-chat-message>
+			<provider name="ChatContext" [value]="{ name: 'Nested Provider Value' }">
+				<app-chat-message></app-chat-message>
+			</provider>
+		</div>
+	`,
 })
 export class ChatContainerComponent {}
 ```
@@ -835,30 +833,30 @@ Clicking on the _Change Chat Item_ button will update the `chatItem` reference h
 
 ```typescript
 @Component({
-  selector: 'app-root',
-  template: `
-    <context name="ChatContext">
-      <provider [value]="chatItem" name="ChatContext">
-        <app-chat-container></app-chat-container>
-      </provider>
-    </context>
-    <button (click)="updateChatItem()">Change Chat Item</button>
-  `,
+	selector: 'app-root',
+	template: `
+		<context name="ChatContext">
+			<provider [value]="chatItem" name="ChatContext">
+				<app-chat-container></app-chat-container>
+			</provider>
+		</context>
+		<button (click)="updateChatItem()">Change Chat Item</button>
+	`,
 })
 export class AppComponent {
-  chatItem = {
-    message: 'Initial name',
-    avatar:
-      'https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg',
-  };
+	chatItem = {
+		message: 'Initial name',
+		avatar:
+			'https://icon-library.com/images/avatar-icon-images/avatar-icon-images-4.jpg',
+	};
 
-  updateChatItem() {
-    const randomInt = Math.round(Math.random() * 10);
-    this.chatItem = {
-      message: `Random ${randomInt}`,
-      avatar: `https://icon-library.com/images/avatar-icon-images/avatar-icon-images-${randomInt}.jpg`,
-    };
-  }
+	updateChatItem() {
+		const randomInt = Math.round(Math.random() * 10);
+		this.chatItem = {
+			message: `Random ${randomInt}`,
+			avatar: `https://icon-library.com/images/avatar-icon-images/avatar-icon-images-${randomInt}.jpg`,
+		};
+	}
 }
 ```
 

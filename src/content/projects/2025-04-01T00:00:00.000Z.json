@@ -1,8 +1,9 @@
 {
 	"$schema": "../../../.astro/collections/projects.schema.json",
-	"date": "2024-04-01T00:00:00.000Z",
-	"title": "Deepagents",
-	"icon": "Car",
+	"date": "2026-01-01T00:00:00.000Z",
+	"title": "DeepAgents",
+	"description": "Batteries included framework to develop AI agents.",
+	"icon": "Brain",
 	"status": "idea",
 	"url": "https://github.com/januarylabs/deepagents"
 }

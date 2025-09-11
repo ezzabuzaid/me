@@ -1,10 +1,9 @@
 ---
 publishedAt: '2024-06-17T00:00:00'
 title: 'Building Todo List API, Once Again.'
-description: "Build a simple Todo List API with January’s CanonLang and extensions, then connect GitHub and deploy to Fly.io—step-by-step walkthrough."
+description: 'Build a simple Todo List API with January’s CanonLang and extensions, then connect GitHub and deploy to Fly.io—step-by-step walkthrough.'
 
-
-
+featured: 100
 ---
 
 Chances you’ve built a todo list app/website before is high, especially in your early days. Todo list is about the next step after printing “Hello World“.
@@ -51,10 +50,10 @@ Let’s start with describing the todo feature
 
 ```ts
 export default project(
-  feature('Todo', {
-    tables: {},
-    workflows: [],
-  })
+	feature('Todo', {
+		tables: {},
+		workflows: [],
+	})
 );
 ```
 
@@ -68,12 +67,12 @@ _Primary key and audit fields will be auto generated._
 
 ```ts
 tables: {
-  tasks: table({
-    fields: {
-      title: field({ type: 'short-text', validations: [mandatory()] }),
-      completed: field({ type: 'boolean' }),
-    },
-  });
+	tasks: table({
+		fields: {
+			title: field({ type: 'short-text', validations: [mandatory()] }),
+			completed: field({ type: 'boolean' }),
+		},
+	});
 }
 ```
 
@@ -88,16 +87,16 @@ import { saveEntity } from '@extensions/postgresql';
 import { tables } from '@workspace/entities';
 
 workflow('AddTaskWorkflow', {
-  tag: 'tasks',
-  trigger: trigger.http({
-    method: 'post',
-    path: '/',
-  }),
-  execute: async ({ trigger }) => {
-    await saveEntity(tables.tasks, {
-      title: trigger.body.title,
-    });
-  },
+	tag: 'tasks',
+	trigger: trigger.http({
+		method: 'post',
+		path: '/',
+	}),
+	execute: async ({ trigger }) => {
+		await saveEntity(tables.tasks, {
+			title: trigger.body.title,
+		});
+	},
 });
 ```
 
@@ -121,19 +120,19 @@ Select the taks to be updated and update the title.
 ```ts
 import { createQueryBuilder, updateEntity } from '@extensions/postgresql';
 workflow('UpdateTaskWorkflow', {
-  tag: 'tasks',
-  trigger: trigger.http({
-    method: 'patch',
-    path: '/:id',
-  }),
-  execute: async ({ trigger }) => {
-    const qb = createQueryBuilder(tables.tasks, 'tasks').where('id = :id', {
-      id: trigger.path.id,
-    });
-    await updateEntity(qb, {
-      title: trigger.body.title,
-    });
-  },
+	tag: 'tasks',
+	trigger: trigger.http({
+		method: 'patch',
+		path: '/:id',
+	}),
+	execute: async ({ trigger }) => {
+		const qb = createQueryBuilder(tables.tasks, 'tasks').where('id = :id', {
+			id: trigger.path.id,
+		});
+		await updateEntity(qb, {
+			title: trigger.body.title,
+		});
+	},
 });
 ```
 
@@ -143,32 +142,32 @@ Similar to the other actions but now with the powerful **pagination** that will 
 
 ```ts
 import {
-  createQueryBuilder,
-  deferredJoinPagination,
-  execute,
+	createQueryBuilder,
+	deferredJoinPagination,
+	execute,
 } from '@extensions/postgresql';
 import { tables } from '@workspace/entities';
 
 workflow('ListTasksWorkflow', {
-  tag: 'tasks',
-  trigger: trigger.http({
-    method: 'get',
-    path: '/',
-  }),
-  execute: async ({ trigger }) => {
-    const qb = createQueryBuilder(tables.tasks, 'tasks');
-    const paginationMetadata = deferredJoinPagination(qb, {
-      pageSize: trigger.query.pageSize,
-      pageNo: trigger.query.pageNo,
-      count: await qb.getCount(),
-    });
-    const records = await execute(qb);
-    const output = {
-      meta: paginationMetadata(records),
-      records: records,
-    };
-    return output;
-  },
+	tag: 'tasks',
+	trigger: trigger.http({
+		method: 'get',
+		path: '/',
+	}),
+	execute: async ({ trigger }) => {
+		const qb = createQueryBuilder(tables.tasks, 'tasks');
+		const paginationMetadata = deferredJoinPagination(qb, {
+			pageSize: trigger.query.pageSize,
+			pageNo: trigger.query.pageNo,
+			count: await qb.getCount(),
+		});
+		const records = await execute(qb);
+		const output = {
+			meta: paginationMetadata(records),
+			records: records,
+		};
+		return output;
+	},
 });
 ```
 
@@ -181,18 +180,18 @@ import { createQueryBuilder, updateEntity } from '@extensions/postgresql';
 import { tables } from '@workspace/entities';
 
 workflow('ListTasksWorkflow', {
-  tag: 'tasks',
-  trigger: trigger.http({
-    method: 'get',
-    path: '/',
-  }),
-  execute: async ({ trigger }) => {
-    const qb = createQueryBuilder(tables.tasks, 'tasks').where('id = :id', {
-      id: trigger.path.id,
-    });
-    const [task] = await execute(qb);
-    return task;
-  },
+	tag: 'tasks',
+	trigger: trigger.http({
+		method: 'get',
+		path: '/',
+	}),
+	execute: async ({ trigger }) => {
+		const qb = createQueryBuilder(tables.tasks, 'tasks').where('id = :id', {
+			id: trigger.path.id,
+		});
+		const [task] = await execute(qb);
+		return task;
+	},
 });
 ```
 

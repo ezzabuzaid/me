@@ -58,6 +58,19 @@ export function sortPostsByPublishedAt(
 }
 
 /**
+ * Sort posts by `featured` ascending (lower appears first), with fallback to publishedAt desc
+ */
+export function sortPostsByFeatured(
+	a: CollectionEntry<'posts'>,
+	b: CollectionEntry<'posts'>,
+): number {
+	const fa = a.data.featured;
+	const fb = b.data.featured;
+	if (fa !== fb) return fa - fb;
+	return sortPostsByPublishedAt(a, b);
+}
+
+/**
  * Remap a post to match the shape of a list component item
  *
  * @param post - The content collection post entry

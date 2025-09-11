@@ -1,10 +1,8 @@
 ---
 title: Gentle Introduction To ESLint Rules
 description: Unlock the power of custom linting by learning how to write your own ESLint rules tailored for your specific coding requirements.
+featured: 60
 publishedAt: '2022-07-07T12:34:56+00:00'
-
-
-
 ---
 
 Have you ever wondered how your editor can know if you used `var` instead of `let`? or that you missed adding `alt` to the `img` tag? Yes, that is **ESLint** ladies and gentlemen.
@@ -147,19 +145,19 @@ ESLint rule structure as follows
 
 ```typescript
 type Rule = {
-  meta: {
-    hasSuggestion: boolean;
-    type: 'problem' | 'suggestion' | 'layout';
-    docs: {
-      description: string;
-      url: string;
-      category: string;
-      recommended: boolean;
-    };
-    fixable: 'code' | 'whitespace';
-    schema: [];
-  };
-  create: Function;
+	meta: {
+		hasSuggestion: boolean;
+		type: 'problem' | 'suggestion' | 'layout';
+		docs: {
+			description: string;
+			url: string;
+			category: string;
+			recommended: boolean;
+		};
+		fixable: 'code' | 'whitespace';
+		schema: [];
+	};
+	create: Function;
 };
 ```
 
@@ -370,12 +368,12 @@ We've to get all tokens that reference that variable and check if any of them ha
 
 ```js
 const getAllUsageOfThisVar = sourceCode.getTokensAfter(node, {
-  filter: nextToken => nextToken.value === varName,
+	filter: (nextToken) => nextToken.value === varName,
 });
 
-const reassigned = getAllUsageOfThisVar.some(token => {
-  const directNextToken = sourceCode.getTokenAfter(token);
-  return directNextToken.value === '=';
+const reassigned = getAllUsageOfThisVar.some((token) => {
+	const directNextToken = sourceCode.getTokenAfter(token);
+	return directNextToken.value === '=';
 });
 ```
 
@@ -383,21 +381,21 @@ In the fix function, get the variable keyword token (we are interested in its ex
 
 ```js
 if (!reassigned) {
-  context.report({
-    node: node,
-    message: `Use const instead.`,
-    suggest: [
-      {
-        desc: 'You are not reassigning this variable, would you like to change it to const?',
-        fix: function (fixer) {
-          const varToken = sourceCode.getFirstToken(node, {
-            skip: 0,
-          }); // the var/let token
-          return fixer.replaceText(varToken, 'const');
-        },
-      },
-    ],
-  });
+	context.report({
+		node: node,
+		message: `Use const instead.`,
+		suggest: [
+			{
+				desc: 'You are not reassigning this variable, would you like to change it to const?',
+				fix: function (fixer) {
+					const varToken = sourceCode.getFirstToken(node, {
+						skip: 0,
+					}); // the var/let token
+					return fixer.replaceText(varToken, 'const');
+				},
+			},
+		],
+	});
 }
 ```
 
@@ -419,12 +417,12 @@ _html-parser.js_
 
 ```js
 exports.parseForESLint = function (code, options) {
-  return {
-    ast: require('parse5').parse(code),
-    services: {},
-    scopeManager: null,
-    visitorKeys: null,
-  };
+	return {
+		ast: require('parse5').parse(code),
+		services: {},
+		scopeManager: null,
+		visitorKeys: null,
+	};
 };
 ```
 
@@ -464,19 +462,19 @@ const rule = require('./use-let.rule.js');
 const { RuleTester } = require('eslint');
 
 const ruleTester = new RuleTester({
-  parserOptions: {
-    ecmaVersion: 2020,
-  },
+	parserOptions: {
+		ecmaVersion: 2020,
+	},
 });
 
 ruleTester.run('use-let', rule, {
-  valid: [RuleTester.only(`let foo = "bar";`)],
-  invalid: [
-    {
-      code: `var foo = "bar";`,
-      errors: [{ message: 'Use "let" instead' }],
-    },
-  ],
+	valid: [RuleTester.only(`let foo = "bar";`)],
+	invalid: [
+		{
+			code: `var foo = "bar";`,
+			errors: [{ message: 'Use "let" instead' }],
+		},
+	],
 });
 ```
 
@@ -713,7 +711,7 @@ _internalFunction(); // an error will be reporated
 const nil = null;
 
 if (nil === null) {
-  // you should see warning in the console ^^
+	// you should see warning in the console ^^
 }
 ```
 
@@ -766,16 +764,16 @@ Once we found a keyword with comments that have `@private` tag we need to find a
 ```js
 const keywordIdentifier = tokens[index + 1];
 for (const nextToken of tokens.slice(index + 2)) {
-  if (
-    nextToken.type === 'Identifier' &&
-    nextToken.value === keywordIdentifier.value
-  ) {
-    const message = privateTagMessage;
-    context.report({
-      node: nextToken,
-      message: `${keywordIdentifier.value}: ${message}`,
-    });
-  }
+	if (
+		nextToken.type === 'Identifier' &&
+		nextToken.value === keywordIdentifier.value
+	) {
+		const message = privateTagMessage;
+		context.report({
+			node: nextToken,
+			message: `${keywordIdentifier.value}: ${message}`,
+		});
+	}
 }
 ```
 

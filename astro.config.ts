@@ -70,7 +70,7 @@ export default defineConfig({
   site,
 
   vite: {
-      plugins: [base64(), tailwind()],
+      plugins: [base64() as any, tailwind() as any] as any,
       ssr: {
           // Note: These dependencies are only required for builds to work as
           // they are used to generate OpenGraph images.

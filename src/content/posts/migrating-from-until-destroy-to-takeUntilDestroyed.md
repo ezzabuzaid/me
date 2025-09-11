@@ -1,10 +1,8 @@
 ---
 title: 'Migrating from until-destroy to takeUntilDestroyed'
 description: "Migrating to Angular's latest feature, DestroyRef, streamlines component cleanup, pairing seamlessly with takeUntilDestroyed using codemod"
+featured: 40
 publishedAt: '2023-12-19T00:00:00Z'
-
-
-
 ---
 
 Angular has been releasing new things nonstop, one of which Is the `DestroyRef` token, a utility class that provides an `onDestroy` hook that is called when a component/directive is destroyed.
@@ -47,11 +45,11 @@ With `DestroyRef` and `takeUntilDestroyed` you can do the following:
 
 ```ts
 export class NewWayComponent implements OnInit {
-  _destroy: DestroyRef = inject(DestroyRef);
+	_destroy: DestroyRef = inject(DestroyRef);
 
-  ngOnInit(): void {
-    _stream.pipe(takeUntilDestroyed(this._destroy)).subscribe();
-  }
+	ngOnInit(): void {
+		_stream.pipe(takeUntilDestroyed(this._destroy)).subscribe();
+	}
 }
 ```
 
@@ -90,13 +88,13 @@ Create a morph project and select Angular-related files
 import * as morph from 'ts-morph';
 
 const project = new morph.Project({
-  // Change it to select the project you want to update.
-  tsConfigFilePath: './tsconfig.json',
+	// Change it to select the project you want to update.
+	tsConfigFilePath: './tsconfig.json',
 });
 
 // Get all the source files that match the angular pattern (e.g., "*.component.ts")
 const files = project.getSourceFiles(
-  `/**/*.+(component|directive|pipe|service).ts`
+	`/**/*.+(component|directive|pipe|service).ts`
 );
 ```
 
@@ -109,10 +107,10 @@ The plan is to iterate over all files from `ts-morph` and then loop over all cla
 ```ts
 // Iterate through each component file
 for (const file of files) {
-  const classes = file.getDescendantsOfKind(morph.SyntaxKind.ClassDeclaration);
-  for (const clazz of classes) {
-    // Codemod Logic goes here
-  }
+	const classes = file.getDescendantsOfKind(morph.SyntaxKind.ClassDeclaration);
+	for (const clazz of classes) {
+		// Codemod Logic goes here
+	}
 }
 ```
 
@@ -127,16 +125,16 @@ The class doesn’t have an Angular-related decorator.
 
 ```ts
 for (const clazz of classes) {
-  {
-    // only migrate classes that have @Component, @Directive, @Pipe or @Injectable decorators
-    const angularDecorators = ['Component', 'Directive', 'Pipe', 'Injectable'];
-    const angularClass = clazz.getDecorator(dec =>
-      angularDecorators.includes(dec.getName())
-    );
-    if (!angularClass) {
-      continue;
-    }
-  }
+	{
+		// only migrate classes that have @Component, @Directive, @Pipe or @Injectable decorators
+		const angularDecorators = ['Component', 'Directive', 'Pipe', 'Injectable'];
+		const angularClass = clazz.getDecorator((dec) =>
+			angularDecorators.includes(dec.getName())
+		);
+		if (!angularClass) {
+			continue;
+		}
+	}
 }
 ```
 
@@ -144,14 +142,14 @@ The class doesn’t have a `UntilDestroy` decorator.
 
 ```ts
 {
-  // @UntilDestroy() is our indication that the class needs to be migrated
-  const untilDestroyDecorator = clazz.getDecorator(
-    dec => dec.getName() === 'UntilDestroy'
-  );
+	// @UntilDestroy() is our indication that the class needs to be migrated
+	const untilDestroyDecorator = clazz.getDecorator(
+		(dec) => dec.getName() === 'UntilDestroy'
+	);
 
-  if (!untilDestroyDecorator) {
-    continue;
-  }
+	if (!untilDestroyDecorator) {
+		continue;
+	}
 }
 ```
 
@@ -161,10 +159,10 @@ The `UntilDestroy` decorator has options in it.
 // if options is specified then skip this file
 const [optionsArg] = untilDestroyDecorator?.getArguments() ?? [];
 const haveOptions = (
-  optionsArg as morph.ObjectLiteralExpression
+	optionsArg as morph.ObjectLiteralExpression
 )?.getProperties().length;
 if (haveOptions) {
-  continue;
+	continue;
 }
 ```
 
@@ -172,17 +170,17 @@ The `untilDestroyed` function is not used in the class. You need to get all call
 
 ```ts
 {
-  // migrate untilDestroyed() to takeUntilDestroyed()
-  const untilDestroyedCalls = clazz
-    .getDescendantsOfKind(morph.SyntaxKind.CallExpression)
-    .filter(call => {
-      const identifier = call.getLastChildByKind(morph.SyntaxKind.Identifier);
-      return identifier?.getText() === 'untilDestroyed';
-    });
+	// migrate untilDestroyed() to takeUntilDestroyed()
+	const untilDestroyedCalls = clazz
+		.getDescendantsOfKind(morph.SyntaxKind.CallExpression)
+		.filter((call) => {
+			const identifier = call.getLastChildByKind(morph.SyntaxKind.Identifier);
+			return identifier?.getText() === 'untilDestroyed';
+		});
 
-  if (!untilDestroyedCalls.length) {
-    continue;
-  }
+	if (!untilDestroyedCalls.length) {
+		continue;
+	}
 }
 ```
 
@@ -194,9 +192,9 @@ Within the constructor
 @UntilDestroy()
 @Injectable()
 export class InboxService {
-  constructor() {
-    interval(1000).pipe(untilDestroyed(this)).subscribe();
-  }
+	constructor() {
+		interval(1000).pipe(untilDestroyed(this)).subscribe();
+	}
 }
 ```
 
@@ -206,9 +204,9 @@ Within a method
 @UntilDestroy()
 @Component({})
 export class InboxComponent {
-  ngOnInit() {
-    interval(1000).pipe(untilDestroyed(this)).subscribe();
-  }
+	ngOnInit() {
+		interval(1000).pipe(untilDestroyed(this)).subscribe();
+	}
 }
 ```
 
@@ -218,9 +216,9 @@ Inlined in the class body
 @UntilDestroy()
 @Component({})
 export class HomeComponent {
-  subscription = fromEvent(document, 'mousemove')
-    .pipe(untilDestroyed(this))
-    .subscribe();
+	subscription = fromEvent(document, 'mousemove')
+		.pipe(untilDestroyed(this))
+		.subscribe();
 }
 ```
 
@@ -231,34 +229,34 @@ So you need to loop over `untilDestroyedCalls` from above and check where each `
 let doWeNeedDestroyRef = null;
 
 for (const untilDestroyedCall of untilDestroyedCalls) {
-  const withinConstructor = untilDestroyedCall.getFirstAncestorByKind(
-    morph.SyntaxKind.Constructor
-  );
-  const withinMethod = untilDestroyedCall.getFirstAncestorByKind(
-    morph.SyntaxKind.MethodDeclaration
-  );
+	const withinConstructor = untilDestroyedCall.getFirstAncestorByKind(
+		morph.SyntaxKind.Constructor
+	);
+	const withinMethod = untilDestroyedCall.getFirstAncestorByKind(
+		morph.SyntaxKind.MethodDeclaration
+	);
 
-  switch (true) {
-    case !!withinConstructor:
-      // takeUntilDestroyed if used within the constructor can auto-infer the destroyRef
-      // from the injection context
-      untilDestroyedCall.replaceWithText('takeUntilDestroyed()');
-      break;
-    case !!withinMethod:
-      // takeUntilDestroyed if used within a method needs to be passed the destroyRef
-      untilDestroyedCall.replaceWithText(
-        'takeUntilDestroyed(this._destroyRef)'
-      );
+	switch (true) {
+		case !!withinConstructor:
+			// takeUntilDestroyed if used within the constructor can auto-infer the destroyRef
+			// from the injection context
+			untilDestroyedCall.replaceWithText('takeUntilDestroyed()');
+			break;
+		case !!withinMethod:
+			// takeUntilDestroyed if used within a method needs to be passed the destroyRef
+			untilDestroyedCall.replaceWithText(
+				'takeUntilDestroyed(this._destroyRef)'
+			);
 
-      // set doWeNeedDestroyRef to true so that you can add the _destroyRef property
-      doWeNeedDestroyRef ??= true;
-      break;
-    default:
-      // Assuming the observable is declared directly in the class
-      // body so you treat it as if it were within the constructor
-      untilDestroyedCall.replaceWithText('takeUntilDestroyed()');
-      break;
-  }
+			// set doWeNeedDestroyRef to true so that you can add the _destroyRef property
+			doWeNeedDestroyRef ??= true;
+			break;
+		default:
+			// Assuming the observable is declared directly in the class
+			// body so you treat it as if it were within the constructor
+			untilDestroyedCall.replaceWithText('takeUntilDestroyed()');
+			break;
+	}
 }
 ```
 
@@ -266,17 +264,17 @@ You might have noticied the variable `doWeNeedDestroyRef` that is used to determ
 
 ```ts
 {
-  // add Inject DestroyRef after last public property
-  if (doWeNeedDestroyRef) {
-    const lastPublicProperty = clazz
-      .getInstanceProperties()
-      .filter(prop => prop.getScope() === morph.Scope.Public);
-    clazz.insertProperty(lastPublicProperty.length, {
-      name: '_destroyRef',
-      scope: morph.Scope.Private,
-      initializer: 'inject(DestroyRef)',
-    });
-  }
+	// add Inject DestroyRef after last public property
+	if (doWeNeedDestroyRef) {
+		const lastPublicProperty = clazz
+			.getInstanceProperties()
+			.filter((prop) => prop.getScope() === morph.Scope.Public);
+		clazz.insertProperty(lastPublicProperty.length, {
+			name: '_destroyRef',
+			scope: morph.Scope.Private,
+			initializer: 'inject(DestroyRef)',
+		});
+	}
 }
 ```
 
@@ -286,12 +284,12 @@ Last but not least, you need to remove the `until-destroy` import and `UntilDest
 
 ```ts
 {
-  // ...
-  if (!untilDestroyedCalls.length) {
-    continue;
-  }
-  // remove @UntilDestroy() decorator
-  untilDestroyDecorator.remove();
+	// ...
+	if (!untilDestroyedCalls.length) {
+		continue;
+	}
+	// remove @UntilDestroy() decorator
+	untilDestroyDecorator.remove();
 }
 ```
 
@@ -299,11 +297,11 @@ Remove the `until-destroy` import
 
 ```ts
 {
-  // remove untilDestroyed import
-  const untilDestroyedImport = file.getImportDeclaration(
-    imp => imp.getModuleSpecifierValue() === '@ngneat/until-destroy'
-  );
-  untilDestroyedImport?.remove();
+	// remove untilDestroyed import
+	const untilDestroyedImport = file.getImportDeclaration(
+		(imp) => imp.getModuleSpecifierValue() === '@ngneat/until-destroy'
+	);
+	untilDestroyedImport?.remove();
 }
 ```
 
@@ -311,39 +309,39 @@ Finally, you need to ensure the `DestroyRef` and `takeUntilDestroyed` imports ar
 
 ```ts
 {
-  // add imports if needed
-  if (fileMigrated) {
-    const imports: [string, string[]][] = [
-      ['@angular/core', ['inject', 'DestroyRef']],
-      ['@angular/core/rxjs-interop', ['takeUntilDestroyed']],
-    ];
-    setImports(file, imports);
-    file.saveSync();
-  }
+	// add imports if needed
+	if (fileMigrated) {
+		const imports: [string, string[]][] = [
+			['@angular/core', ['inject', 'DestroyRef']],
+			['@angular/core/rxjs-interop', ['takeUntilDestroyed']],
+		];
+		setImports(file, imports);
+		file.saveSync();
+	}
 }
 
 export function setImports(
-  sourceFile: morph.SourceFile,
-  imports: [string, string[]][]
+	sourceFile: morph.SourceFile,
+	imports: [string, string[]][]
 ): void {
-  imports.forEach(([moduleSpecifier, namedImports]) => {
-    const moduleSpecifierImport =
-      sourceFile
-        .getImportDeclarations()
-        .find(imp => imp.getModuleSpecifierValue() === moduleSpecifier) ??
-      sourceFile.addImportDeclaration({
-        moduleSpecifier,
-      });
+	imports.forEach(([moduleSpecifier, namedImports]) => {
+		const moduleSpecifierImport =
+			sourceFile
+				.getImportDeclarations()
+				.find((imp) => imp.getModuleSpecifierValue() === moduleSpecifier) ??
+			sourceFile.addImportDeclaration({
+				moduleSpecifier,
+			});
 
-    const missingNamedImports = namedImports.filter(
-      namedImport =>
-        !moduleSpecifierImport
-          .getNamedImports()
-          .some(imp => imp.getName() === namedImport)
-    );
+		const missingNamedImports = namedImports.filter(
+			(namedImport) =>
+				!moduleSpecifierImport
+					.getNamedImports()
+					.some((imp) => imp.getName() === namedImport)
+		);
 
-    moduleSpecifierImport.addNamedImports(missingNamedImports);
-  });
+		moduleSpecifierImport.addNamedImports(missingNamedImports);
+	});
 }
 ```
 

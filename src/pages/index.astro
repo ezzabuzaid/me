@@ -10,7 +10,7 @@ import { Music } from '~/components/Widgets/Lanyard/Music.tsx';
 import List from '~/components/Widgets/List.astro';
 import Timeline from '~/components/Widgets/Timeline.astro';
 import Document from '~/layouts/Document.astro';
-import { filterPosts, mapPostToListItem, sortPostsByPublishedAt } from '~/utils/content';
+import { filterPosts, mapPostToListItem, sortPostsByFeatured } from '~/utils/content';
 import { getLanyardUser } from '~/utils/lanyard';
 
 export const prerender = false;
@@ -21,7 +21,7 @@ const [status, posts, projects] = await Promise.all([
 	getCollection('posts').then((posts) =>
 		posts
 			.filter(filterPosts({ archived: false }))
-			.sort(sortPostsByPublishedAt)
+			.sort(sortPostsByFeatured)
 			.map(mapPostToListItem),
 	),
 	getCollection('projects').then((projects) =>

@@ -1,102 +1,116 @@
 ---
-import { format } from 'date-fns';
-import { Newspaper } from 'lucide-preact';
+import { format } from "date-fns";
+import { Newspaper } from "lucide-preact";
 
-import { cn } from '~/utils/cn';
-import { loadIcon } from '~/utils/icon';
+import { cn } from "~/utils/cn";
+import { loadIcon } from "~/utils/icon";
 
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 
-type Item = CollectionEntry<'posts'>['data'] & {
-	href: string;
+type Item = CollectionEntry<"posts">["data"] & {
+  href: string;
 };
 
 export interface Props {
-	class?: string;
-	empty?: {
-		title?: string;
-		description?: string;
-	};
-	href?: string;
-	id: string;
-	items: Array<Item>;
-	title: string;
+  class?: string;
+  empty?: {
+    title?: string;
+    description?: string;
+  };
+  href?: string;
+  id: string;
+  items: Array<Item>;
+  title: string;
 }
 
-const { class: className, empty, href, id, items, title } = Astro.props as Props;
+const {
+  class: className,
+  empty,
+  href,
+  id,
+  items,
+  title,
+} = Astro.props as Props;
 
 const hasUrl = !!href;
-const TitleComponent = hasUrl ? 'a' : 'h3';
+const TitleComponent = hasUrl ? "a" : "h3";
 const anchorProps = hasUrl ? { href } : {};
 ---
 
-<section class={cn('bg-white dark:bg-gray-950 rounded-xl border-2 border-gray-100 dark:border-gray-900 px-2 pb-2 overflow-auto', className)} id={id}>
-	<TitleComponent
-		class={cn(
-			'absolute -translate-y-3 inline-flex transform-gpu items-center bg-white dark:bg-gray-950 rounded-full px-4 mx-4 border-2 border-gray-100 dark:border-gray-900 font-bold text-gray-600 dark:text-white text-sm',
-			hasUrl ? 'default-transition default-focus' : ''
-		)}
-		{...anchorProps}
-	>
-		{title}
-	</TitleComponent>
+<section
+  class={cn(
+    "bg-white dark:bg-gray-950 rounded-xl border-2 border-gray-100 dark:border-gray-900 px-2 pb-2 overflow-auto",
+    className,
+  )}
+  id={id}
+>
+  <TitleComponent
+    class={cn(
+      "absolute -translate-y-3 inline-flex transform-gpu items-center bg-white dark:bg-gray-950 rounded-full px-4 mx-4 border-2 border-gray-100 dark:border-gray-900 font-bold text-gray-600 dark:text-white text-sm",
+      hasUrl ? "default-transition default-focus" : "",
+    )}
+    {...anchorProps}
+  >
+    {title}
+  </TitleComponent>
 
-	{items.length > 0 ? (
-		<ul
-			class="flex flex-col space-y-2 dark:space-y-0 mt-3"
-			role="list"
-		>
-			{items.map(async (item, index) => {
-				const Icon = await loadIcon(item.icon);
+  {
+    items.length > 0 ? (
+      <ul class="flex flex-col space-y-2 dark:space-y-0 mt-3" role="list">
+        {items.map(async (item, index) => {
+          const Icon = await loadIcon(item.icon);
 
-				const hasUrl = !!item.href;
-				const Component = hasUrl ? 'a' : 'div';
+          const hasUrl = !!item.href;
+          const Component = hasUrl ? "a" : "div";
 
-				return (
-					<>
-						<li>
-							<Component
-								href={item.href}
-									class={cn(
-									"text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 flex items-center justify-between space-x-4 p-2.5 rounded-md default-transition default-focus",
-									{ 'mt-2': index + 1 !== 0 }
-								)}
-							>
-								<div class="font-semibold flex items-center space-x-3">
-									<Icon class="w-4 h-4" />
-									<p>{item.title}</p>
-								</div>
+          return (
+            <>
+              <li>
+                <Component
+                  href={item.href}
+                  class={cn(
+                    "text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 flex items-center justify-between space-x-4 p-2.5 rounded-md default-transition default-focus",
+                    { "mt-2": index + 1 !== 0 },
+                  )}
+                >
+                  <div class="font-semibold flex items-center space-x-3">
+                    <Icon class="w-4 h-4" />
+                    <p>{item.title}</p>
+                  </div>
 
-								<time
-									class="font-normal text-sm"
-									datetime={item.publishedAt.toISOString()}
-									title={format(item.publishedAt, 'PPP')}
-								>
-									{format(item.publishedAt, 'dd-MM-yyyy')}
-								</time>
-							</Component>
-						</li>
+                  <div class="whitespace-nowrap text-right text-sm">
+                    <time
+                      class="font-normal"
+                      datetime={item.publishedAt.toISOString()}
+                      title={format(item.publishedAt, "PPP")}
+                    >
+                      {format(item.publishedAt, "dd-MM-yyyy")}
+                    </time>
+                  </div>
+                </Component>
+              </li>
 
-						{/* {index !== items.length - 1 && (
+              {/* {index !== items.length - 1 && (
 							<hr class="border border-gray-100 dark:border-gray-900 mb-0" />
 						)} */}
-					</>
-				)
-			})}
-		</ul>
-	) : (
-		<div class="h-full flex items-center justify-center">
-			<div class="space-y-2 text-center">
-				<Newspaper class='mx-auto' />
+            </>
+          );
+        })}
+      </ul>
+    ) : (
+      <div class="h-full flex items-center justify-center">
+        <div class="space-y-2 text-center">
+          <Newspaper class="mx-auto" />
 
-				<h3 class='font-semibold text-gray-900 text-md dark:text-gray-200'>
-					{empty?.title ?? 'No posts here yet'}
-				</h3>
+          <h3 class="font-semibold text-gray-900 text-md dark:text-gray-200">
+            {empty?.title ?? "No posts here yet"}
+          </h3>
 
-				<p class='text-gray-400 text-sm dark:text-gray-600'>
-					{empty?.description ?? 'Stay tuned for more content soon'}
-				</p>
-			</div>
-		</div>
-	)}
+          <p class="text-gray-400 text-sm dark:text-gray-600">
+            {empty?.description ?? "Stay tuned for more content soon"}
+          </p>
+        </div>
+      </div>
+    )
+  }
 </section>
