@@ -1,0 +1,26 @@
+---
+import { Image } from 'astro:assets';
+
+import avatarSrc from '~/assets/avatar.jpeg';
+import { cn } from '~/utils/cn';
+
+export interface Props {
+	className?: string;
+	height: number;
+	width: number;
+}
+
+const { className, height, width } = Astro.props;
+---
+
+<div class={cn('relative inline-flex', className)} transition:name='avatar'>
+	<Image
+		alt='A photo of myself'
+		class='z-10 h-full w-full rounded-full'
+		height={height}
+		src={avatarSrc}
+		width={width}
+	/>
+
+	<div class='absolute h-full w-full rounded-full bg-gray-100 dark:bg-gray-900 motion-safe:animate-pulse' />
+</div>

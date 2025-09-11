@@ -1,0 +1,129 @@
+@reference "./global.css";
+
+code[data-theme*=" "],
+code[data-theme*=" "] span {
+  /* Note: We don't apply the background color CSS var here as we are using our own custom color palette */
+  /* https://rehype-pretty.pages.dev/#multiple-themes-dark-and-light-mode */
+  @apply !bg-transparent;
+  color: var(--shiki-light);
+  /* background-color: var(--shiki-light-bg); */
+}
+
+figcaption + pre {
+  @apply !rounded-t-none border border-gray-100/25;
+}
+
+.prose pre,
+[data-rehype-pretty-code-figure] pre {
+  @apply !bg-gray-100/25;
+  @apply border border-gray-100;
+}
+
+[data-rehype-pretty-code-title] {
+  @apply inline-flex items-center w-full rounded-t-md p-3 font-medium text-sm tracking-wide border border-b-0;
+  @apply bg-gray-100/25 text-gray-400 border-gray-100;
+}
+
+.prose h1 > a,
+.prose h2 > a,
+.prose h3 > a,
+.prose h4 > a,
+.prose h5 > a,
+.prose h6 > a {
+  @apply float-left -ml-5 border-none opacity-0 hover:opacity-100 no-underline rounded-md;
+
+  @apply transition duration-300 ease-in-out;
+
+  @apply !text-gray-900;
+
+  .icon-link:before {
+    content: "#";
+  }
+}
+
+.prose a {
+  /* default-transition */
+  @apply transition duration-300 ease-in-out;
+  /* default-focus */
+  @apply focus:outline-none focus:ring focus:ring-primary-500 dark:focus:ring-primary-600 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+}
+
+@media (prefers-color-scheme: dark) {
+  code[data-theme*=" "],
+  code[data-theme*=" "] span {
+    color: var(--shiki-dark);
+    /* background-color: var(--shiki-dark-bg); */
+  }
+
+  .prose pre,
+  [data-rehype-pretty-code-figure] pre {
+    @apply !bg-gray-900 border-gray-800;
+  }
+
+  [data-rehype-pretty-code-title] {
+    @apply bg-gray-900 text-gray-400 border-gray-800;
+  }
+
+  .prose h1 > a,
+  .prose h2 > a,
+  .prose h3 > a,
+  .prose h4 > a,
+  .prose h5 > a,
+  .prose h6 > a {
+    @apply !text-white;
+  }
+
+  figcaption[data-language="astro"] {
+    &::before {
+      content: url("/lang/astro-dark.svg") !important;
+    }
+  }
+
+  figcaption[data-language="rs"],
+  figcaption[data-language="rust"] {
+    &::before {
+      @apply invert;
+    }
+  }
+}
+
+/** ------------------------------------------------------------------------------ */
+
+figcaption[data-language="js"],
+figcaption[data-language="javascript"] {
+  &::before {
+    @apply mr-2 w-4 h-4;
+    content: url("/lang/javascript.svg");
+  }
+}
+
+figcaption[data-language="ts"],
+figcaption[data-language="typescript"] {
+  &::before {
+    @apply mr-2 w-4 h-4;
+    content: url("/lang/typescript.svg");
+  }
+}
+
+figcaption[data-language="jsx"],
+figcaption[data-language="tsx"] {
+  &::before {
+    @apply mr-2 w-4 h-4;
+    content: url("/lang/react.svg");
+  }
+}
+
+figcaption[data-language="rs"],
+figcaption[data-language="rust"] {
+  &::before {
+    @apply mr-2 w-4 h-4;
+    content: url("/lang/rust.svg");
+  }
+}
+
+figcaption[data-language="astro"] {
+  &::before {
+    @apply mr-2 w-4 h-4;
+    content: url("/lang/astro-light.svg");
+  }
+}

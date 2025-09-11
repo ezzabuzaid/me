@@ -1,0 +1,22 @@
+---
+import Avatar from '~/components/Avatar.astro';
+import { HOME } from '~/constants';
+---
+
+<section class='sm:flex gap-8 space-y-4 sm:space-y-0 z-10' id='hero'>
+	<div
+		class='max-w-3xl space-y-4 font-semibold not-italic leading-9 tracking-tighter grow'
+	>
+		<h1 class='text-4xl text-black dark:text-white'>
+			{HOME.title}
+		</h1>
+
+		<h2 class='text-2xl text-gray-400 dark:text-gray-600 md:max-w-md'>
+			{HOME.subtitle}
+		</h2>
+	</div>
+
+	<div class="hidden sm:block">
+		<Avatar className="h-24 w-24 lg:h-32 lg:w-32" width={128} height={128}  />
+	</div>
+</section>

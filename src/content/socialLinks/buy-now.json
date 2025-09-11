@@ -1,0 +1,6 @@
+{
+	"$schema": "../../../.astro/collections/socialLinks.schema.json",
+	"icon": "simple-icons:lemonsqueezy",
+	"name": "Buy now",
+	"url": "https://butterythemes.com/buy/959f821b-3729-4c56-8247-5dc8496171b3"
+}

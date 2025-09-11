@@ -1,0 +1,72 @@
+---
+import { getCollection } from 'astro:content';
+import { DISCORD_USER_ID } from 'astro:env/client';
+
+import Footer from '~/components/Footer.astro';
+import Head from '~/components/Head.astro';
+import Hero from '~/components/Hero.astro';
+import { Building } from '~/components/Widgets/Lanyard/Building.tsx';
+import { Music } from '~/components/Widgets/Lanyard/Music.tsx';
+import List from '~/components/Widgets/List.astro';
+import Timeline from '~/components/Widgets/Timeline.astro';
+import Document from '~/layouts/Document.astro';
+import { filterPosts, mapPostToListItem, sortPostsByPublishedAt } from '~/utils/content';
+import { getLanyardUser } from '~/utils/lanyard';
+
+export const prerender = false;
+
+const [status, posts, projects] = await Promise.all([
+	DISCORD_USER_ID ? getLanyardUser(DISCORD_USER_ID) : null,
+
+	getCollection('posts').then((posts) =>
+		posts
+			.filter(filterPosts({ archived: false }))
+			.sort(sortPostsByPublishedAt)
+			.map(mapPostToListItem),
+	),
+	getCollection('projects').then((projects) =>
+		projects
+			.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+			.map(({ data }) => data),
+	),
+]);
+---
+
+<Head />
+
+<Document>
+	<main class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8">
+		<Hero />
+
+		<div class="grid grid-cols-1 md:grid-cols-10 gap-6 z-10">
+			<List
+				class="md:col-span-6 max-h-80 min-h-48 md:min-h-80"
+				id="posts"
+				items={posts}
+				title="Posts"
+				href="/posts"
+			/>
+			<Timeline
+				class="md:col-span-4 max-h-80 min-h-48 md:min-h-80 scrollbar-hidden"
+				id="projects"
+				projects={projects}
+				title="Projects"
+			/>
+
+			<!-- Only show these interactive widgets if a Discord user ID is provided -->
+			{DISCORD_USER_ID ? (
+				<>
+					<Building client:load discordUserId={DISCORD_USER_ID} initial={status} />
+					<Music client:load discordUserId={DISCORD_USER_ID} initial={status} />
+				</>
+			) : null}
+
+		</div>
+	</main>
+
+	<Footer class="max-w-4xl">
+		<div class="mt-8 md:order-1 md:mt-0">
+			<p class="text-center text-xs leading-5 text-gray-400 font-medium">&copy; {new Date().getFullYear()}</p>
+		</div>
+	</Footer>
+</Document>

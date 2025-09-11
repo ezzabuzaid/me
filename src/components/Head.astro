@@ -1,0 +1,56 @@
+---
+import { SITE_DESCRIPTION, SITE_TITLE } from '~/constants';
+
+interface Props {
+	description?: string;
+	image?: string;
+	modifiedAt?: string | undefined;
+	publishedAt?: string;
+	title?: string;
+	type?: 'article' | 'website';
+}
+
+const {
+	description = SITE_DESCRIPTION,
+	image = '/og.png',
+	modifiedAt,
+	publishedAt,
+	title = `${SITE_TITLE} ─ Buttery Themes`,
+	type = 'website',
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+---
+
+<head>
+	<link rel='canonical' href={canonicalURL} />
+
+	<title>{title}</title>
+	<meta charset='UTF-8' />
+	<meta name='viewport' content='width=device-width, initial-scale=1.0' />
+	<meta name='title' content={title} />
+	<meta name='description' content={description} />
+	<meta name="generator" content={Astro.generator} />
+
+	<meta name="theme-color" content="#ffffff" />
+	<link rel="manifest" href="/site.webmanifest" crossorigin="anonymous" />
+
+	<link rel="sitemap" href="/sitemap-index.xml" />
+
+	<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+
+	<meta property='og:description' content={description} />
+	<meta property='og:image' content={image} />
+	<meta property='og:title' content={title} />
+	<meta property='og:type' content={type} />
+	<meta property='og:url' content={canonicalURL} />
+
+	<meta property='twitter:card' content='summary_large_image' />
+	<meta property='twitter:url' content={Astro.url} />
+	<meta property='twitter:title' content={title} />
+	<meta property='twitter:description' content={description} />
+	<meta property='twitter:image' content={image} />
+
+	{publishedAt && <meta property='article:published_time' content={publishedAt} />}
+	{modifiedAt && <meta property='article:modified_time' content={modifiedAt} />}
+</head>

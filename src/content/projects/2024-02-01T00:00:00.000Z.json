@@ -1,0 +1,7 @@
+{
+	"$schema": "../../../.astro/collections/projects.schema.json",
+	"date": "2024-02-01T00:00:00.000Z",
+	"icon": "Sparkles",
+	"title": "Founded Google",
+	"url": "https://google.com"
+}

@@ -1,0 +1,7 @@
+{
+	"$schema": "../../../.astro/collections/projects.schema.json",
+	"date": "2024-03-01T00:00:00.000Z",
+	"icon": "Rocket",
+	"title": "Launched a rocket",
+	"url": "https://spacex.com"
+}
