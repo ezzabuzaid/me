@@ -1,0 +1,38 @@
+---
+import { SearchCommand } from "./SearchCommand";
+import { getSearchData } from "../utils/search";
+
+const searchItems = await getSearchData();
+---
+
+<nav
+  class="bg-zinc-50 dark:bg-gray-950 sticky top-0 z-50 border-b border-gray-200 dark:border-gray-800"
+>
+  <div class="mx-auto max-w-4xl px-4 sm:px-6 lg:px-8">
+    <div class="flex h-14 items-center justify-between">
+      <div class="flex space-x-4">
+        <a
+          class="text-gray-900 hover:text-primary-500 dark:text-gray-100 dark:hover:text-primary-400 text-sm font-medium decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+          href="/"
+        >
+          home
+        </a>
+        <a
+          class="text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 text-sm font-medium decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+          href="/posts"
+        >
+          notes
+        </a>
+        <a
+          class="text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 text-sm font-medium decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+          href="/projects"
+        >
+          projects
+        </a>
+      </div>
+
+      <!-- Search Command Component -->
+      <SearchCommand client:load items={searchItems} />
+    </div>
+  </div>
+</nav>

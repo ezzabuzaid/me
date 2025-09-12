@@ -45,6 +45,8 @@ const [posts, archivedPosts] = await Promise.all([
         href="/posts/all"
         id="posts"
         items={posts}
+        title="Posts"
+        variant="borderless"
       />
       {
         archivedPosts.length > 0 ? (
@@ -58,6 +60,7 @@ const [posts, archivedPosts] = await Promise.all([
             id="archived"
             items={archivedPosts}
             title="Archived"
+            variant="borderless"
           />
         ) : null
       }

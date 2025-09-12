@@ -51,6 +51,7 @@ const [status, posts, projects] = await Promise.all([
 				id="projects"
 				projects={projects}
 				title="Projects"
+				href="/projects"
 			/>
 
 			<!-- Only show these interactive widgets if a Discord user ID is provided -->
@@ -66,7 +67,7 @@ const [status, posts, projects] = await Promise.all([
 
 	<Footer class="max-w-4xl">
 		<div class="mt-8 md:order-1 md:mt-0">
-			<p class="text-center text-xs leading-5 text-zinc-200 font-medium">&copy; {new Date().getFullYear()}</p>
+			<p class="text-center text-xs leading-5 text-gray-600 dark:text-zinc-200 font-medium">&copy; {new Date().getFullYear()}</p>
 		</div>
 	</Footer>
 </Document>

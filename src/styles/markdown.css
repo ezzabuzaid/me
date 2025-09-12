@@ -10,18 +10,18 @@ code[data-theme*=" "] span {
 }
 
 figcaption + pre {
-  @apply !rounded-t-none border border-gray-100/25;
+  @apply !rounded-t-none border border-gray-300;
 }
 
 .prose pre,
 [data-rehype-pretty-code-figure] pre {
-  @apply !bg-gray-100/25;
-  @apply border border-gray-100;
+  @apply !bg-gray-100;
+  @apply border border-gray-300;
 }
 
 [data-rehype-pretty-code-title] {
   @apply inline-flex items-center w-full rounded-t-md p-3 font-medium text-sm tracking-wide border border-b-0;
-  @apply bg-gray-100/25 text-zinc-200 border-gray-100;
+  @apply bg-gray-200 text-gray-800 border-gray-300;
 }
 
 .prose h1 > a,
@@ -93,7 +93,7 @@ figcaption + pre {
 .prose blockquote.callout,
 .prose .callout {
   @apply not-italic my-6 rounded-md border p-4;
-  @apply bg-gray-100/25 text-gray-600 border-gray-100;
+  @apply bg-gray-50 text-gray-700 border-gray-200;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -114,7 +114,7 @@ figcaption + pre {
 .prose blockquote.callout > h5,
 .prose .callout > h5 {
   @apply m-0 mb-2 flex items-center gap-2 text-sm font-semibold leading-5;
-  @apply text-gray-800;
+  @apply text-gray-900;
 }
 
 @media (prefers-color-scheme: dark) {

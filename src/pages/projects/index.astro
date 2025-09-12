@@ -1,0 +1,50 @@
+---
+import { getCollection } from "astro:content";
+import { ArrowLeft } from "lucide-preact";
+
+import Footer from "~/components/Footer.astro";
+import Head from "~/components/Head.astro";
+import Hero from "~/components/Hero.astro";
+import ProjectGrid from "~/components/Widgets/ProjectGrid.astro";
+import { SITE_TITLE } from "~/constants";
+import Document from "~/layouts/Document.astro";
+
+const projects = await getCollection("projects").then((projects) =>
+  projects
+    .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
+    .map(({ data }) => data),
+);
+---
+
+<Head title={`${SITE_TITLE} ─ projects`} />
+
+<Document>
+  <main
+    class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8"
+  >
+    <Hero />
+
+    <div class="z-10">
+      <ProjectGrid
+        projects={projects}
+        title="Projects"
+      />
+    </div>
+  </main>
+
+  <Footer class="max-w-4xl">
+    <div
+      class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
+    >
+      <a
+        class="default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-900 dark:text-zinc-200 dark:hover:text-zinc-200"
+        href="/"
+      >
+        <ArrowLeft
+          class="w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-900 dark:group-hover:text-zinc-200"
+        />
+        <span>Go back</span>
+      </a>
+    </div>
+  </Footer>
+</Document>

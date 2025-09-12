@@ -23,7 +23,7 @@ const socialLinks = await getCollection("socialLinks").then((arr) =>
           socialLinks.map(async ({ data: socialLink }) => (
             <a
               aria-label={socialLink.name}
-              class="text-zinc-200 hover:text-gray-500 dark:hover:text-gray-100 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 rounded-md p-1.5 default-transition default-focus"
+              class="text-gray-700 hover:text-gray-900 dark:text-zinc-200 dark:hover:text-gray-100 bg-white hover:bg-gray-100 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 rounded-md p-1.5 default-transition default-focus"
               href={socialLink.url}
               rel="noreferrer"
               target="_blank"
@@ -37,7 +37,7 @@ const socialLinks = await getCollection("socialLinks").then((arr) =>
       </div>
     </div>
 
-    <h2 class="text-2xl text-zinc-200 dark:text-gray-600 md:max-w-lg">
+    <h2 class="text-2xl text-gray-700 dark:text-gray-600 md:max-w-lg">
       {HOME.subtitle}
     </h2>
   </div>
