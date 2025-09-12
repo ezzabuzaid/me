@@ -58,7 +58,7 @@ const Icon = await loadIcon(post.icon);
 
 				<div class="w-full inline-flex items-center gap-8 text-gray-500 my-8 font-medium text-2xl">
 					<time
-						class='font-normal text-base text-gray-400 dark:text-gray-300'
+						class='font-normal text-base text-zinc-200 dark:text-gray-300'
 						datetime={post.publishedAt.toISOString()}
 						title={format(post.publishedAt, 'PPP')}
 					>
@@ -81,9 +81,9 @@ const Icon = await loadIcon(post.icon);
 				"prose-headings:text-black dark:prose-headings:text-white",
 				"prose-hr:mb-8 prose-hr:border-2 prose-hr:border-gray-100 dark:prose-hr:border-gray-900 prose-hr:rounded-full",
 				"prose-img:rounded-xl",
-				"prose-kbd:uppercase prose-kbd:text-xs prose-kbd:text-gray-400 dark:prose-kbd:text-gray-200 prose-kbd:bg-gray-50 dark:prose-kbd:bg-gray-900 prose-kbd:rounded-md prose-kbd:border prose-kbd:border-gray-200 dark:prose-kbd:border-gray-800",
-				"prose-li:text-gray-500 dark:prose-li:text-gray-400",
-				"prose-p:text-gray-500 dark:prose-p:text-gray-400",
+				"prose-kbd:uppercase prose-kbd:text-xs prose-kbd:text-zinc-200 dark:prose-kbd:text-gray-200 prose-kbd:bg-gray-50 dark:prose-kbd:bg-gray-900 prose-kbd:rounded-md prose-kbd:border prose-kbd:border-gray-200 dark:prose-kbd:border-gray-800",
+				"prose-li:text-gray-500 dark:prose-li:text-zinc-200",
+				"prose-p:text-gray-500 dark:prose-p:text-zinc-200",
 				"prose-pre:rounded-lg",
 				"prose-strong:text-gray-800 dark:prose-strong:text-gray-100",
 				"prose-td:text-gray-600 dark:prose-td:text-gray-300",
@@ -97,12 +97,12 @@ const Icon = await loadIcon(post.icon);
 	<Footer class="max-w-3xl">
 		<div class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0">
 			<a
-				class='default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-400 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-500 dark:hover:text-gray-400'
+				class='default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-zinc-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-500 dark:hover:text-zinc-200'
 				href='/'
 				data-astro-reload
 			>
 				<ArrowLeft
-					class='w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-500 dark:group-hover:text-gray-400'
+					class='w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-500 dark:group-hover:text-zinc-200'
 				/>
 				<span>Go back</span>
 			</a>

@@ -21,7 +21,7 @@ figcaption + pre {
 
 [data-rehype-pretty-code-title] {
   @apply inline-flex items-center w-full rounded-t-md p-3 font-medium text-sm tracking-wide border border-b-0;
-  @apply bg-gray-100/25 text-gray-400 border-gray-100;
+  @apply bg-gray-100/25 text-zinc-200 border-gray-100;
 }
 
 .prose h1 > a,
@@ -61,7 +61,7 @@ figcaption + pre {
   }
 
   [data-rehype-pretty-code-title] {
-    @apply bg-gray-900 text-gray-400 border-gray-800;
+    @apply bg-gray-900 text-zinc-200 border-gray-800;
   }
 
   .prose h1 > a,

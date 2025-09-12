@@ -74,7 +74,7 @@ const anchorProps = hasUrl ? { href } : {};
                 <Component
                   href={item.href}
                   class={cn(
-                    "text-gray-400 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 flex items-center justify-between space-x-4 p-2.5 rounded-md default-transition default-focus",
+                    "text-zinc-200 hover:text-gray-500 dark:text-gray-300 dark:hover:text-gray-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 flex items-center justify-between space-x-4 p-2.5 rounded-md default-transition default-focus",
                     { "mt-2": index + 1 !== 0 },
                   )}
                 >
@@ -111,7 +111,7 @@ const anchorProps = hasUrl ? { href } : {};
             {empty?.title ?? "No posts here yet"}
           </h3>
 
-          <p class="text-gray-400 text-sm dark:text-gray-600">
+          <p class="text-zinc-200 text-sm dark:text-gray-600">
             {empty?.description ?? "Stay tuned for more content soon"}
           </p>
         </div>

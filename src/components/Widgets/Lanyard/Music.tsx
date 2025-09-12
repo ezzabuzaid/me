@@ -48,7 +48,7 @@ export function Music({ discordUserId, initial }: MusicProps): JSX.Element {
 						<h1 class='line-clamp-1 font-bold text-gray-600 text-lg dark:text-white'>
 							{status.spotify.song}
 						</h1>
-						<h2 class='line-clamp-1 font-normal text-gray-400 text-sm dark:text-gray-600'>
+						<h2 class='line-clamp-1 font-normal text-zinc-200 text-sm dark:text-gray-600'>
 							{status.spotify.artist}
 						</h2>
 					</div>

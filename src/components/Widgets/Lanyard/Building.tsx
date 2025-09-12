@@ -66,7 +66,7 @@ export function Building({ discordUserId, initial }: BuildingProps): JSX.Element
 							{activity.details}
 						</h1>
 						<h2
-							class='line-clamp-1 font-normal text-gray-400 text-sm dark:text-gray-600'
+							class='line-clamp-1 font-normal text-zinc-200 text-sm dark:text-gray-600'
 							title={activity.state}>
 							{activity.state}
 						</h2>
