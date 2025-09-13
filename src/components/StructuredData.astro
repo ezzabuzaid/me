@@ -1,0 +1,163 @@
+---
+import type { CollectionEntry } from "astro:content";
+import { AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "~/constants";
+
+export interface Props {
+  type?: "website" | "article" | "person" | "blog" | undefined;
+  article?: CollectionEntry<"posts">["data"] & {
+    slug?: string;
+    tags?: string[];
+    wordCount?: number;
+  } | undefined;
+  breadcrumbs?: Array<{ name: string; url: string }> | undefined;
+}
+
+const { type = "website", article, breadcrumbs } = Astro.props;
+
+function generateWebsiteSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "WebSite",
+    name: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: SITE_URL,
+    author: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: AUTHOR.url,
+      email: AUTHOR.email,
+      description: AUTHOR.bio,
+      sameAs: [
+        `https://github.com/${AUTHOR.social.github}`,
+        `https://twitter.com/${AUTHOR.social.twitter.replace("@", "")}`,
+        `https://linkedin.com/in/${AUTHOR.social.linkedin}`,
+      ],
+    },
+    potentialAction: {
+      "@type": "SearchAction",
+      target: `${SITE_URL}/search?q={search_term_string}`,
+      "query-input": "required name=search_term_string",
+    },
+  };
+}
+
+function generateBlogSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Blog",
+    name: SITE_TITLE,
+    description: SITE_DESCRIPTION,
+    url: `${SITE_URL}/posts`,
+    author: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: AUTHOR.url,
+      email: AUTHOR.email,
+      description: AUTHOR.bio,
+    },
+    publisher: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: AUTHOR.url,
+    },
+  };
+}
+
+function generatePersonSchema() {
+  return {
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: AUTHOR.name,
+    url: AUTHOR.url,
+    email: AUTHOR.email,
+    description: AUTHOR.bio,
+    jobTitle: "Software Engineer",
+    knowsAbout: [
+      "TypeScript",
+      "JavaScript",
+      "Angular",
+      "React",
+      "Node.js",
+      "Software Engineering",
+      "Web Development",
+    ],
+    sameAs: [
+      `https://github.com/${AUTHOR.social.github}`,
+      `https://twitter.com/${AUTHOR.social.twitter.replace("@", "")}`,
+      `https://linkedin.com/in/${AUTHOR.social.linkedin}`,
+    ],
+  };
+}
+
+function generateArticleSchema() {
+  if (!article) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BlogPosting",
+    headline: article.title,
+    description: article.description,
+    datePublished: article.publishedAt,
+    dateModified: article.lastModifiedAt || article.publishedAt,
+    author: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: AUTHOR.url,
+      email: AUTHOR.email,
+    },
+    publisher: {
+      "@type": "Person",
+      name: AUTHOR.name,
+      url: AUTHOR.url,
+    },
+    url: `${SITE_URL}/posts/${article.slug}`,
+    mainEntityOfPage: {
+      "@type": "WebPage",
+      "@id": `${SITE_URL}/posts/${article.slug}`,
+    },
+    keywords: article.tags || [],
+    wordCount: article.wordCount || 0,
+    inLanguage: "en-US",
+  };
+}
+
+function generateBreadcrumbSchema() {
+  if (!breadcrumbs || breadcrumbs.length === 0) return null;
+
+  return {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    itemListElement: breadcrumbs.map((crumb, index) => ({
+      "@type": "ListItem",
+      position: index + 1,
+      name: crumb.name,
+      item: crumb.url,
+    })),
+  };
+}
+
+let schema;
+switch (type) {
+  case "article":
+    schema = generateArticleSchema();
+    break;
+  case "person":
+    schema = generatePersonSchema();
+    break;
+  case "blog":
+    schema = generateBlogSchema();
+    break;
+  default:
+    schema = generateWebsiteSchema();
+}
+
+const breadcrumbSchema = generateBreadcrumbSchema();
+---
+
+{schema && (
+	<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
+)}
+
+{breadcrumbSchema && (
+	<script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
+)}

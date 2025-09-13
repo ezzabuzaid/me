@@ -1,56 +1,136 @@
 ---
-import { SITE_DESCRIPTION, SITE_TITLE } from '~/constants';
+import type { CollectionEntry } from "astro:content";
+import {
+AUTHOR,
+SEO,
+SITE_AUTHOR,
+SITE_DESCRIPTION,
+SITE_KEYWORDS,
+SITE_TITLE,
+} from "~/constants";
+import StructuredData from "./StructuredData.astro";
 
 interface Props {
-	description?: string;
-	image?: string;
-	modifiedAt?: string | undefined;
-	publishedAt?: string;
-	title?: string;
-	type?: 'article' | 'website';
+  description?: string;
+  image?: string;
+  imageAlt?: string;
+  modifiedAt?: string | undefined;
+  publishedAt?: string;
+  title?: string;
+  type?: "article" | "website" | "blog";
+  keywords?: string[];
+  article?: CollectionEntry<"posts">["data"] & {
+    slug?: string;
+    tags?: string[];
+  };
+  breadcrumbs?: Array<{ name: string; url: string }>;
+  robots?: string;
 }
 
 const {
-	description = SITE_DESCRIPTION,
-	image = '/og.png',
-	modifiedAt,
-	publishedAt,
-	title = `${SITE_TITLE}`,
-	type = 'website',
+  description = SITE_DESCRIPTION,
+  image = SEO.defaultImage,
+  imageAlt = SEO.defaultImageAlt,
+  modifiedAt,
+  publishedAt,
+  title = SITE_TITLE,
+  type = "website",
+  keywords = SITE_KEYWORDS,
+  article,
+  breadcrumbs,
+  robots = SEO.robots,
 } = Astro.props;
 
 const canonicalURL = new URL(Astro.url.pathname, Astro.site);
+const fullTitle = title === SITE_TITLE ? title : `${title} | ${SITE_TITLE}`;
+const imageUrl = new URL(image, Astro.site);
+const keywordsString = keywords.join(", ");
 ---
 
 <head>
-	<link rel='canonical' href={canonicalURL} />
+  <!-- Essential Meta Tags -->
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="generator" content={Astro.generator} />
 
-	<title>{title}</title>
-	<meta charset='UTF-8' />
-	<meta name='viewport' content='width=device-width, initial-scale=1.0' />
-	<meta name='title' content={title} />
-	<meta name='description' content={description} />
-	<meta name="generator" content={Astro.generator} />
+  <!-- SEO Meta Tags -->
+  <title>{fullTitle}</title>
+  <meta name="title" content={fullTitle} />
+  <meta name="description" content={description} />
+  <meta name="keywords" content={keywordsString} />
+  <meta name="robots" content={robots} />
+  <meta name="language" content={SEO.language} />
+  <meta name="author" content={SITE_AUTHOR} />
 
-	<meta name="theme-color" content="#ffffff" />
-	<link rel="manifest" href="/site.webmanifest" crossorigin="anonymous" />
+  <!-- Canonical URL -->
+  <link rel="canonical" href={canonicalURL} />
 
-	<link rel="sitemap" href="/sitemap-index.xml" />
+  <!-- Theme and Icons -->
+  <meta name="theme-color" content="#ffffff" />
+  <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  <link rel="manifest" href="/site.webmanifest" crossorigin="anonymous" />
 
-	<link rel='icon' type='image/svg+xml' href='/favicon.svg' />
+  <!-- Sitemap -->
+  <link rel="sitemap" href="/sitemap-index.xml" />
 
-	<meta property='og:description' content={description} />
-	<meta property='og:image' content={image} />
-	<meta property='og:title' content={title} />
-	<meta property='og:type' content={type} />
-	<meta property='og:url' content={canonicalURL} />
+  <!-- Open Graph Meta Tags -->
+  <meta property="og:type" content={type} />
+  <meta property="og:site_name" content={SITE_TITLE} />
+  <meta property="og:title" content={fullTitle} />
+  <meta property="og:description" content={description} />
+  <meta property="og:image" content={imageUrl} />
+  <meta property="og:image:alt" content={imageAlt} />
+  <meta property="og:image:width" content="1200" />
+  <meta property="og:image:height" content="630" />
+  <meta property="og:url" content={canonicalURL} />
+  <meta property="og:locale" content={SEO.locale} />
 
-	<meta property='twitter:card' content='summary_large_image' />
-	<meta property='twitter:url' content={Astro.url} />
-	<meta property='twitter:title' content={title} />
-	<meta property='twitter:description' content={description} />
-	<meta property='twitter:image' content={image} />
+  <!-- Twitter Card Meta Tags -->
+  <meta name="twitter:card" content="summary_large_image" />
+  <meta name="twitter:site" content={SEO.twitterHandle} />
+  <meta name="twitter:creator" content={SEO.twitterHandle} />
+  <meta name="twitter:title" content={fullTitle} />
+  <meta name="twitter:description" content={description} />
+  <meta name="twitter:image" content={imageUrl} />
+  <meta name="twitter:image:alt" content={imageAlt} />
 
-	{publishedAt && <meta property='article:published_time' content={publishedAt} />}
-	{modifiedAt && <meta property='article:modified_time' content={modifiedAt} />}
+  <!-- Article-specific Meta Tags -->
+  {
+    publishedAt && (
+      <meta property="article:published_time" content={publishedAt} />
+    )
+  }
+  {modifiedAt && <meta property="article:modified_time" content={modifiedAt} />}
+  {
+    type === "article" && (
+      <meta property="article:author" content={AUTHOR.name} />
+    )
+  }
+  {
+    type === "article" && (
+      <meta property="article:section" content="Technology" />
+    )
+  }
+  {
+    article?.tags &&
+      article.tags.map((tag: string) => (
+        <meta property="article:tag" content={tag} />
+      ))
+  }
+
+  <!-- LinkedIn Meta Tags -->
+  <meta property="profile:first_name" content="Ezz" />
+  <meta property="profile:last_name" content="Abuzaid" />
+  <meta property="profile:username" content={AUTHOR.social.linkedin} />
+
+  <!-- Performance and Security -->
+  <meta name="referrer" content="strict-origin-when-cross-origin" />
+  <meta name="format-detection" content="telephone=no" />
+
+  <!-- Structured Data -->
+  <StructuredData
+    type={type}
+    article={article}
+    breadcrumbs={breadcrumbs}
+  />
 </head>

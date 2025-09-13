@@ -1,37 +1,94 @@
 ---
-import { ArrowLeft } from 'lucide-preact';
+import { ArrowLeft } from "lucide-preact";
 
-import Head from '~/components/Head.astro';
-import { SITE_TITLE } from '~/constants';
-import Document from '~/layouts/Document.astro';
+import Footer from "~/components/Footer.astro";
+import Head from "~/components/Head.astro";
+import Hero from "~/components/Hero.astro";
+import Document from "~/layouts/Document.astro";
 ---
 
-<Head title=`Not found ─ ${SITE_TITLE}` description='Whoops, it looks like the page you requested cannot be found' />
+<Head
+  title="Page Not Found"
+  description="The page you're looking for doesn't exist. Explore our posts, projects, or return to the homepage."
+  robots="noindex, follow"
+/>
 
 <Document>
-	<main class='grid min-h-screen place-items-center px-6 py-24 sm:py-32 lg:px-8'>
-		<div class='space-y-8 text-left'>
-			<div
-				class='max-w-xl space-y-4 text-4xl font-semibold not-italic leading-9 tracking-tighter selection:bg-primary-500 selection:text-white'
-			>
-				<h1 class='text-black dark:text-white' transition:name='title'>Page not found</h1>
+  <main
+    class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8"
+  >
+    <Hero pageDescription="The page you're looking for doesn't exist." />
 
-				<h1 class='text-gray-700 dark:text-gray-500' transition:name='sub-title'>
-					Sorry, we couldn't find the page you're looking for.
-				</h1>
-			</div>
+    <div class="z-10">
+      <div class="space-y-8">
+        <div class="space-y-4">
+          <p class="text-gray-600 dark:text-gray-400">
+            Here are some helpful places to go instead:
+          </p>
 
-			<div class='flex items-center justify-start gap-x-6'>
-				<a
-					class='default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-4 py-2 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-900 dark:text-zinc-200 dark:hover:text-zinc-200'
-					href='/'
-				>
-					<ArrowLeft
-						class='default-transition transform group-hover:-translate-x-1 group-hover:text-gray-900 dark:group-hover:text-zinc-200'
-					/>
-					<span>Go back home</span>
-				</a>
-			</div>
-		</div>
-	</main>
+          <div>
+            <a
+              href="/"
+              class="block py-2 text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+            >
+              <span class="font-medium">Home</span>
+              <span class="text-gray-500 dark:text-gray-500 ml-2">—</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                Return to the main page
+              </span>
+            </a>
+
+            <a
+              href="/posts"
+              class="block py-2 text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+            >
+              <span class="font-medium">Posts</span>
+              <span class="text-gray-500 dark:text-gray-500 ml-2">—</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                Read articles and tutorials
+              </span>
+            </a>
+
+            <a
+              href="/projects"
+              class="block py-2 text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+            >
+              <span class="font-medium">Projects</span>
+              <span class="text-gray-500 dark:text-gray-500 ml-2">—</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                Explore my work and tools
+              </span>
+            </a>
+
+            <a
+              href="/internet"
+              class="block py-2 text-gray-700 hover:text-primary-500 dark:text-gray-300 dark:hover:text-primary-400 decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+            >
+              <span class="font-medium">Internet</span>
+              <span class="text-gray-500 dark:text-gray-500 ml-2">—</span>
+              <span class="text-sm text-gray-600 dark:text-gray-400 ml-2">
+                Links and resources I've found
+              </span>
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <Footer class="max-w-4xl">
+    <div
+      class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
+    >
+      <button
+        onclick="history.back()"
+        class="default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-900 dark:text-zinc-200 dark:hover:text-zinc-200"
+      >
+        <ArrowLeft
+          class="w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-900 dark:group-hover:text-zinc-200"
+        />
+        <span>Go back</span>
+      </button>
+    </div>
+  </Footer>
 </Document>
