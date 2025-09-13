@@ -1,0 +1,129 @@
+---
+import { ArrowLeft } from "lucide-preact";
+
+import Footer from "~/components/Footer.astro";
+import Head from "~/components/Head.astro";
+import Hero from "~/components/Hero.astro";
+import { SITE_TITLE } from "~/constants";
+import Document from "~/layouts/Document.astro";
+
+const links = [
+  {
+    title: "Luminal",
+    url: "https://github.com/luminal-ai/luminal",
+    description: "Deep learning at the speed of light.",
+    category: "Tools",
+  },
+  {
+    title: "How to Scale Your Model",
+    url: "https://jax-ml.github.io/scaling-book/",
+    description:
+      "Training LLMs often feels like alchemy, but understanding and optimizing the performance of your models doesn't have to. This book aims to demystify the science of scaling language models: how TPUs (and GPUs) work and how they communicate with each other, how LLMs run on real hardware, and how to parallelize your models during training and inference so they run efficiently at massive scale. If you've ever wondered “how expensive should this LLM be to train” or “how much memory do I need to serve this model myself” or “what's an AllGather”, we hope this will be useful to you.",
+    category: "Online Books",
+  },
+];
+
+const groupedLinks = links.reduce(
+  (acc, link) => {
+    const category = link.category;
+    if (!acc[category]) {
+      acc[category] = [];
+    }
+    acc[category].push(link);
+    return acc;
+  },
+  {} as Record<string, typeof links>,
+);
+---
+
+<Head title={`${SITE_TITLE} ─ internet`} />
+
+<Document>
+  <main
+    class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8"
+  >
+    <Hero />
+
+    <div class="z-10">
+      <div class="space-y-8">
+        <div>
+          <h2 class="text-2xl font-bold text-gray-900 dark:text-gray-100 mb-4">
+            Things I Found on the Internet
+          </h2>
+          <p class="text-gray-600 dark:text-gray-400 mb-8">
+            A collection of interesting links, tools, articles, and resources
+            I've discovered online.
+          </p>
+        </div>
+
+        {
+          Object.entries(groupedLinks).map(([category, categoryLinks]) => (
+            <div class="space-y-4">
+              <h3 class="text-xl font-semibold text-gray-800 dark:text-gray-200 border-b border-gray-200 dark:border-gray-700 pb-2">
+                {category}
+              </h3>
+              <div class="space-y-3">
+                {categoryLinks.map((link) => (
+                  <div class="py-2">
+                    <div>
+                      <div class="flex items-start gap-2 mb-1">
+                        <h4 class="text-base font-medium text-gray-900 dark:text-gray-100 flex-shrink-0">
+                          <a
+                            href={link.url}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            class="hover:text-primary-500 dark:hover:text-primary-400 decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
+                          >
+                            {link.title}
+                          </a>
+                        </h4>
+                        <span class="text-gray-400 dark:text-gray-600 flex-shrink-0">
+                          —
+                        </span>
+                        <p
+                          class="text-gray-600 dark:text-gray-400 text-sm line-clamp-1 flex-1"
+                          title={link.description}
+                        >
+                          {link.description}
+                        </p>
+                      </div>
+                      <p class="text-xs text-gray-500 dark:text-gray-500 break-all">
+                        {link.url}
+                      </p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))
+        }
+
+        {
+          Object.keys(groupedLinks).length === 0 && (
+            <div class="text-center py-12">
+              <p class="text-gray-500 dark:text-gray-400">
+                No links added yet. Start collecting your internet findings!
+              </p>
+            </div>
+          )
+        }
+      </div>
+    </div>
+  </main>
+
+  <Footer class="max-w-4xl">
+    <div
+      class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
+    >
+      <a
+        class="default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-900 dark:text-zinc-200 dark:hover:text-zinc-200"
+        href="/"
+      >
+        <ArrowLeft
+          class="w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-900 dark:group-hover:text-zinc-200"
+        />
+        <span>Go back</span>
+      </a>
+    </div>
+  </Footer>
+</Document>
