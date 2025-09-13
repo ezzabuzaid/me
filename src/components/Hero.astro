@@ -4,6 +4,12 @@ import { getCollection } from "astro:content";
 import Avatar from "~/components/Avatar.astro";
 import { HOME } from "~/constants";
 
+export interface Props {
+  pageDescription?: string;
+}
+
+const { pageDescription } = Astro.props;
+
 const socialLinks = await getCollection("socialLinks").then((arr) =>
   // Sort the social links alphabetically by name
   arr.sort((a, b) => a.data.name.localeCompare(b.data.name)),
@@ -37,8 +43,8 @@ const socialLinks = await getCollection("socialLinks").then((arr) =>
       </div>
     </div>
 
-    <h2 class="text-2xl text-gray-700 dark:text-gray-600 md:max-w-lg">
-      {HOME.subtitle}
+    <h2 class="text-2xl text-gray-700 dark:text-zinc-300 md:max-w-lg">
+      {pageDescription ?? HOME.subtitle}
     </h2>
   </div>
 

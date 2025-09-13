@@ -4,5 +4,6 @@
 	"title": "SDK-IT",
 	"description": "Generates type-safe client SDKs from OpenAPI and OpenAPI from TypeScript",
 	"icon": "Car",
+	"status": "production",
 	"url": "https://github.com/januarylabs/sdk-it"
 }
