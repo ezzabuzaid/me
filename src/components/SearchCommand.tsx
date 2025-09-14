@@ -1,5 +1,5 @@
-import { useEffect, useState } from "preact/hooks";
-import { Signal, useSignal } from "@preact/signals";
+import { useSignal } from "@preact/signals";
+import { useEffect } from "preact/hooks";
 
 interface SearchItem {
   id: string;
@@ -22,7 +22,7 @@ export function SearchCommand({ items }: SearchCommandProps) {
 
   // Filter and sort items based on search query
   const filteredItems = items
-    .filter(item => 
+    .filter(item =>
       item.title.toLowerCase().includes(searchQuery.value.toLowerCase()) ||
       (item.excerpt && item.excerpt.toLowerCase().includes(searchQuery.value.toLowerCase()))
     )
@@ -95,7 +95,7 @@ export function SearchCommand({ items }: SearchCommandProps) {
   return (
     <>
       {/* Search Button */}
-      <button 
+      <button
         onClick={openSearch}
         class="hidden md:flex items-center justify-start bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md px-4 py-2 text-sm text-gray-600 dark:text-gray-400 transition-colors cursor-pointer shadow-sm w-40 lg:w-56 xl:w-64"
       >
@@ -111,7 +111,7 @@ export function SearchCommand({ items }: SearchCommandProps) {
       {isOpen.value && (
         <div class="fixed inset-0 z-50 flex items-start justify-center pt-20">
           {/* Backdrop */}
-          <div 
+          <div
             class="absolute inset-0 bg-black/50 dark:bg-black/70"
             onClick={() => {
               isOpen.value = false;
@@ -119,7 +119,7 @@ export function SearchCommand({ items }: SearchCommandProps) {
               selectedIndex.value = 0;
             }}
           />
-          
+
           {/* Modal */}
           <div class="relative w-full max-w-lg mx-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl">
             {/* Search Input */}
