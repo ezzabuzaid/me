@@ -41,7 +41,7 @@ const anchorProps = hasUrl ? { href } : {};
 
 <section
   class={cn(
-    "bg-zinc-50 dark:bg-gray-950 rounded-xl overflow-auto",
+    "bg-stone-50 dark:bg-stone-950 rounded-xl overflow-auto",
     variant === "default" &&
       title &&
       "border-2 border-gray-200 dark:border-gray-900 px-2 pb-2",
@@ -55,7 +55,7 @@ const anchorProps = hasUrl ? { href } : {};
       <TitleComponent
         class={cn(
           variant === "default" &&
-            "absolute -translate-y-3 inline-flex transform-gpu items-center bg-zinc-50 dark:bg-gray-950 rounded-full px-4 mx-4 border-2 border-gray-200 dark:border-gray-900 font-bold text-gray-900 dark:text-white text-sm",
+            "absolute -translate-y-3 inline-flex transform-gpu items-center bg-stone-50 dark:bg-stone-950 rounded-full px-4 mx-4 border-2 border-stone-200 dark:border-stone-800 font-bold text-stone-900 dark:text-white text-sm",
           variant === "borderless" &&
             "mb-6 text-2xl font-bold text-gray-900 dark:text-white",
           hasUrl ? "default-transition default-focus" : "",
@@ -89,7 +89,7 @@ const anchorProps = hasUrl ? { href } : {};
                 <Component
                   href={item.href}
                   class={cn(
-                    "text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 flex items-center justify-between space-x-4 p-2.5 rounded-md default-transition default-focus",
+                    "text-stone-700 hover:text-stone-900 dark:text-stone-300 dark:hover:text-stone-200 bg-stone-100 hover:bg-stone-200 dark:bg-stone-900 dark:hover:bg-stone-800 border border-stone-200 hover:border-stone-300 dark:border-stone-800 dark:hover:border-stone-700 flex items-center justify-between space-x-4 p-2.5 rounded-md default-transition default-focus",
                     { "mt-2": index + 1 !== 0 },
                   )}
                 >
