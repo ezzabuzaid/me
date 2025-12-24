@@ -118,28 +118,24 @@ const anchorProps = hasUrl ? { href } : {};
                     },
                   )}
                 >
-                  <div>
-                    <div class="flex items-center justify-between">
+                  <div class="flex-1">
+                    <div class="flex items-center justify-between gap-4">
                       <p
-                        class="font-semibold text-xs line-clamp-1"
+                        class="font-medium text-sm line-clamp-1"
                         title={project.title}
                       >
                         {project.title}
                       </p>
-                      <div class="whitespace-nowrap text-right text-sm">
-                        <time
-                          class="font-normal"
-                          datetime={project.date.toISOString()}
-                          title={format(project.date, "PPP")}
-                        >
-                          {format(project.date, "dd-MM-yyyy")}
-                        </time>
-                      </div>
+                      <time
+                        class="text-xs text-gray-500 dark:text-gray-400 whitespace-nowrap"
+                        datetime={project.date.toISOString()}
+                      >
+                        {format(project.date, "MMM yyyy")}
+                      </time>
                     </div>
                     {project.description && (
                       <p
-                        class="text-xs mt-1 line-clamp-2 opacity-75"
-                        style="font-size: 12px;"
+                        class="text-xs text-gray-500 dark:text-gray-400 mt-1 line-clamp-2"
                         title={project.description}
                       >
                         {project.description}

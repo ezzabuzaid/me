@@ -9,7 +9,6 @@ import PostNavigation from '~/components/PostNavigation.astro';
 import TableOfContents from '~/components/TableOfContents.astro';
 import { SITE_TITLE } from '~/constants';
 import Document from '~/layouts/Document.astro';
-import { cn } from '~/utils/cn';
 import { calculateReadingTime, filterPosts, formatReadingTime } from '~/utils/content';
 
 import '~/styles/markdown.css';
@@ -77,22 +76,7 @@ const readingTime = calculateReadingTime(body);
 
 			<TableOfContents headings={headings} />
 
-			<section class={cn(
-				"prose prose-gray dark:prose-invert max-w-none",
-				"prose-a:text-primary-500 prose-a:hover:text-primary-600 dark:prose-a:text-primary-600 dark:prose-a:hover:text-primary-500 prose-a:rounded-xs",
-				"prose-code:text-gray-600 dark:prose-code:text-gray-200",
-				"prose-h1:font-bold",
-				"prose-headings:text-black dark:prose-headings:text-white",
-				"prose-hr:mb-8 prose-hr:border-2 prose-hr:border-gray-100 dark:prose-hr:border-gray-900 prose-hr:rounded-full",
-				"prose-img:rounded-xl",
-				"prose-kbd:uppercase prose-kbd:text-xs prose-kbd:text-zinc-200 dark:prose-kbd:text-gray-200 prose-kbd:bg-gray-50 dark:prose-kbd:bg-gray-900 prose-kbd:rounded-md prose-kbd:border prose-kbd:border-gray-200 dark:prose-kbd:border-gray-800",
-				"prose-li:text-gray-500 dark:prose-li:text-zinc-200",
-				"prose-p:text-gray-500 dark:prose-p:text-zinc-200",
-				"prose-pre:rounded-lg",
-				"prose-strong:text-gray-800 dark:prose-strong:text-gray-100",
-				"prose-td:text-gray-600 dark:prose-td:text-gray-300",
-				"prose-thead:border-gray-200 dark:prose-thead:border-gray-800"
-			)}>
+			<section class="prose max-w-none">
 				<Content />
 			</section>
 

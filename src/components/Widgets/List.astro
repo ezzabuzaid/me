@@ -96,8 +96,8 @@ const anchorProps = hasUrl ? { href } : {};
                   <div class="font-semibold flex items-center space-x-3">
                     <div class="flex-1">
                       <div class="flex items-center space-x-2">
-                        <Icon class="w-4 h-4" />
-                        <p class="font-serif text-lg">{item.title}</p>
+                        <Icon class="w-4 h-4 flex-shrink-0" />
+                        <p class="text-base font-medium">{item.title}</p>
                       </div>
                       {item.description && variant === "borderless" && (
                         <p class="text-sm text-gray-600 dark:text-gray-400 font-normal mt-1 line-clamp-2">
@@ -107,13 +107,11 @@ const anchorProps = hasUrl ? { href } : {};
                     </div>
                   </div>
 
-                  <div class="whitespace-nowrap text-right text-sm">
+                  <div class="whitespace-nowrap text-right text-sm text-gray-500 dark:text-gray-400">
                     <time
-                      class="font-normal"
                       datetime={item.publishedAt.toISOString()}
-                      title={format(item.publishedAt, "PPP")}
                     >
-                      {format(item.publishedAt, "dd-MM-yyyy")}
+                      {format(item.publishedAt, "MMM d, yyyy")}
                     </time>
                   </div>
                 </Component>
