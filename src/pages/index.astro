@@ -1,23 +1,15 @@
 ---
 import { getCollection } from 'astro:content';
-import { DISCORD_USER_ID } from 'astro:env/client';
+import { Icon } from 'astro-icon/components';
 
 import Footer from '~/components/Footer.astro';
 import Head from '~/components/Head.astro';
-import Hero from '~/components/Hero.astro';
-import { Building } from '~/components/Widgets/Lanyard/Building.tsx';
-import { Music } from '~/components/Widgets/Lanyard/Music.tsx';
 import List from '~/components/Widgets/List.astro';
 import Timeline from '~/components/Widgets/Timeline.astro';
 import Document from '~/layouts/Document.astro';
 import { filterPosts, mapPostToListItem, sortPostsByFeatured } from '~/utils/content';
-import { getLanyardUser } from '~/utils/lanyard';
 
-export const prerender = false;
-
-const [status, posts, projects] = await Promise.all([
-	DISCORD_USER_ID ? getLanyardUser(DISCORD_USER_ID) : null,
-
+const [posts, projects, socialLinks] = await Promise.all([
 	getCollection('posts').then((posts) =>
 		posts
 			.filter(filterPosts({ archived: false }))
@@ -29,43 +21,58 @@ const [status, posts, projects] = await Promise.all([
 			.sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
 			.map(({ data }) => data),
 	),
+	getCollection('socialLinks').then((arr) =>
+		arr.sort((a, b) => a.data.name.localeCompare(b.data.name)),
+	),
 ]);
 ---
 
 <Head />
 
 <Document>
-	<main class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8">
-		<Hero />
+	<main class="flex flex-col h-full mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 py-16 space-y-12 pb-8">
+		<!-- Minimal Hero -->
+		<section class="space-y-4">
+			<h1 class="text-3xl font-bold text-gray-900 dark:text-white">
+				Hi, I'm Ezz
+			</h1>
+			<p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+				I write about software engineering, web development, and building products.
+			</p>
+			<div class="flex items-center space-x-4 pt-2">
+				{socialLinks.map(({ data: socialLink }) => (
+					<a
+						href={socialLink.url}
+						target="_blank"
+						rel="noreferrer"
+						class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white default-transition"
+						title={socialLink.name}
+					>
+						<Icon class="size-5" name={socialLink.icon} />
+						<span class="sr-only">{socialLink.name}</span>
+					</a>
+				))}
+			</div>
+		</section>
 
-		<div class="grid grid-cols-1 md:grid-cols-10 gap-6 z-10">
-			<List
-				class="md:col-span-6 max-h-96 min-h-48 md:min-h-80"
-				id="posts"
-				items={posts}
-				title="Posts"
-				href="/posts"
-			/>
-			<Timeline
-				class="md:col-span-4 max-h-80 min-h-48 md:min-h-80 scrollbar-hidden"
-				id="projects"
-				projects={projects}
-				title="Projects"
-				href="/projects"
-			/>
+		<!-- Projects Section -->
+		<Timeline
+			id="projects"
+			projects={projects}
+			title="Projects"
+			variant="borderless"
+		/>
 
-			<!-- Only show these interactive widgets if a Discord user ID is provided -->
-			{DISCORD_USER_ID ? (
-				<>
-					<Building client:load discordUserId={DISCORD_USER_ID} initial={status} />
-					<Music client:load discordUserId={DISCORD_USER_ID} initial={status} />
-				</>
-			) : null}
-
-		</div>
+		<!-- Posts Section -->
+		<List
+			id="posts"
+			items={posts}
+			title="Writing"
+			variant="borderless"
+		/>
 	</main>
 
-	<Footer class="max-w-4xl">
+	<Footer class="max-w-2xl">
 		<div class="mt-8 md:order-1 md:mt-0">
 			<p class="text-center text-xs leading-5 text-gray-600 dark:text-zinc-200 font-medium">&copy; {new Date().getFullYear()}</p>
 		</div>
