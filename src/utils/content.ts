@@ -1,5 +1,22 @@
 import type { CollectionEntry } from 'astro:content';
 
+/**
+ * Calculate reading time based on word count
+ * Average reading speed is ~200-250 words per minute
+ */
+export function calculateReadingTime(content: string): number {
+	const wordsPerMinute = 200;
+	const words = content.trim().split(/\s+/).length;
+	return Math.max(1, Math.ceil(words / wordsPerMinute));
+}
+
+/**
+ * Format reading time as a human-readable string
+ */
+export function formatReadingTime(minutes: number): string {
+	return `${minutes} min read`;
+}
+
 interface FilterPostOptions {
 	/**
 	 * Whether to include archived posts
