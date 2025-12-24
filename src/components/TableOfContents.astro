@@ -1,0 +1,39 @@
+---
+export interface Heading {
+	depth: number;
+	slug: string;
+	text: string;
+}
+
+export interface Props {
+	headings: Heading[];
+}
+
+const { headings } = Astro.props;
+
+// Only show h2 and h3 headings, and only if there are 3+ headings
+const filteredHeadings = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+const shouldShow = filteredHeadings.length >= 3;
+---
+
+{shouldShow && (
+	<nav class="space-y-3" aria-label="Table of contents">
+		<h2 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+			Table of Contents
+		</h2>
+		<ul class="space-y-2 text-sm">
+			{filteredHeadings.map((heading) => (
+				<li
+					class={heading.depth === 3 ? 'ml-4' : ''}
+				>
+					<a
+						href={`#${heading.slug}`}
+						class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white default-transition"
+					>
+						{heading.text}
+					</a>
+				</li>
+			))}
+		</ul>
+	</nav>
+)}

@@ -1,0 +1,55 @@
+---
+import { ArrowLeft, ArrowRight } from 'lucide-preact';
+
+export interface NavPost {
+	slug: string;
+	title: string;
+}
+
+export interface Props {
+	prev?: NavPost | null;
+	next?: NavPost | null;
+}
+
+const { prev, next } = Astro.props;
+
+const hasNavigation = prev || next;
+---
+
+{hasNavigation && (
+	<nav class="space-y-4" aria-label="Post navigation">
+		<h2 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+			Keep Reading
+		</h2>
+		<div class="flex flex-col sm:flex-row gap-4">
+			{prev && (
+				<a
+					href={`/posts/${prev.slug}`}
+					class="group flex-1 flex items-center gap-3 p-4 rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 bg-white dark:bg-gray-950 default-transition"
+				>
+					<ArrowLeft class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 default-transition group-hover:-translate-x-1" />
+					<div class="min-w-0">
+						<span class="text-xs text-gray-500 dark:text-gray-400">Previous</span>
+						<p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+							{prev.title}
+						</p>
+					</div>
+				</a>
+			)}
+			{next && (
+				<a
+					href={`/posts/${next.slug}`}
+					class="group flex-1 flex items-center justify-end gap-3 p-4 rounded-lg border-2 border-gray-200 dark:border-gray-800 hover:border-gray-300 dark:hover:border-gray-700 bg-white dark:bg-gray-950 default-transition text-right"
+				>
+					<div class="min-w-0">
+						<span class="text-xs text-gray-500 dark:text-gray-400">Next</span>
+						<p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+							{next.title}
+						</p>
+					</div>
+					<ArrowRight class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 default-transition group-hover:translate-x-1" />
+				</a>
+			)}
+		</div>
+	</nav>
+)}

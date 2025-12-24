@@ -3,14 +3,14 @@ import { getCollection } from 'astro:content';
 import { format } from 'date-fns';
 import { ArrowLeft } from 'lucide-preact';
 
-import Avatar from '~/components/Avatar.astro';
 import Footer from '~/components/Footer.astro';
 import Head from '~/components/Head.astro';
+import PostNavigation from '~/components/PostNavigation.astro';
+import TableOfContents from '~/components/TableOfContents.astro';
 import { SITE_TITLE } from '~/constants';
 import Document from '~/layouts/Document.astro';
 import { cn } from '~/utils/cn';
-import { filterPosts } from '~/utils/content';
-import { loadIcon } from '~/utils/icon';
+import { calculateReadingTime, filterPosts, formatReadingTime } from '~/utils/content';
 
 import '~/styles/markdown.css';
 
@@ -20,24 +20,30 @@ import type { CollectionEntry } from 'astro:content';
 export async function getStaticPaths() {
 	const posts = await getCollection('posts', filterPosts({ archived: true }));
 
-	return (
-		posts
-			// Sort by date
-			.sort((a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf())
-			// Map to paths
-			.map((props) => ({
-				params: { slug: props.slug },
-				props,
-			}))
+	// Sort by date for consistent ordering
+	const sortedPosts = posts.sort(
+		(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
 	);
+
+	return sortedPosts.map((props, index) => ({
+		params: { slug: props.slug },
+		props: {
+			...props,
+			prevPost: sortedPosts[index + 1] ?? null,
+			nextPost: sortedPosts[index - 1] ?? null,
+		},
+	}));
 }
 
-export type Props = CollectionEntry<'posts'>;
+export type Props = CollectionEntry<'posts'> & {
+	prevPost: CollectionEntry<'posts'> | null;
+	nextPost: CollectionEntry<'posts'> | null;
+};
 
-const { render: renderPost, data: post, slug } = Astro.props;
-const { Content } = await renderPost();
+const { render: renderPost, data: post, body, slug, prevPost, nextPost } = Astro.props;
+const { Content, headings } = await renderPost();
 
-const Icon = await loadIcon(post.icon);
+const readingTime = calculateReadingTime(body);
 ---
 
 <Head
@@ -49,32 +55,30 @@ const Icon = await loadIcon(post.icon);
 />
 
 <Document>
-	<main class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-16 pb-8 space-y-8">
+	<main class="flex flex-col h-full mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 pt-16 pb-8 space-y-8">
 		<article class="space-y-8 z-10">
-			<header class="space-y-8">
-				<Icon class="w-10 h-10" />
+			<header class="space-y-4">
+				<h1 class='text-4xl font-bold text-black dark:text-white leading-tight'>
+					{post.title}
+				</h1>
 
-				<h1 class='text-5xl font-extrabold text-black dark:text-white'>{post.title}</h1>
+				<p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
+					{post.description}
+				</p>
 
-				<div class="w-full inline-flex items-center gap-8 text-gray-500 my-8 font-medium text-2xl">
-					<time
-						class='font-normal text-base text-zinc-200 dark:text-gray-300'
-						datetime={post.publishedAt.toISOString()}
-						title={format(post.publishedAt, 'PPP')}
-					>
-						{format(post.publishedAt, 'dd-MM-yyyy')}
+				<div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
+					<time datetime={post.publishedAt.toISOString()}>
+						{format(post.publishedAt, 'MMMM d, yyyy')}
 					</time>
-
-					<hr class="border-2 border-gray-100 dark:border-gray-900 rounded-full grow" />
-
-					<a class="h-12 w-12 rounded-full default-transition default-focus" href="/">
-						<Avatar className="h-12 w-12" width={48} height={48} />
-					</a>
+					<span>•</span>
+					<span>{formatReadingTime(readingTime)}</span>
 				</div>
 			</header>
 
+			<TableOfContents headings={headings} />
+
 			<section class={cn(
-				"mx-auto max-w-3xl prose",
+				"prose prose-gray dark:prose-invert max-w-none",
 				"prose-a:text-primary-500 prose-a:hover:text-primary-600 dark:prose-a:text-primary-600 dark:prose-a:hover:text-primary-500 prose-a:rounded-xs",
 				"prose-code:text-gray-600 dark:prose-code:text-gray-200",
 				"prose-h1:font-bold",
@@ -91,20 +95,24 @@ const Icon = await loadIcon(post.icon);
 			)}>
 				<Content />
 			</section>
+
+			<PostNavigation
+				prev={prevPost ? { slug: prevPost.slug, title: prevPost.data.title } : null}
+				next={nextPost ? { slug: nextPost.slug, title: nextPost.data.title } : null}
+			/>
 		</article>
 	</main>
 
-	<Footer class="max-w-3xl">
+	<Footer class="max-w-2xl">
 		<div class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0">
 			<a
-				class='default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-zinc-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-500 dark:hover:text-zinc-200'
-				href='/'
-				data-astro-reload
+				class='default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-gray-200 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-700'
+				href='/posts'
 			>
 				<ArrowLeft
-					class='w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-500 dark:group-hover:text-zinc-200'
+					class='w-4 h-4 default-transition transform group-hover:-translate-x-1'
 				/>
-				<span>Go back</span>
+				<span>All posts</span>
 			</a>
 		</div>
 	</Footer>
