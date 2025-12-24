@@ -5,6 +5,14 @@ import rehypeAutolinkHeadingsPlugin from 'rehype-autolink-headings';
 import rehypeExternalLinksPlugin from 'rehype-external-links';
 import rehypePrettyCodePlugin from 'rehype-pretty-code';
 import rehypeSlugPlugin from 'rehype-slug';
+import { transformerCopyButton } from '@rehype-pretty/transformers';
+import {
+	transformerNotationDiff,
+	transformerNotationHighlight,
+	transformerNotationWordHighlight,
+	transformerNotationFocus,
+	transformerNotationErrorLevel,
+} from '@shikijs/transformers';
 
 import type { RehypePlugins, RemarkPlugins } from 'astro';
 
@@ -24,7 +32,7 @@ export const rehypePlugins: RehypePlugins = [
 		{ behavior: 'prepend' } satisfies RehypeAutolinkHeadingsOptions,
 	],
 
-	// Add syntax highlighting to code blocks
+	// Add syntax highlighting to code blocks with enhanced features
 	[
 		rehypePrettyCodePlugin,
 		{
@@ -32,6 +40,23 @@ export const rehypePlugins: RehypePlugins = [
 				dark: 'github-dark',
 				light: 'github-light',
 			},
+			transformers: [
+				// Copy button on code blocks
+				transformerCopyButton({
+					visibility: 'hover',
+					feedbackDuration: 2500,
+				}),
+				// Line highlighting: // [!code highlight]
+				transformerNotationHighlight(),
+				// Diff support: // [!code ++] and // [!code --]
+				transformerNotationDiff(),
+				// Word highlighting: // [!code word:xxx]
+				transformerNotationWordHighlight(),
+				// Focus lines: // [!code focus]
+				transformerNotationFocus(),
+				// Error/warning levels: // [!code error] and // [!code warning]
+				transformerNotationErrorLevel(),
+			],
 		} satisfies RehypePrettyCodeOptions,
 	],
 
