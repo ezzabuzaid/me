@@ -1,8 +1,9 @@
 ---
-title: Gentle Introduction To ESLint Rules
-description: Unlock the power of custom linting by learning how to write your own ESLint rules tailored for your specific coding requirements.
+title: 'How to Write Custom ESLint Rules (Step-by-Step Guide)'
+description: 'Create your own ESLint rules from scratch. Learn AST traversal, rule structure, and testing. Working examples included.'
 featured: 6
 publishedAt: '2022-07-07T12:34:56+00:00'
+tags: ['ESLint', 'JavaScript', 'TypeScript', 'Code Quality', 'AST']
 ---
 
 Have you ever wondered how your editor can know if you used `var` instead of `let`? or that you missed adding `alt` to the `img` tag? Yes, that is **ESLint** ladies and gentlemen.

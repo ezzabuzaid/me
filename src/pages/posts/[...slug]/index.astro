@@ -12,6 +12,7 @@ import Document from "~/layouts/Document.astro";
 import { cn } from "~/utils/cn";
 import {
   calculateReadingTime,
+  calculateWordCount,
   filterPosts,
   formatReadingTime,
 } from "~/utils/content";
@@ -55,15 +56,38 @@ const {
 const { Content, headings } = await renderPost();
 
 const readingTime = calculateReadingTime(body);
+const wordCount = calculateWordCount(body);
+
+// Build article data for SEO
+const articleData = {
+  ...post,
+  slug,
+  tags: post.tags ?? [],
+  wordCount,
+};
+
+// Breadcrumbs for structured data
+const breadcrumbs = [
+  { name: "Home", url: Astro.site?.href ?? "/" },
+  { name: "Posts", url: new URL("/posts", Astro.site).href },
+  { name: post.title, url: new URL(`/posts/${slug}`, Astro.site).href },
+];
+
+// Build Head props, conditionally including optional fields
+const headProps = {
+  title: `${post.title} ─ ${SITE_TITLE}`,
+  description: post.description,
+  publishedAt: post.publishedAt.toISOString(),
+  image: new URL(`/posts/${slug}/og.png`, Astro.site).href,
+  type: "article" as const,
+  article: articleData,
+  breadcrumbs,
+  ...(post.lastModifiedAt && { modifiedAt: post.lastModifiedAt.toISOString() }),
+  ...(post.tags && post.tags.length > 0 && { keywords: post.tags }),
+};
 ---
 
-<Head
-  title={`${post.title} ─ ${SITE_TITLE}`}
-  description={post.description}
-  publishedAt={post.publishedAt.toISOString()}
-  image={new URL(`/posts/${slug}/og.png`, Astro.site).href}
-  type="article"
-/>
+<Head {...headProps} />
 
 <Document>
   <main

@@ -3,7 +3,7 @@
 
 export const SITE_TITLE = `Ezz's Blog`;
 export const SITE_DESCRIPTION =
-  "Empirical Engineer. Creating tools is my hobby.";
+  "Technical blog by Ezz Abuzaid covering TypeScript, Angular, React, Node.js, RxJS, and modern web development. In-depth tutorials, code examples, and best practices for software engineers.";
 export const SITE_URL = "https://ezz.sh";
 export const SITE_AUTHOR = "Ezz Abuzaid";
 export const SITE_KEYWORDS = [
@@ -23,7 +23,7 @@ export const AUTHOR = {
   name: "Ezz Abuzaid",
   email: "ezzabuzaid@gmail.com",
   url: "https://ezz.sh",
-  bio: "Empirical Engineer passionate about creating developer tools and sharing knowledge through code.",
+  bio: "Software engineer passionate about TypeScript, Angular, React, and building developer tools. Sharing practical web development knowledge through code.",
   location: "Earth",
   social: {
     twitter: "@ezzabuzaid",

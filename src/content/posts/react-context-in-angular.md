@@ -1,8 +1,9 @@
 ---
-title: React Context In Angular
-description: 'Mimic React Context API in Angular'
+title: 'Implement React Context API Pattern in Angular'
+description: "Bring React's Context API pattern to Angular. Share state across components without prop drilling. Full implementation guide with code."
 featured: 60
 publishedAt: '2021-09-10T00:00:00.000'
+tags: ['Angular', 'React', 'State Management', 'TypeScript', 'Design Patterns']
 ---
 
 In this article, I'm going to show you how to mimic **React Context API** in **Angular**, I'll start by defining **React Context**, talk about what problem is meant to solve, and a possible implementation in Angular.

@@ -1,8 +1,9 @@
 ---
-title: 'Migrating from until-destroy to takeUntilDestroyed'
-description: "Migrating to Angular's latest feature, DestroyRef, streamlines component cleanup, pairing seamlessly with takeUntilDestroyed using codemod"
+title: 'Angular takeUntilDestroyed Migration Guide (with Codemod)'
+description: "Stop using @ngneat/until-destroy. Migrate to Angular's built-in takeUntilDestroyed with a one-command codemod. Before/after examples included."
 featured: 8
 publishedAt: '2023-12-19T00:00:00Z'
+tags: ['Angular', 'RxJS', 'Migration', 'TypeScript', 'Codemod']
 ---
 
 Angular has been releasing new things nonstop, one of which Is the `DestroyRef` token, a utility class that provides an `onDestroy` hook that is called when a component/directive is destroyed.

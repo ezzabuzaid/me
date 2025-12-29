@@ -1,8 +1,9 @@
 ---
 publishedAt: '2024-06-17T00:00:00'
-title: 'Building Todo List API, Once Again.'
-description: 'Build a simple Todo List API with January’s CanonLang and extensions, then connect GitHub and deploy to Fly.io—step-by-step walkthrough.'
+title: 'Build and Deploy a Todo API with January (Low-Code)'
+description: "Create a REST API without writing backend code. Use January's low-code platform to build and deploy a Todo List API to Fly.io."
 featured: 100
+tags: ['API', 'Backend', 'Tutorial', 'Low Code', 'Deployment']
 ---
 
 Chances you’ve built a todo list app/website before is high, especially in your early days. Todo list is about the next step after printing “Hello World“.

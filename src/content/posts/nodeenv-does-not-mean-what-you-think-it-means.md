@@ -1,8 +1,9 @@
 ---
-title: "NODE_ENV doesn't mean what you think it means"
-description: "Some thoughts on the ambiguous usage of NODE_ENV in Node.js applications."
+title: "NODE_ENV: What It Actually Does (And What It Doesn't)"
+description: "Stop misusing NODE_ENV. Learn what it's really for, why you should always use production, and how to properly configure your Node.js apps."
 featured: 1
 publishedAt: "2025-11-11T00:00:00.00Z"
+tags: ['Node.js', 'Best Practices', 'Environment Variables', 'DevOps']
 ---
 
 `NODE_ENV` is not a server discriminator or some kind of identifier for the server, rather it is an ambiguous umbrella variable that some developers use as an on-off switch for code that works in an environment and not in others.

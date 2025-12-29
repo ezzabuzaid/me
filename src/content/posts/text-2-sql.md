@@ -1,8 +1,9 @@
 ---
-title: "Text 2 SQL"
-description: "On build agents generating SQL queries from natural language prompts."
+title: "Build a Text-to-SQL Agent with LLMs"
+description: "Generate SQL queries from natural language using LLMs. Build an AI agent that understands your database schema and writes accurate queries."
 featured: 1000
 publishedAt: "2025-11-11T00:00:00.00Z"
+tags: ['AI', 'LLM', 'SQL', 'Machine Learning', 'Natural Language Processing']
 ---
 
 An LLM is great at generating text based on patterns it has seen during training. This makes it a powerful tool for generating SQL queries from natural language prompts.

@@ -15,6 +15,7 @@ const posts = defineCollection({
       icon: z.enum(IconKeys).default("Newspaper"),
       lastModifiedAt: z.coerce.date().optional(),
       publishedAt: z.coerce.date(),
+      tags: z.array(z.string()).optional().default([]),
       title: z.string(),
     })
     .strict(),

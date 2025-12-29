@@ -1,8 +1,9 @@
 ---
-title: Real-time OpenAI Response Streaming with Node.js
-description: 'Do what ChatGPT does: continuously stream results as they become available; don’t wait for completion—render tokens in real time.'
+title: 'Stream OpenAI Responses in Real-Time with Node.js'
+description: 'Build ChatGPT-like streaming responses with the OpenAI API. Handle SSE, token buffering, and real-time rendering in Node.js.'
 featured: 5
 publishedAt: '2023-10-25T12:51:21.697Z'
+tags: ['Node.js', 'OpenAI', 'Streaming', 'API', 'JavaScript', 'AI']
 ---
 
 You know how ChatGPT continuously show the results as it becomes available -generated-, It doesn't wait for the whole response to get together, rather it shows what the model is generating right away.

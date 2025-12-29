@@ -1,8 +1,9 @@
 ---
-description: Dive deep into the inner workings of the TypeScript Compiler API and discover how it can enhance your development workflow. From manual type checking to code generation and transformation, this guide provides a detailed walkthrough of the API's functionalities.
+description: 'Master the TypeScript Compiler API. Learn type checking, AST traversal, code generation, and transformation with practical examples.'
 featured: 2
-title: Gentle Introduction To Typescript Compiler API
+title: 'TypeScript Compiler API: A Practical Guide'
 publishedAt: '2023-11-17T11:00:00.00Z'
+tags: ['TypeScript', 'Compiler', 'AST', 'Code Generation', 'Developer Tools']
 ---
 
 TypeScript extends JavaScript by adding types, thereby enhancing code quality and understandability through static type checking which enables developers to catch errors at compile-time rather than runtime.

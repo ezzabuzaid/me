@@ -1,8 +1,9 @@
 ---
-title: Build Infinity Scroll Using RxJS
-description: 'Learn how to build infinite scrolling using RxJS. Improve user experience, optimize resource usage, and fetch data incrementally!'
+title: 'Build Infinite Scroll with RxJS (Complete Tutorial)'
+description: 'Create smooth infinite scrolling with RxJS operators. Handle loading states, error recovery, and performance optimization. Full working code.'
 featured: 20
 publishedAt: '2023-09-10T00:00:00.00Z'
+tags: ['RxJS', 'JavaScript', 'TypeScript', 'Infinite Scroll', 'UI Components', 'Web Development']
 ---
 
 Have you ever experienced slow loading or lag on a webpage while trying to load a large amount of data? If so, you're not alone. An effective solution to improve the experience is to use infinite scrolling, which works similarly to how your Twitter feed continuously loads more tweets as you scroll down.
@@ -658,10 +659,3 @@ Stay tuned for an upcoming post on **Virtual Scroll**. Subscribe to the newslett
   ](https://www.digitala11y.com/infinite-scroll-accessibility-is-it-any-good/)
 - [RxJS Operators](https://rxjs.dev/guide/operators)
 - [Angular Implementation](/posts/implementing-infinity-scroll-in-angular)
-
-
-Read this "[Application](https://jobs.ashbyhq.com/openai/f96dbc99-6253-4e40-9263-0accd934345d/application)" and interview me in detail using the AskUserQuestionTool about literally every question in there.
-
-Be very in-depth and continue interviewing me continually until it's complete, then write the spec to the file.
-
-The purpose of this is to get me joined for this residency program.

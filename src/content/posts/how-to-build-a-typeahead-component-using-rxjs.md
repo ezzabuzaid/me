@@ -1,8 +1,9 @@
 ---
-title: 'How To Build a Typeahead Component Using RxJS'
-description: 'Learn how to build a typeahead component using RxJS. Improve the user experience and performance of your application.'
+title: 'Build a Typeahead/Autocomplete Component with RxJS'
+description: 'Create a fast typeahead search with RxJS. Handle debouncing, caching, keyboard navigation, and API optimization. Full code included.'
 featured: 160
 publishedAt: '2023-09-19T17:00:00.00Z'
+tags: ['RxJS', 'TypeScript', 'UI Components', 'Search', 'JavaScript']
 ---
 
 You know when you start typing in a search box and it starts suggesting things to you? That's called typeahead. It's a great way to help users find what they're looking for. In this article, you'll learn how to build a typeahead component using RxJS.

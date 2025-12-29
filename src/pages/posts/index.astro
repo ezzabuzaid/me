@@ -5,7 +5,6 @@ import { ArrowLeft } from "lucide-preact";
 import Footer from "~/components/Footer.astro";
 import Head from "~/components/Head.astro";
 import List from "~/components/Widgets/List.astro";
-import { SITE_TITLE } from "~/constants";
 import Document from "~/layouts/Document.astro";
 import {
   filterPosts,
@@ -30,7 +29,11 @@ const [posts, archivedPosts] = await Promise.all([
 ]);
 ---
 
-<Head title={`${SITE_TITLE} ─ posts`} />
+<Head
+  title="Blog Posts"
+  description="Articles on TypeScript, Angular, React, RxJS, Node.js, and web development. Practical tutorials, code examples, and software engineering insights by Ezz Abuzaid."
+  type="blog"
+/>
 
 <Document>
   <main

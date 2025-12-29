@@ -1,11 +1,9 @@
 ---
 publishedAt: '2024-10-04T00:00:00'
-title: 'Using Github Repository To Host NPM Packages'
-description: "Work around npm scope issues by hosting tarballs on GitHub; pros/cons, caching gotchas, scripts, and future improvements."
+title: 'Host npm Packages on GitHub (Without npm Registry)'
+description: "Can't get your npm scope? Host packages directly from GitHub using tarballs. Covers caching issues, installation scripts, and tradeoffs."
 featured: 100
-
-
-
+tags: ['npm', 'GitHub', 'Package Management', 'Node.js', 'DevOps']
 ---
 
 I was excited to release the first half-working version of **January** and share it with world, but to my surprise, the name was already taken. I made a mistake of not checking if the **“@january”** scope was available on npm. “Who would pick January as a package name?" I thought. Well, someone had—seven years ago.

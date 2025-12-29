@@ -1,8 +1,9 @@
 ---
 publishedAt: '2024-07-16T00:00:00'
-title: 'Running Untrusted JavaScript Code'
-description: 'Strategies to safely run user JS/TS: eval pitfalls, Workers, isolated-vm, WASM, Docker, static analysis, and timeboxing.'
+title: 'How to Safely Run Untrusted JavaScript Code (7 Methods)'
+description: 'Execute user-submitted JavaScript securely. Compare Web Workers, isolated-vm, WASM sandboxes, Docker, and static analysis with code examples.'
 featured: 3
+tags: ['JavaScript', 'Security', 'Web Workers', 'WebAssembly', 'Docker', 'Node.js']
 ---
 
 

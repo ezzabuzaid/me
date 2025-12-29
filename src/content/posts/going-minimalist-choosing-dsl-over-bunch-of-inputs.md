@@ -1,9 +1,9 @@
 ---
 publishedAt: '2021-03-09T00:00:00'
-title: 'Going Minimalist: Choosing DSL Over Bunch of Inputs'
-description: 'Why a small purpose-built DSL can beat complex UIs: lessons from designing policy rules, constructs, tradeoffs, and next steps.'
-
+title: 'Why I Chose a DSL Over Complex Form UIs'
+description: 'Replace complex form UIs with a simple DSL. Real-world case study on designing policy rules, with syntax design decisions and tradeoffs.'
 featured: 100
+tags: ['DSL', 'UX Design', 'Low Code', 'Product Design']
 ---
 
 To catch you up quickly, January.sh is a low code platform that builds backend service and generates human readable code as result, the general product user persona can be put as following: someone who worked with similar products before (any other low code platform) and have general understanding of the technical side of building a product/tool.

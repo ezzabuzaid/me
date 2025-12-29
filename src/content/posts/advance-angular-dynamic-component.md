@@ -1,8 +1,9 @@
 ---
 publishedAt: '2021-08-06T00:00:00'
-title: Advance Angular Dynamic Component
-description: 'Create Angular components dynamically with inputs, outputs, and ngOnChanges support, including validation, binding, and cleanup patterns for v13+.'
+title: 'Angular Dynamic Components: Inputs, Outputs & ngOnChanges'
+description: 'Create dynamic Angular components with full lifecycle support. Handle inputs, outputs, and ngOnChanges in dynamically loaded components.'
 featured: 80
+tags: ['Angular', 'TypeScript', 'Dynamic Components', 'Web Development']
 ---
 
 In this article, I will show you how you can still use inputs and outputs and support OnChanges lifecycle while creating dynamic components.
