@@ -18,10 +18,10 @@ const socialLinks = await getCollection("socialLinks").then((arr) =>
 
 <section class="sm:flex gap-8 space-y-4 sm:space-y-0 z-10" id="hero">
   <div
-    class="max-w-4xl space-y-4 font-semibold not-italic leading-9 tracking-tighter grow"
+    class="max-w-4xl space-y-4 grow"
   >
     <div class="flex items-center gap-4">
-      <h1 class="text-4xl text-black dark:text-white">
+      <h1 class="font-[Fraunces] text-4xl sm:text-5xl font-bold tracking-tight text-gray-50 leading-[0.9]">
         {HOME.title}
       </h1>
       <div class="flex justify-center space-x-2 md:order-2">
@@ -29,7 +29,7 @@ const socialLinks = await getCollection("socialLinks").then((arr) =>
           socialLinks.map(async ({ data: socialLink }) => (
             <a
               aria-label={socialLink.name}
-              class="text-gray-700 hover:text-gray-900 dark:text-zinc-200 dark:hover:text-gray-100 bg-white hover:bg-gray-100 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 rounded-md p-1.5 default-transition default-focus"
+              class="text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50 p-1.5 default-transition default-focus"
               href={socialLink.url}
               rel="noreferrer"
               target="_blank"
@@ -43,7 +43,7 @@ const socialLinks = await getCollection("socialLinks").then((arr) =>
       </div>
     </div>
 
-    <h2 class="text-2xl text-gray-700 dark:text-zinc-300 md:max-w-lg">
+    <h2 class="text-lg text-gray-500 md:max-w-lg">
       {pageDescription ?? HOME.subtitle}
     </h2>
   </div>

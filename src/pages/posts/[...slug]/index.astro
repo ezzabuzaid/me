@@ -1,119 +1,130 @@
 ---
-import { getCollection } from 'astro:content';
-import { format } from 'date-fns';
-import { ArrowLeft } from 'lucide-preact';
+import { getCollection } from "astro:content";
+import { format } from "date-fns";
+import { ArrowLeft } from "lucide-preact";
 
-import Footer from '~/components/Footer.astro';
-import Head from '~/components/Head.astro';
-import PostNavigation from '~/components/PostNavigation.astro';
-import TableOfContents from '~/components/TableOfContents.astro';
-import { SITE_TITLE } from '~/constants';
-import Document from '~/layouts/Document.astro';
-import { cn } from '~/utils/cn';
-import { calculateReadingTime, filterPosts, formatReadingTime } from '~/utils/content';
+import Footer from "~/components/Footer.astro";
+import Head from "~/components/Head.astro";
+import PostNavigation from "~/components/PostNavigation.astro";
+import TableOfContents from "~/components/TableOfContents.astro";
+import { SITE_TITLE } from "~/constants";
+import Document from "~/layouts/Document.astro";
+import { cn } from "~/utils/cn";
+import {
+  calculateReadingTime,
+  filterPosts,
+  formatReadingTime,
+} from "~/utils/content";
 
-import '~/styles/markdown.css';
+import "~/styles/markdown.css";
 
-import type { CollectionEntry } from 'astro:content';
+import type { CollectionEntry } from "astro:content";
 
 // biome-ignore lint/nursery/useExplicitType: Inferred return type
 export async function getStaticPaths() {
-	const posts = await getCollection('posts', filterPosts({ archived: true }));
+  const posts = await getCollection("posts", filterPosts({ archived: true }));
 
-	// Sort by date for consistent ordering
-	const sortedPosts = posts.sort(
-		(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf()
-	);
+  // Sort by date for consistent ordering
+  const sortedPosts = posts.sort(
+    (a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
+  );
 
-	return sortedPosts.map((props, index) => ({
-		params: { slug: props.slug },
-		props: {
-			...props,
-			prevPost: sortedPosts[index + 1] ?? null,
-			nextPost: sortedPosts[index - 1] ?? null,
-		},
-	}));
+  return sortedPosts.map((props, index) => ({
+    params: { slug: props.slug },
+    props: {
+      ...props,
+      prevPost: sortedPosts[index + 1] ?? null,
+      nextPost: sortedPosts[index - 1] ?? null,
+    },
+  }));
 }
 
-export type Props = CollectionEntry<'posts'> & {
-	prevPost: CollectionEntry<'posts'> | null;
-	nextPost: CollectionEntry<'posts'> | null;
+export type Props = CollectionEntry<"posts"> & {
+  prevPost: CollectionEntry<"posts"> | null;
+  nextPost: CollectionEntry<"posts"> | null;
 };
 
-const { render: renderPost, data: post, body, slug, prevPost, nextPost } = Astro.props;
+const {
+  render: renderPost,
+  data: post,
+  body,
+  slug,
+  prevPost,
+  nextPost,
+} = Astro.props;
 const { Content, headings } = await renderPost();
 
 const readingTime = calculateReadingTime(body);
 ---
 
 <Head
-	title={`${post.title} ─ ${SITE_TITLE}`}
-	description={post.description}
-	publishedAt={post.publishedAt.toISOString()}
-	image={new URL(`/posts/${slug}/og.png`, Astro.site).href}
-	type='article'
+  title={`${post.title} ─ ${SITE_TITLE}`}
+  description={post.description}
+  publishedAt={post.publishedAt.toISOString()}
+  image={new URL(`/posts/${slug}/og.png`, Astro.site).href}
+  type="article"
 />
 
 <Document>
-	<main class="flex flex-col h-full mx-auto max-w-2xl px-4 sm:px-6 lg:px-8 pt-16 pb-8 space-y-8">
-		<article class="space-y-8 z-10">
-			<header class="space-y-4">
-				<h1 class='text-4xl font-bold text-black dark:text-white leading-tight'>
-					{post.title}
-				</h1>
+  <main
+    class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-16 pb-8 space-y-8"
+  >
+    <article class="space-y-8 z-10">
+      <header class="space-y-6">
+        <!-- Post title - Fraunces for editorial impact -->
+        <h1
+          class="font-[Fraunces] text-4xl sm:text-5xl font-bold text-gray-50 leading-tight"
+        >
+          {post.title}
+        </h1>
 
-				<p class="text-lg text-gray-600 dark:text-gray-300 leading-relaxed">
-					{post.description}
-				</p>
+        <p class="text-lg text-gray-400 leading-relaxed font-sans">
+          {post.description}
+        </p>
 
-				<div class="flex items-center gap-3 text-sm text-gray-500 dark:text-gray-400">
-					<time datetime={post.publishedAt.toISOString()}>
-						{format(post.publishedAt, 'MMMM d, yyyy')}
-					</time>
-					<span>•</span>
-					<span>{formatReadingTime(readingTime)}</span>
-				</div>
-			</header>
+        <!-- Terminal-style metadata -->
+        <div
+          class="flex items-center gap-4 font-mono text-xs text-gray-500 uppercase tracking-wider"
+        >
+          <time datetime={post.publishedAt.toISOString()}>
+            <span class="text-primary-500">◇</span>
+            {format(post.publishedAt, "dd-MM-yyyy")}
+          </time>
+          <span class="text-gray-700">|</span>
+          <span>{formatReadingTime(readingTime)}</span>
+        </div>
+      </header>
 
-			<TableOfContents headings={headings} />
+      <TableOfContents headings={headings} />
 
-			<section class={cn(
-				"prose prose-gray dark:prose-invert max-w-none",
-				"prose-a:text-primary-500 prose-a:hover:text-primary-600 dark:prose-a:text-primary-600 dark:prose-a:hover:text-primary-500 prose-a:rounded-xs",
-				"prose-code:text-gray-600 dark:prose-code:text-gray-200",
-				"prose-h1:font-bold",
-				"prose-headings:text-black dark:prose-headings:text-white",
-				"prose-hr:mb-8 prose-hr:border-2 prose-hr:border-gray-100 dark:prose-hr:border-gray-900 prose-hr:rounded-full",
-				"prose-img:rounded-xl",
-				"prose-kbd:uppercase prose-kbd:text-xs prose-kbd:text-zinc-200 dark:prose-kbd:text-gray-200 prose-kbd:bg-gray-50 dark:prose-kbd:bg-gray-900 prose-kbd:rounded-md prose-kbd:border prose-kbd:border-gray-200 dark:prose-kbd:border-gray-800",
-				"prose-li:text-gray-500 dark:prose-li:text-zinc-200",
-				"prose-p:text-gray-500 dark:prose-p:text-zinc-200",
-				"prose-pre:rounded-lg",
-				"prose-strong:text-gray-800 dark:prose-strong:text-gray-100",
-				"prose-td:text-gray-600 dark:prose-td:text-gray-300",
-				"prose-thead:border-gray-200 dark:prose-thead:border-gray-800"
-			)}>
-				<Content />
-			</section>
+      <section class={cn("prose max-w-none")}>
+        <Content />
+      </section>
 
-			<PostNavigation
-				prev={prevPost ? { slug: prevPost.slug, title: prevPost.data.title } : null}
-				next={nextPost ? { slug: nextPost.slug, title: nextPost.data.title } : null}
-			/>
-		</article>
-	</main>
+      <PostNavigation
+        prev={prevPost
+          ? { slug: prevPost.slug, title: prevPost.data.title }
+          : null}
+        next={nextPost
+          ? { slug: nextPost.slug, title: nextPost.data.title }
+          : null}
+      />
+    </article>
+  </main>
 
-	<Footer class="max-w-2xl">
-		<div class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0">
-			<a
-				class='default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-600 dark:text-gray-300 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-gray-200 hover:border-gray-300 dark:border-gray-800 dark:hover:border-gray-700'
-				href='/posts'
-			>
-				<ArrowLeft
-					class='w-4 h-4 default-transition transform group-hover:-translate-x-1'
-				/>
-				<span>All posts</span>
-			</a>
-		</div>
-	</Footer>
+  <Footer class="max-w-3xl border-t border-gray-800">
+    <div
+      class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
+    >
+      <a
+        class="default-focus mt-4 default-transition group inline-flex items-center justify-center space-x-2 px-3 py-1 font-mono text-xs uppercase tracking-wider text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50"
+        href="/posts"
+      >
+        <ArrowLeft
+          class="w-4 h-4 default-transition transform group-hover:-translate-x-1"
+        />
+        <span>All posts</span>
+      </a>
+    </div>
+  </Footer>
 </Document>

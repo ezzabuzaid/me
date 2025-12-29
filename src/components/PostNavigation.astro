@@ -17,20 +17,21 @@ const hasNavigation = prev || next;
 ---
 
 {hasNavigation && (
-	<nav class="space-y-4" aria-label="Post navigation">
-		<h2 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
+	<nav class="space-y-4 border-t border-gray-800 pt-8" aria-label="Post navigation">
+		<h2 class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-400">
+			<span class="text-primary-500 mr-2">◇</span>
 			Keep Reading
 		</h2>
 		<div class="flex flex-col sm:flex-row gap-4">
 			{prev && (
 				<a
 					href={`/posts/${prev.slug}`}
-					class="group flex-1 flex items-center gap-3 p-4 rounded-lg border border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 bg-stone-100 dark:bg-stone-900 default-transition"
+					class="group flex-1 flex items-center gap-3 p-4 border border-gray-800 hover:border-primary-500/50 bg-gray-900 hover:bg-gray-800 default-transition relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0 before:bg-primary-500 before:transition-all before:duration-200 hover:before:w-1"
 				>
-					<ArrowLeft class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 default-transition group-hover:-translate-x-1" />
+					<ArrowLeft class="w-4 h-4 text-gray-500 group-hover:text-primary-500 default-transition group-hover:-translate-x-1" />
 					<div class="min-w-0">
-						<span class="text-xs text-gray-500 dark:text-gray-400">Previous</span>
-						<p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+						<span class="font-mono text-xs text-gray-600 uppercase tracking-wider">Previous</span>
+						<p class="text-sm font-[Fraunces] text-gray-200 group-hover:text-gray-50 truncate default-transition">
 							{prev.title}
 						</p>
 					</div>
@@ -39,15 +40,15 @@ const hasNavigation = prev || next;
 			{next && (
 				<a
 					href={`/posts/${next.slug}`}
-					class="group flex-1 flex items-center justify-end gap-3 p-4 rounded-lg border border-stone-200 dark:border-stone-800 hover:border-stone-300 dark:hover:border-stone-700 bg-stone-100 dark:bg-stone-900 default-transition text-right"
+					class="group flex-1 flex items-center justify-end gap-3 p-4 border border-gray-800 hover:border-primary-500/50 bg-gray-900 hover:bg-gray-800 default-transition text-right relative before:absolute before:right-0 before:top-0 before:bottom-0 before:w-0 before:bg-primary-500 before:transition-all before:duration-200 hover:before:w-1"
 				>
 					<div class="min-w-0">
-						<span class="text-xs text-gray-500 dark:text-gray-400">Next</span>
-						<p class="text-sm font-medium text-gray-900 dark:text-white truncate">
+						<span class="font-mono text-xs text-gray-600 uppercase tracking-wider">Next</span>
+						<p class="text-sm font-[Fraunces] text-gray-200 group-hover:text-gray-50 truncate default-transition">
 							{next.title}
 						</p>
 					</div>
-					<ArrowRight class="w-4 h-4 text-gray-400 group-hover:text-gray-600 dark:group-hover:text-gray-300 default-transition group-hover:translate-x-1" />
+					<ArrowRight class="w-4 h-4 text-gray-500 group-hover:text-primary-500 default-transition group-hover:translate-x-1" />
 				</a>
 			)}
 		</div>

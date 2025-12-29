@@ -1,60 +1,86 @@
 @import "tailwindcss";
 
 /* @see https://github.com/tailwindlabs/tailwindcss/issues/15794 */
-@source "../components/";
+@source "../**/*.{astro,js,jsx,ts,tsx,md,mdx}";
 
 @plugin "@tailwindcss/typography";
 
 @custom-variant dark (@media (prefers-color-scheme: dark));
 
 @theme {
-  --animate-meteor-effect: meteor 5s linear infinite;
+  /* ============================================================================
+     BRUTALIST TERMINAL EDITORIAL - Design System
+     ============================================================================ */
 
-  /* Light theme: Warm stone palette for a paper-like feel */
-  --color-gray-50: theme(color.stone.50);
-  --color-gray-100: theme(color.stone.100);
-  --color-gray-200: theme(color.stone.200);
-  --color-gray-300: theme(color.stone.300);
-  --color-gray-400: theme(color.stone.400);
-  --color-gray-500: theme(color.stone.500);
-  --color-gray-600: theme(color.stone.600);
-  --color-gray-700: theme(color.stone.700);
-  --color-gray-800: theme(color.stone.800);
-  --color-gray-900: theme(color.stone.900);
-  --color-gray-950: theme(color.stone.950);
+  /* Near-black/off-white brutalist palette */
+  --color-bg: #050505;
+  --color-fg: #fafafa;
+  --color-gray: #666666;
+  --color-gray-dark: #333333;
+  --color-gray-darker: #1a1a1a;
+  --color-coral: #ff4d00;
+  --color-coral-dark: #cc3d00;
+  --color-cyan: #00d9ff;
+  --color-border: rgba(255, 255, 255, 0.15);
+  --color-border-strong: rgba(255, 255, 255, 0.25);
 
-  --color-primary-50: theme(color.blue.50);
-  --color-primary-100: theme(color.blue.100);
-  --color-primary-200: theme(color.blue.200);
-  --color-primary-300: theme(color.blue.300);
-  --color-primary-400: theme(color.blue.400);
-  --color-primary-500: theme(color.blue.500);
-  --color-primary-600: theme(color.blue.600);
-  --color-primary-700: theme(color.blue.700);
-  --color-primary-800: theme(color.blue.800);
-  --color-primary-900: theme(color.blue.900);
-  --color-primary-950: theme(color.blue.950);
+  /* Gray scale for brutalist dark theme */
+  --color-gray-50: #fafafa;
+  --color-gray-100: #e5e5e5;
+  --color-gray-200: #cccccc;
+  --color-gray-300: #999999;
+  --color-gray-400: #666666;
+  --color-gray-500: #4d4d4d;
+  --color-gray-600: #333333;
+  --color-gray-700: #262626;
+  --color-gray-800: #1a1a1a;
+  --color-gray-900: #0d0d0d;
+  --color-gray-950: #050505;
 
-  /* Clean, modern sans-serif stack */
-  --font-sans:
-    "Inter Tight Variable", -apple-system, BlinkMacSystemFont, "Segoe UI",
-    Roboto, "Helvetica Neue", Arial, sans-serif;
-  --font-mono:
-    "Geist Mono Variable", ui-monospace, SFMono-Regular, "SF Mono", Menlo,
-    Monaco, Consolas, monospace;
+  /* Primary = Coral (hot brand accent) */
+  --color-primary-50: #fff5f0;
+  --color-primary-100: #ffebe0;
+  --color-primary-200: #ffd6c2;
+  --color-primary-300: #ffb899;
+  --color-primary-400: #ff8c5c;
+  --color-primary-500: #ff4d00;
+  --color-primary-600: #cc3d00;
+  --color-primary-700: #992e00;
+  --color-primary-800: #661f00;
+  --color-primary-900: #331000;
+  --color-primary-950: #1a0800;
 
-  @keyframes meteor {
-    0% {
-      transform: rotate(215deg) translateX(0);
-      opacity: 1;
-    }
-    70% {
-      opacity: 1;
-    }
-    100% {
-      transform: rotate(215deg) translateX(-500px);
-      opacity: 0;
-    }
+  /* Typography - Brutalist Terminal Editorial */
+  --font-display: "Fraunces", "Georgia", serif;
+  --font-sans: "IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco, Consolas, monospace;
+
+  /* Animation for typewriter cursor */
+  --animate-blink: blink 1s step-end infinite;
+  --animate-grain: grain 0.5s steps(10) infinite;
+  --animate-fade-in: fade-in 0.2s ease-out both;
+
+  @keyframes blink {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0; }
+  }
+
+  @keyframes fade-in {
+    from { opacity: 0; transform: translateY(4px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @keyframes grain {
+    0%, 100% { transform: translate(0, 0); }
+    10% { transform: translate(-5%, -10%); }
+    20% { transform: translate(-15%, 5%); }
+    30% { transform: translate(7%, -25%); }
+    40% { transform: translate(-5%, 25%); }
+    50% { transform: translate(-15%, 10%); }
+    60% { transform: translate(15%, 0%); }
+    70% { transform: translate(0%, 15%); }
+    80% { transform: translate(3%, 35%); }
+    90% { transform: translate(-10%, 10%); }
   }
 }
 
@@ -64,28 +90,128 @@
   ::before,
   ::backdrop,
   ::file-selector-button {
-    border-color: var(--color-gray-200, currentColor);
+    border-color: var(--color-border);
   }
 
-  /* Base typography improvements */
+  /* Brutalist base typography */
   html {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
     text-rendering: optimizeLegibility;
+    background-color: var(--color-bg);
   }
 
   body {
     line-height: 1.6;
     letter-spacing: -0.011em;
+    background-color: var(--color-bg);
+    color: var(--color-fg);
+  }
+
+  /* Selection color - coral accent */
+  ::selection {
+    background-color: var(--color-coral);
+    color: var(--color-bg);
   }
 }
 
+/* ============================================================================
+   GRAIN OVERLAY - Adds atmosphere and depth
+   ============================================================================ */
+
+.grain {
+  position: fixed;
+  top: -50%;
+  left: -50%;
+  right: -50%;
+  bottom: -50%;
+  width: 200%;
+  height: 200%;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  pointer-events: none;
+  z-index: 9999;
+  animation: grain 0.5s steps(10) infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .grain {
+    animation: none;
+  }
+}
+
+/* ============================================================================
+   SCANLINES - CRT retro effect for terminal elements
+   ============================================================================ */
+
+.scanlines {
+  position: relative;
+  overflow: hidden;
+}
+
+.scanlines::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: repeating-linear-gradient(
+    0deg,
+    rgba(0, 0, 0, 0.1) 0px,
+    rgba(0, 0, 0, 0.1) 1px,
+    transparent 1px,
+    transparent 2px
+  );
+  pointer-events: none;
+  z-index: 10;
+}
+
+/* ============================================================================
+   TERMINAL WINDOW CHROME
+   ============================================================================ */
+
+.terminal-window {
+  background: var(--color-gray-darker);
+  border: 1px solid var(--color-border);
+}
+
+.terminal-chrome {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--color-border);
+  background: var(--color-gray-800);
+}
+
+.terminal-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 0; /* Brutalist - no rounded corners */
+}
+
+.terminal-dot--red { background: #ff5f57; }
+.terminal-dot--yellow { background: #ffbd2e; }
+.terminal-dot--green { background: #28ca42; }
+
+.terminal-content {
+  padding: 20px;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--color-gray-300);
+}
+
+/* ============================================================================
+   BRUTALIST UTILITIES
+   ============================================================================ */
+
 @utility default-focus {
-  @apply focus:outline-hidden focus:ring-3 focus:ring-primary-500 dark:focus:ring-primary-600 focus:ring-offset-2 dark:focus:ring-offset-gray-900;
+  @apply focus:outline-none focus:ring-2 focus:ring-primary-500 focus:ring-offset-2 focus:ring-offset-gray-950;
 }
 
 @utility default-transition {
-  @apply transition duration-300 ease-in-out;
+  @apply transition duration-200 ease-out;
 }
 
 @utility scrollbar-hidden {
@@ -94,5 +220,56 @@
 
   &::-webkit-scrollbar {
     display: none;
+  }
+}
+
+/* Diamond bullet - signature brutalist element */
+@utility diamond {
+  &::before {
+    content: "◇";
+    color: var(--color-coral);
+    margin-right: 0.5em;
+  }
+}
+
+/* Tracked uppercase text */
+@utility tracked {
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+}
+
+/* Outline text effect for massive section numbers */
+@utility text-outline {
+  -webkit-text-stroke: 1px var(--color-border-strong);
+  -webkit-text-fill-color: transparent;
+}
+
+/* Coral accent border on hover */
+@utility hover-coral-border {
+  position: relative;
+
+  &::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    width: 0;
+    background: var(--color-coral);
+    transition: width 0.2s ease-out;
+  }
+
+  &:hover::before {
+    width: 3px;
+  }
+}
+
+/* Typewriter cursor */
+@utility cursor-blink {
+  &::after {
+    content: "_";
+    animation: blink 1s step-end infinite;
   }
 }

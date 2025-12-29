@@ -1,9 +1,8 @@
 ---
-import { ArrowLeft } from "lucide-preact";
+import { ArrowLeft, ExternalLink } from "lucide-preact";
 
 import Footer from "~/components/Footer.astro";
 import Head from "~/components/Head.astro";
-import Hero from "~/components/Hero.astro";
 import { SITE_TITLE } from "~/constants";
 import Document from "~/layouts/Document.astro";
 
@@ -25,7 +24,7 @@ const links = [
     title: "How to Scale Your Model",
     url: "https://jax-ml.github.io/scaling-book/",
     description:
-      "Training LLMs often feels like alchemy, but understanding and optimizing the performance of your models doesn't have to. This book aims to demystify the science of scaling language models: how TPUs (and GPUs) work and how they communicate with each other, how LLMs run on real hardware, and how to parallelize your models during training and inference so they run efficiently at massive scale. If you've ever wondered “how expensive should this LLM be to train” or “how much memory do I need to serve this model myself” or “what's an AllGather”, we hope this will be useful to you.",
+      "Training LLMs often feels like alchemy, but understanding and optimizing the performance of your models doesn't have to. This book aims to demystify the science of scaling language models.",
     category: "Online Books",
   },
 ];
@@ -47,50 +46,55 @@ const groupedLinks = links.reduce(
 
 <Document>
   <main
-    class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8"
+    class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 space-y-12 pb-8"
   >
-    <Hero
-      pageDescription="A collection of interesting links, tools, articles, and resources I've found on the Internet"
-    />
+    <!-- Brutalist Hero -->
+    <section class="space-y-4 pt-8">
+      <h1
+        class="font-[Fraunces] text-5xl sm:text-6xl font-bold tracking-tight text-gray-50 leading-[0.9]"
+      >
+        <span class="text-primary-500">◇</span> Internet
+      </h1>
+      <p class="text-gray-500 text-base">
+        A collection of interesting links, tools, articles, and resources I've
+        found across the web.
+      </p>
+    </section>
 
     <div class="z-10">
-      <div class="space-y-8">
+      <div class="space-y-10">
         {
           Object.entries(groupedLinks).map(([category, categoryLinks]) => (
             <div class="space-y-4">
-              <h3 class="text-xl font-semibold text-gray-800 dark:text-zinc-400 border-b border-gray-200 dark:border-gray-700 pb-2">
+              <h3 class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-400 border-b border-gray-800 pb-3">
+                <span class="text-primary-500 mr-2">◇</span>
                 {category}
               </h3>
-              <div class="space-y-3">
+              <div class="space-y-0">
                 {categoryLinks.map((link) => (
-                  <div class="py-2">
-                    <div>
-                      <div class="flex items-start gap-2 mb-1">
-                        <h4 class="text-base font-medium text-gray-900 dark:text-gray-100 flex-shrink-0">
-                          <a
-                            href={link.url}
-                            target="_blank"
-                            rel="noopener noreferrer"
-                            class="hover:text-primary-500 dark:hover:text-primary-400 decoration-[0.1em] underline-offset-4 hover:underline hover:decoration-wavy hover:decoration-primary-500 dark:hover:decoration-primary-400 transition-colors"
-                          >
+                  <a
+                    href={link.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="group block py-4 px-4 -mx-4 border-b border-gray-800 default-transition hover:bg-gray-900 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0 before:bg-primary-500 before:transition-all before:duration-200 hover:before:w-1"
+                  >
+                    <div class="flex items-start gap-3">
+                      <div class="flex-1 min-w-0">
+                        <div class="flex items-center gap-2 mb-1">
+                          <h4 class="font-[Fraunces] text-base text-gray-100 group-hover:text-gray-50 default-transition">
                             {link.title}
-                          </a>
-                        </h4>
-                        <span class="text-gray-400 dark:text-gray-600 flex-shrink-0">
-                          —
-                        </span>
+                          </h4>
+                          <ExternalLink class="w-3 h-3 text-gray-600 group-hover:text-primary-500 default-transition flex-shrink-0" />
+                        </div>
                         <p
-                          class="text-gray-600 dark:text-gray-400 text-sm line-clamp-1 flex-1"
+                          class="text-gray-500 text-sm line-clamp-2"
                           title={link.description}
                         >
                           {link.description}
                         </p>
                       </div>
-                      {/* <p class="text-xs text-gray-500 dark:text-gray-500 break-all">
-                        {link.url}
-                      </p> */}
                     </div>
-                  </div>
+                  </a>
                 ))}
               </div>
             </div>
@@ -100,8 +104,9 @@ const groupedLinks = links.reduce(
         {
           Object.keys(groupedLinks).length === 0 && (
             <div class="text-center py-12">
-              <p class="text-gray-500 dark:text-gray-400">
-                No links added yet. Start collecting your internet findings!
+              <p class="font-mono text-sm text-gray-600">
+                <span class="text-primary-500">$</span> No links yet. Start
+                collecting!
               </p>
             </div>
           )
@@ -110,16 +115,16 @@ const groupedLinks = links.reduce(
     </div>
   </main>
 
-  <Footer class="max-w-4xl">
+  <Footer class="max-w-3xl border-t border-gray-800">
     <div
       class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
     >
       <a
-        class="default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-gray-700 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-gray-200 hover:border-gray-300 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-900 dark:text-zinc-200 dark:hover:text-zinc-200"
+     class="default-focus mt-4 default-transition group inline-flex items-center justify-center space-x-2 px-3 py-1 font-mono text-xs uppercase tracking-wider text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50"
         href="/"
       >
         <ArrowLeft
-          class="w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-900 dark:group-hover:text-zinc-200"
+          class="w-4 h-4 default-transition transform group-hover:-translate-x-1"
         />
         <span>Go back</span>
       </a>

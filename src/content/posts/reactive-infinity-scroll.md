@@ -658,3 +658,10 @@ Stay tuned for an upcoming post on **Virtual Scroll**. Subscribe to the newslett
   ](https://www.digitala11y.com/infinite-scroll-accessibility-is-it-any-good/)
 - [RxJS Operators](https://rxjs.dev/guide/operators)
 - [Angular Implementation](/posts/implementing-infinity-scroll-in-angular)
+
+
+Read this "[Application](https://jobs.ashbyhq.com/openai/f96dbc99-6253-4e40-9263-0accd934345d/application)" and interview me in detail using the AskUserQuestionTool about literally every question in there.
+
+Be very in-depth and continue interviewing me continually until it's complete, then write the spec to the file.
+
+The purpose of this is to get me joined for this residency program.

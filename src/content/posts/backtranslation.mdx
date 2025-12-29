@@ -1,0 +1,114 @@
+---
+title: Data Augmentation - Backtranslation
+description: Learn how backtranslation works as a data augmentation technique in machine learning to augment limited data while maintaining its fidelity.
+featured: 4
+publishedAt: "2025-01-30T12:00:00+00:00"
+---
+
+Notes from the paper [Backtranslation and paraphrasing in the LLM era? Comparing data augmentation methods for emotion classification](https://arxiv.org/pdf/2507.14590).
+
+## Problem
+
+Machine learning models need large amounts of training data to perform well. When data is scarce, models tend to overfit which leads to memorizing specific patterns rather than learning to generalize. The challenge is to augment the data while maintaining its fidelity.
+
+Fidelity means how accurately something is represented. In the context of data augmentation, it refers to maintaining the integrity and meaning of the original data while introducing variations.
+
+## Solution
+
+Backtranslation is a data augmentation technique used in machine learning to augment limited data while maintaining its fidelity. It works by translating existing data into another language and then translating it back to the original language. This process can introduce variations in phrasing while preserving the original meaning.
+
+For example, consider this English sentence that goes through backtranslation via Arabic:
+
+<div class="bt-card">
+  <strong>English (Original)</strong>
+  <br />
+  "The <span class="hl">quick</span> brown fox <span class="hl">jumps</span>{" "}
+  over the lazy dog."
+</div>
+<div class="bt-arrow">↓ Translate to Arabic</div>
+<div class="bt-card" dir="rtl">
+  <strong>Arabic (Intermediate)</strong>
+  <br />
+  "الثعلب البني <span class="hl">السريع</span> <span class="hl">يقفز</span> فوق
+  الكلب الكسول."
+</div>
+<div class="bt-arrow">↓ Translate back to English</div>
+<div class="bt-card">
+  <strong>English (Backtranslated)</strong>
+  <br />
+  "The <span class="hl">fast</span> brown fox <span class="hl">leaps</span> over
+  the lazy dog."
+</div>
+
+The backtranslated sentence retains the original meaning but uses different wording ("quick" → "fast", "jumps" → "leaps"), which increases the diversity of the dataset.
+
+## Code Example
+
+Let's implement backtranslation using TypeScript and the DeepAgents framework.
+
+First, set up the imports and define the input text we want to augment:
+
+```ts
+import { agent, generate, user } from "@deepagents/agent";
+import { groq } from "@ai-sdk/groq";
+import z from "zod";
+
+const input = `The customer service was excellent and the staff were very helpful.`;
+```
+
+**Step 1: Translate to Arabic** — Create an agent that translates English text to Arabic:
+
+```ts
+const toArabicAgent = agent({
+  model: groq("gpt-oss-20b"),
+  output: z.object({
+    translation: z.string().describe("Arabic translation of the input"),
+  }),
+  prompt: `Translate the following English text to Arabic.`,
+});
+
+const { experimental_output: arabic } = await generate(toArabicAgent, [
+  user(input),
+]);
+// Result: "كانت خدمة العملاء ممتازة وكان الموظفون متعاونين للغاية."
+```
+
+**Step 2: Translate back to English** — Create another agent that translates the Arabic text back to English:
+
+```ts
+const toEnglishAgent = agent({
+  model: groq("gpt-oss-20b"),
+  output: z.object({
+    translation: z.string().describe("English translation of the input"),
+  }),
+  prompt: `Translate the following Arabic text to English.`,
+});
+
+const { experimental_output: backTranslated } = await generate(toEnglishAgent, [
+  user(arabic.translation),
+]);
+// Result: "The customer service was outstanding and the employees were very cooperative."
+```
+
+**Result:** Notice how "excellent" became "outstanding", "staff" became "employees", and "helpful" became "cooperative" — natural variations that preserve meaning while creating diversity in the dataset.
+
+You can verify fidelity using semantic similarity. Cosine similarity measures the angle between two embedding vectors — a value close to 1 means the texts have similar meaning:
+
+```ts
+import { cosineSimilarity, embedMany } from "ai";
+import { openai } from "@ai-sdk/openai";
+
+const { embeddings } = await embedMany({
+  model: openai.embedding("text-embedding-3-small"),
+  values: [input, backTranslated.translation],
+});
+
+const similarity = cosineSimilarity(embeddings[0], embeddings[1]);
+// Result: 0.94 (high similarity = meaning preserved)
+```
+
+## Key Takeaways
+
+- **Enhances dataset diversity** - Creates natural variations of your training data
+- **Improves model generalization** - Models learn to understand different phrasings of the same concept
+- **Reduces overfitting** - More diverse data prevents models from memorizing specific patterns

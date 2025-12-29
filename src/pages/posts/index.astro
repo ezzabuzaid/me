@@ -4,14 +4,13 @@ import { ArrowLeft } from "lucide-preact";
 
 import Footer from "~/components/Footer.astro";
 import Head from "~/components/Head.astro";
-import Hero from "~/components/Hero.astro";
 import List from "~/components/Widgets/List.astro";
 import { SITE_TITLE } from "~/constants";
 import Document from "~/layouts/Document.astro";
 import {
-filterPosts,
-mapPostToListItem,
-sortPostsByFeatured,
+  filterPosts,
+  mapPostToListItem,
+  sortPostsByFeatured,
 } from "~/utils/content";
 
 const [posts, archivedPosts] = await Promise.all([
@@ -35,48 +34,47 @@ const [posts, archivedPosts] = await Promise.all([
 
 <Document>
   <main
-    class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-10 pb-8"
+    class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 space-y-12 pb-8"
   >
-    <Hero />
+    <!-- Brutalist Hero for Posts Page -->
+    <section class="space-y-4 pt-8">
+      <h1
+        class="font-[Fraunces] text-5xl sm:text-6xl font-bold tracking-tight text-gray-50 leading-[0.9]"
+      >
+        <span class="text-primary-500">◇</span> Writings
+      </h1>
+      <p class="text-gray-500 text-base">
+        All my posts on software engineering, web development, and building
+        products.
+      </p>
+    </section>
 
-    <div class="grid grid-cols-1 gap-6 z-10">
-      <List
-        class="md:col-span-2 min-h-48 md:min-h-80"
-        href="/posts/all"
-        id="posts"
-        items={posts}
-        title="Posts"
-        variant="borderless"
-      />
+    <div class="space-y-12 z-10">
+      <List id="posts" items={posts} variant="borderless" />
       {
         archivedPosts.length > 0 ? (
-          <List
-            class="md:col-span-2 max-h-80 min-h-48 md:min-h-80"
-            empty={{
-              title: "No posts archived yet",
-              description: "Stay tuned for more content soon",
-            }}
-            href="/posts/all#archived-all"
-            id="archived"
-            items={archivedPosts}
-            title="Archived"
-            variant="borderless"
-          />
+          <section class="space-y-6">
+            <h2 class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-500">
+              <span class="text-gray-600 mr-2">◇</span>
+              Archived
+            </h2>
+            <List id="archived" items={archivedPosts} variant="borderless" />
+          </section>
         ) : null
       }
     </div>
   </main>
 
-  <Footer class="max-w-4xl">
+  <Footer class="max-w-3xl border-t border-gray-800">
     <div
       class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
     >
       <a
-        class="default-focus default-transition group inline-flex items-center justify-center space-x-2 rounded-md px-3 py-1 text-sm font-semibold text-zinc-200 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 hover:text-gray-500 dark:hover:text-zinc-200"
+class="default-focus mt-4 default-transition group inline-flex items-center justify-center space-x-2 px-3 py-1 font-mono text-xs uppercase tracking-wider text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50"
         href="/"
       >
         <ArrowLeft
-          class="w-4 h-4 default-transition transform group-hover:-translate-x-1 group-hover:text-gray-500 dark:group-hover:text-zinc-200"
+          class="w-4 h-4 default-transition transform group-hover:-translate-x-1"
         />
         <span>Go back</span>
       </a>

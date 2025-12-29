@@ -94,25 +94,26 @@ export function SearchCommand({ items }: SearchCommandProps) {
 
   return (
     <>
-      {/* Search Button */}
+      {/* Search Button - Brutalist Terminal Style */}
       <button
         onClick={openSearch}
-        class="hidden md:flex items-center justify-start bg-white hover:bg-gray-100 dark:bg-gray-900 dark:hover:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded-md px-4 py-2 text-sm text-gray-600 dark:text-gray-400 transition-colors cursor-pointer shadow-sm w-40 lg:w-56 xl:w-64"
+        class="hidden md:flex items-center justify-start bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50 px-4 py-2 text-sm text-gray-500 hover:text-gray-300 transition-all duration-200 cursor-pointer w-40 lg:w-56 xl:w-64 font-mono"
       >
-        <span class="hidden lg:inline-flex">Search pages...</span>
-        <span class="inline-flex lg:hidden">Search...</span>
+        <span class="text-primary-500 mr-2">$</span>
+        <span class="hidden lg:inline-flex text-xs uppercase tracking-wider">search...</span>
+        <span class="inline-flex lg:hidden text-xs uppercase tracking-wider">find</span>
         <div class="ml-auto flex items-center gap-1">
-          <kbd class="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5 text-xs font-mono font-medium">⌘</kbd>
-          <kbd class="bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded px-1.5 py-0.5 text-xs font-mono font-medium">K</kbd>
+          <kbd class="bg-gray-800 border border-gray-700 px-1.5 py-0.5 text-xs font-mono text-gray-500">⌘</kbd>
+          <kbd class="bg-gray-800 border border-gray-700 px-1.5 py-0.5 text-xs font-mono text-gray-500">K</kbd>
         </div>
       </button>
 
-      {/* Command Palette Modal */}
+      {/* Command Palette Modal - Terminal Style */}
       {isOpen.value && (
         <div class="fixed inset-0 z-50 flex items-start justify-center pt-20">
           {/* Backdrop */}
           <div
-            class="absolute inset-0 bg-black/50 dark:bg-black/70"
+            class="absolute inset-0 bg-black/80"
             onClick={() => {
               isOpen.value = false;
               searchQuery.value = "";
@@ -120,22 +121,28 @@ export function SearchCommand({ items }: SearchCommandProps) {
             }}
           />
 
-          {/* Modal */}
-          <div class="relative w-full max-w-lg mx-4 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-xl">
+          {/* Modal - No rounded corners, terminal aesthetic */}
+          <div class="relative w-full max-w-lg mx-4 bg-gray-950 border border-gray-800 shadow-2xl">
+            {/* Terminal Chrome */}
+            <div class="flex items-center gap-2 px-4 py-3 border-b border-gray-800 bg-gray-900">
+              <div class="w-3 h-3 bg-[#ff5f57]"></div>
+              <div class="w-3 h-3 bg-[#ffbd2e]"></div>
+              <div class="w-3 h-3 bg-[#28ca42]"></div>
+              <span class="ml-3 font-mono text-xs text-gray-500 uppercase tracking-wider">search</span>
+            </div>
+
             {/* Search Input */}
-            <div class="flex items-center border-b border-gray-200 dark:border-gray-700">
-              <svg class="ml-4 w-4 h-4 text-gray-500 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
-              </svg>
+            <div class="flex items-center border-b border-gray-800">
+              <span class="ml-4 text-primary-500 font-mono">$</span>
               <input
                 type="text"
-                placeholder="Search for pages..."
+                placeholder="grep -r 'query'"
                 value={searchQuery.value}
                 onInput={(e) => searchQuery.value = (e.target as HTMLInputElement).value}
-                class="flex-1 px-4 py-4 text-gray-900 dark:text-gray-100 placeholder-gray-500 dark:placeholder-gray-400 bg-transparent border-0 focus:outline-none text-sm"
+                class="flex-1 px-3 py-4 text-gray-100 placeholder-gray-600 bg-transparent border-0 focus:outline-none font-mono text-sm"
                 autoFocus
               />
-              <kbd class="mr-4 px-2 py-1 text-xs font-mono text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded">ESC</kbd>
+              <kbd class="mr-4 px-2 py-1 text-xs font-mono text-gray-600 bg-gray-900 border border-gray-800">ESC</kbd>
             </div>
 
             {/* Results */}
@@ -146,32 +153,34 @@ export function SearchCommand({ items }: SearchCommandProps) {
                     <div
                       key={item.id}
                       onClick={() => handleItemClick(item)}
-                      class={`px-4 py-3 cursor-pointer transition-colors ${
+                      class={`px-4 py-3 cursor-pointer transition-all duration-150 ${
                         index === selectedIndex.value
-                          ? 'bg-primary-50 dark:bg-primary-900/20 border-l-2 border-primary-500'
-                          : 'hover:bg-gray-50 dark:hover:bg-gray-800'
+                          ? 'bg-gray-900 border-l-2 border-primary-500'
+                          : 'hover:bg-gray-900/50 border-l-2 border-transparent'
                       }`}
                     >
                       <div class="flex items-center space-x-3">
-                        <div class={`w-2 h-2 rounded-full ${item.type === 'post' ? 'bg-blue-500' : 'bg-green-500'}`} />
+                        <span class={`font-mono text-xs ${item.type === 'post' ? 'text-cyan-500' : 'text-primary-500'}`}>
+                          {item.type === 'post' ? '◇' : '▸'}
+                        </span>
                         <div class="flex-1 min-w-0">
                           <div class="flex items-center space-x-2">
-                            <div class="text-sm font-medium text-gray-900 dark:text-gray-100 truncate">
+                            <div class="text-sm text-gray-200 truncate font-[Fraunces]">
                               {item.title}
                             </div>
                             {item.isFeatured && (
-                              <span class="inline-flex items-center px-1.5 py-0.5 rounded-full text-xs font-medium bg-primary-100 text-primary-800 dark:bg-primary-900/20 dark:text-primary-400 flex-shrink-0">
+                              <span class="inline-flex items-center px-1.5 py-0.5 text-xs font-mono text-primary-500 bg-primary-500/10 border border-primary-500/30 flex-shrink-0">
                                 ★
                               </span>
                             )}
                           </div>
                           {item.excerpt && (
-                            <div class="text-xs text-gray-500 dark:text-gray-400 truncate mt-1">
+                            <div class="text-xs text-gray-600 truncate mt-1 font-mono">
                               {item.excerpt}
                             </div>
                           )}
                         </div>
-                        <div class="text-xs text-gray-400 dark:text-gray-500 uppercase">
+                        <div class="font-mono text-xs text-gray-700 uppercase">
                           {item.type}
                         </div>
                       </div>
@@ -179,29 +188,33 @@ export function SearchCommand({ items }: SearchCommandProps) {
                   ))}
                 </div>
               ) : searchQuery.value ? (
-                <div class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                  <div class="text-sm">No results found for "{searchQuery.value}"</div>
+                <div class="px-4 py-8 text-center">
+                  <p class="font-mono text-sm text-gray-600">
+                    <span class="text-primary-500">$</span> no results for "{searchQuery.value}"
+                  </p>
                 </div>
               ) : (
-                <div class="px-4 py-8 text-center text-gray-500 dark:text-gray-400">
-                  <div class="text-sm">Type to search pages and posts...</div>
+                <div class="px-4 py-8 text-center">
+                  <p class="font-mono text-sm text-gray-600">
+                    <span class="text-primary-500">$</span> type to search pages and posts...
+                  </p>
                 </div>
               )}
             </div>
 
             {/* Footer */}
-            <div class="px-4 py-3 border-t border-gray-200 dark:border-gray-700 text-xs text-gray-500 dark:text-gray-400 flex items-center justify-between">
+            <div class="px-4 py-3 border-t border-gray-800 text-xs text-gray-600 flex items-center justify-between font-mono">
               <div class="flex items-center space-x-4">
                 <span class="flex items-center space-x-1">
-                  <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded">↑↓</kbd>
-                  <span>Navigate</span>
+                  <kbd class="px-1.5 py-0.5 bg-gray-900 border border-gray-800">↑↓</kbd>
+                  <span>nav</span>
                 </span>
                 <span class="flex items-center space-x-1">
-                  <kbd class="px-1.5 py-0.5 bg-gray-100 dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded">↵</kbd>
-                  <span>Select</span>
+                  <kbd class="px-1.5 py-0.5 bg-gray-900 border border-gray-800">↵</kbd>
+                  <span>select</span>
                 </span>
               </div>
-              <span>⌘K to open</span>
+              <span class="text-gray-700">⌘K to open</span>
             </div>
           </div>
         </div>

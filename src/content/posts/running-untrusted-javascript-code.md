@@ -2,7 +2,7 @@
 publishedAt: '2024-07-16T00:00:00'
 title: 'Running Untrusted JavaScript Code'
 description: 'Strategies to safely run user JS/TS: eval pitfalls, Workers, isolated-vm, WASM, Docker, static analysis, and timeboxing.'
-featured: 0
+featured: 3
 ---
 
 

@@ -17,20 +17,22 @@ const shouldShow = filteredHeadings.length >= 3;
 ---
 
 {shouldShow && (
-	<nav class="space-y-3" aria-label="Table of contents">
-		<h2 class="text-sm font-semibold text-gray-900 dark:text-white uppercase tracking-wide">
-			Table of Contents
+	<nav class="space-y-4 p-4 border border-gray-800 bg-gray-900" aria-label="Table of contents">
+		<h2 class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-400">
+			<span class="text-primary-500 mr-2">◇</span>
+			Contents
 		</h2>
-		<ul class="space-y-2 text-sm">
-			{filteredHeadings.map((heading) => (
+		<ul class="space-y-2 font-mono text-sm">
+			{filteredHeadings.map((heading, index) => (
 				<li
 					class={heading.depth === 3 ? 'ml-4' : ''}
 				>
 					<a
 						href={`#${heading.slug}`}
-						class="text-gray-600 hover:text-gray-900 dark:text-gray-400 dark:hover:text-white default-transition"
+						class="group flex items-center text-gray-500 hover:text-primary-500 default-transition"
 					>
-						{heading.text}
+						<span class="text-gray-700 mr-2 text-xs">{String(index + 1).padStart(2, '0')}</span>
+						<span class="group-hover:underline underline-offset-2">{heading.text}</span>
 					</a>
 				</li>
 			))}

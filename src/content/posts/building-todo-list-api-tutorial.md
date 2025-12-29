@@ -2,7 +2,6 @@
 publishedAt: '2024-06-17T00:00:00'
 title: 'Building Todo List API, Once Again.'
 description: 'Build a simple Todo List API with January’s CanonLang and extensions, then connect GitHub and deploy to Fly.io—step-by-step walkthrough.'
-
 featured: 100
 ---
 

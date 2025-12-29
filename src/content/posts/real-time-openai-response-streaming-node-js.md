@@ -1,7 +1,7 @@
 ---
 title: Real-time OpenAI Response Streaming with Node.js
 description: 'Do what ChatGPT does: continuously stream results as they become available; don’t wait for completion—render tokens in real time.'
-featured: 10
+featured: 5
 publishedAt: '2023-10-25T12:51:21.697Z'
 ---
 

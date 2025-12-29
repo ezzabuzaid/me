@@ -1,7 +1,7 @@
 ---
 title: 'Migrating from until-destroy to takeUntilDestroyed'
 description: "Migrating to Angular's latest feature, DestroyRef, streamlines component cleanup, pairing seamlessly with takeUntilDestroyed using codemod"
-featured: 40
+featured: 8
 publishedAt: '2023-12-19T00:00:00Z'
 ---
 

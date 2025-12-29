@@ -1,7 +1,7 @@
 ---
 title: "NODE_ENV doesn't mean what you think it means"
 description: "Some thoughts on the ambiguous usage of NODE_ENV in Node.js applications."
-featured: 0
+featured: 1
 publishedAt: "2025-11-11T00:00:00.00Z"
 ---
 

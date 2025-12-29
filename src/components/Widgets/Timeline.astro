@@ -13,7 +13,7 @@ export interface Props {
   class?: string;
   projects: Array<Project["data"]>;
   id: string;
-  title: string;
+  title?: string;
   variant?: "default" | "borderless";
   href?: string;
 }
@@ -33,10 +33,10 @@ const anchorProps = hasUrl ? { href } : {};
 
 <section
   class={cn(
-    "bg-stone-50 dark:bg-stone-950 rounded-xl overflow-auto",
+    "bg-gray-950 overflow-auto",
     variant === "default" &&
-      "border-2 border-gray-200 dark:border-gray-900 px-2 pb-2",
-    variant === "borderless" && "bg-transparent dark:bg-transparent",
+      "border border-gray-800 px-2 pb-2",
+    variant === "borderless" && "bg-transparent",
     className,
   )}
   id={id}
@@ -45,14 +45,12 @@ const anchorProps = hasUrl ? { href } : {};
     title && (
       <TitleComponent
         class={cn(
-          variant === "default" &&
-            "absolute -translate-y-3 inline-flex transform-gpu items-center bg-stone-50 dark:bg-stone-950 rounded-full px-4 mx-4 border-2 border-stone-200 dark:border-stone-800 font-bold text-stone-900 dark:text-white text-sm",
-          variant === "borderless" &&
-            "mb-6 text-2xl font-bold text-gray-900 dark:text-white",
-          hasUrl ? "default-transition default-focus" : "",
+          "flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-400 mb-6",
+          hasUrl ? "hover:text-primary-500 default-transition default-focus" : "",
         )}
         {...anchorProps}
       >
+        <span class="text-primary-500 mr-2">◇</span>
         {title}
       </TitleComponent>
     )
@@ -61,11 +59,7 @@ const anchorProps = hasUrl ? { href } : {};
   {
     projects.length > 0 ? (
       <ul
-        class={cn(
-          "flow-root",
-          variant === "default" && "mt-6",
-          variant === "borderless" && "mt-0",
-        )}
+        class="flow-root"
         role="list"
       >
         {projects.map(async (project, index) => {
@@ -85,25 +79,21 @@ const anchorProps = hasUrl ? { href } : {};
           const showConnector = index + 1 !== projects.length;
 
           return (
-            <li class="group relative pb-3">
+            <li class="group relative pb-6">
               {showConnector ? (
                 <span
                   aria-hidden={true}
-                  class="absolute left-6 top-4 -ml-px h-full w-0.5 bg-gray-300 dark:bg-gray-900 z-0"
+                  class="absolute left-4 top-8 -ml-px h-full w-px bg-gray-800 z-0"
                 />
               ) : null}
 
               <Component
-                class="relative flex space-x-3 default-transition default-focus rounded-md ps-2 pe-3"
+                class="relative flex space-x-4 default-transition default-focus py-3 px-2 hover:bg-gray-900/50"
                 {...anchorProps}
               >
                 <div
                   class={cn(
-                    "text-stone-700 group-hover:text-stone-900 dark:text-stone-300 dark:group-hover:text-white h-8 w-8 rounded-md flex items-center justify-center ring-2 ring-stone-50 dark:ring-stone-950 border-2 border-stone-200 dark:border-stone-800 bg-stone-100 dark:bg-stone-900 z-20 default-transition",
-                    {
-                      "group-hover:border-gray-200 dark:group-hover:border-gray-800":
-                        hasUrl,
-                    },
+                    "text-gray-500 group-hover:text-primary-500 h-8 w-8 flex items-center justify-center border border-gray-800 group-hover:border-primary-500/50 bg-gray-900 z-20 default-transition",
                   )}
                 >
                   <Icon class="h-4 w-4" />
@@ -111,35 +101,31 @@ const anchorProps = hasUrl ? { href } : {};
 
                 <div
                   class={cn(
-                    "text-gray-700 dark:text-gray-300 flex min-w-0 flex-1 justify-between space-x-4 default-transition",
+                    "text-gray-400 flex min-w-0 flex-1 justify-between space-x-4 default-transition",
                     {
-                      "group-hover:text-gray-900 dark:group-hover:text-white":
-                        hasUrl,
+                      "group-hover:text-gray-300": hasUrl,
                     },
                   )}
                 >
-                  <div>
+                  <div class="flex-1">
                     <div class="flex items-center justify-between">
                       <p
-                        class="font-semibold text-xs line-clamp-1"
+                        class="font-[Fraunces] text-sm text-gray-200 group-hover:text-gray-50 default-transition line-clamp-1"
                         title={project.title}
                       >
                         {project.title}
                       </p>
-                      <div class="whitespace-nowrap text-right text-sm">
-                        <time
-                          class="font-normal"
-                          datetime={project.date.toISOString()}
-                          title={format(project.date, "PPP")}
-                        >
-                          {format(project.date, "dd-MM-yyyy")}
-                        </time>
-                      </div>
+                      <time
+                        class="font-mono text-xs text-gray-600 group-hover:text-gray-500 default-transition whitespace-nowrap"
+                        datetime={project.date.toISOString()}
+                        title={format(project.date, "PPP")}
+                      >
+                        {format(project.date, "dd-MM-yyyy")}
+                      </time>
                     </div>
                     {project.description && (
                       <p
-                        class="text-xs mt-1 line-clamp-2 opacity-75"
-                        style="font-size: 12px;"
+                        class="text-xs mt-1 line-clamp-2 text-gray-500"
                         title={project.description}
                       >
                         {project.description}
@@ -153,15 +139,15 @@ const anchorProps = hasUrl ? { href } : {};
         })}
       </ul>
     ) : (
-      <div class="h-full flex items-center justify-center">
-        <div class="space-y-2 text-center">
-          <FlagTriangleRight class="mx-auto" />
+      <div class="h-full flex items-center justify-center py-12">
+        <div class="space-y-4 text-center">
+          <FlagTriangleRight class="mx-auto text-gray-600" />
 
-          <h3 class="font-semibold text-gray-900 text-md dark:text-gray-200">
+          <h3 class="font-mono text-sm uppercase tracking-[0.1em] text-gray-400">
             No projects here yet
           </h3>
 
-          <p class="text-gray-600 text-sm dark:text-gray-600">
+          <p class="text-gray-600 text-sm">
             More projects coming soon
           </p>
         </div>
