@@ -1,0 +1,82 @@
+---
+import { format } from "date-fns";
+import { ArrowRight } from "lucide-preact";
+
+import type { CollectionEntry } from "astro:content";
+import { loadIcon } from "~/utils/icon";
+
+export interface Props {
+	posts: CollectionEntry<"posts">[];
+	title?: string;
+	class?: string;
+}
+
+const { posts, title = "Related Articles", class: className } = Astro.props;
+
+// Don't render if no related posts
+if (posts.length === 0) {
+	return null;
+}
+---
+
+<section class:list={["space-y-6", className]}>
+	<h2
+		class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-500"
+	>
+		<span class="text-gray-600 mr-2">◇</span>
+		{title}
+	</h2>
+
+	<ul class="grid grid-cols-1 gap-4" role="list">
+		{
+			posts.map(async (post) => {
+				const Icon = await loadIcon(post.data.icon);
+				return (
+					<li class="group">
+						<a
+							href={`/posts/${post.slug}`}
+							class="flex items-start gap-4 p-4 bg-gray-900/30 border border-gray-800/50 hover:border-primary-500/30 hover:bg-gray-900/50 default-transition"
+						>
+							<div class="flex-shrink-0 mt-1">
+								<Icon class="w-4 h-4 text-gray-500 group-hover:text-primary-500 default-transition" />
+							</div>
+
+							<div class="flex-1 min-w-0 space-y-1">
+								<h3 class="font-[Fraunces] text-base text-gray-200 group-hover:text-gray-50 default-transition line-clamp-2">
+									{post.data.title}
+								</h3>
+
+								<p class="text-sm text-gray-500 line-clamp-2">
+									{post.data.description}
+								</p>
+
+								<div class="flex items-center gap-3 pt-1">
+									<time
+										class="font-mono text-xs text-gray-600"
+										datetime={post.data.publishedAt.toISOString()}
+									>
+										{format(post.data.publishedAt, "MMM d, yyyy")}
+									</time>
+
+									{post.data.tags && post.data.tags.length > 0 && (
+										<div class="flex items-center gap-2">
+											{post.data.tags.slice(0, 2).map((tag) => (
+												<span class="font-mono text-xs text-gray-600 bg-gray-800/50 px-1.5 py-0.5">
+													{tag}
+												</span>
+											))}
+										</div>
+									)}
+								</div>
+							</div>
+
+							<div class="flex-shrink-0 self-center">
+								<ArrowRight class="w-4 h-4 text-gray-600 group-hover:text-primary-500 group-hover:translate-x-1 default-transition" />
+							</div>
+						</a>
+					</li>
+				);
+			})
+		}
+	</ul>
+</section>

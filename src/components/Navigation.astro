@@ -5,46 +5,50 @@ import { getSearchData } from "../utils/search";
 const searchItems = await getSearchData();
 ---
 
-<nav
-  class="bg-gray-950 sticky top-0 z-50 border-b border-gray-800"
->
-  <div class="mx-auto max-w-3xl px-6 lg:px-8">
-    <div class="flex h-14 items-center justify-between">
-      <!-- Logo with diamond -->
-      <div class="flex items-center space-x-10">
-        <a
-          class="flex items-center font-mono text-sm uppercase tracking-[0.15em] text-gray-50 hover:text-primary-500 default-transition"
-          href="/"
-        >
-          <span class="text-primary-500 mr-2">◇</span>
-          <span>EZZABUZAID</span>
-        </a>
+<nav class="bg-gray-950 sticky top-0 z-50 border-b border-gray-800">
+	<div class="mx-auto max-w-3xl px-6 lg:px-8">
+		<div class="flex h-14 items-center justify-between">
+			<!-- Logo with diamond -->
+			<div class="flex items-center space-x-10">
+				<a
+					class="flex items-center font-mono text-sm uppercase tracking-[0.15em] text-gray-50 hover:text-primary-500 default-transition"
+					href="/"
+				>
+					<span class="text-primary-500 mr-2">◇</span>
+					<span>EZZABUZAID</span>
+				</a>
 
-        <!-- Nav links -->
-        <div class="hidden sm:flex space-x-8">
-          <a
-            class="font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
-            href="/posts"
-          >
-            WRITINGS
-          </a>
-          <a
-            class="font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
-            href="/projects"
-          >
-            PROJECTS
-          </a>
-          <a
-            class="font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
-            href="/internet"
-          >
-            INTERNET
-          </a>
-        </div>
-      </div>
+				<!-- Nav links -->
+				<div class="hidden sm:flex space-x-8">
+					<a
+						class="font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
+						href="/posts"
+					>
+						WRITINGS
+					</a>
+					<a
+						class="font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
+						href="/tags"
+					>
+						TOPICS
+					</a>
+					<a
+						class="font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
+						href="/projects"
+					>
+						PROJECTS
+					</a>
+					<a
+						class="font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
+						href="/internet"
+					>
+						INTERNET
+					</a>
+				</div>
+			</div>
 
-      <!-- Search Command Component -->
-      <SearchCommand client:load items={searchItems} />
-    </div>
-  </div>
+			<!-- Search Command Component -->
+			<SearchCommand client:load items={searchItems} />
+		</div>
+	</div>
 </nav>
