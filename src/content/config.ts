@@ -1,7 +1,6 @@
 import { defineCollection, z } from "astro:content";
 // biome-ignore lint/style/noNamespaceImport: This only affects SSG so this is fine to use here.
 import * as Icons from "lucide-preact";
-import { SEO_DEFAULTS } from "~/config/seo";
 
 const IconKeys = Object.keys(Icons) as [string, ...Array<string>];
 
@@ -10,37 +9,18 @@ const IconKeys = Object.keys(Icons) as [string, ...Array<string>];
 // =============================================================================
 
 /**
- * Custom refinement for SEO-optimized description length
- * Warns if description is outside recommended bounds but doesn't fail
+ * Description validation - requires at least 50 characters
+ * SEO best practice is 120-160 chars, but we allow shorter for flexibility
  */
 const seoDescription = z
 	.string()
-	.min(1, "Description is required")
-	.refine(
-		(val) => val.length >= SEO_DEFAULTS.limits.descriptionMinLength,
-		(val) => ({
-			message: `Description is too short (${val.length} chars). Minimum recommended: ${SEO_DEFAULTS.limits.descriptionMinLength} chars for better SEO.`,
-		}),
-	)
-	.refine(
-		(val) => val.length <= SEO_DEFAULTS.limits.descriptionMaxLength,
-		(val) => ({
-			message: `Description is too long (${val.length} chars). Maximum recommended: ${SEO_DEFAULTS.limits.descriptionMaxLength} chars. It may be truncated in search results.`,
-		}),
-	);
+	.min(50, "Description must be at least 50 characters for SEO");
 
 /**
- * Custom refinement for SEO-optimized title length
+ * Title validation - just ensure it's not empty
+ * SEO best practice is max 60 chars, but we don't enforce strictly
  */
-const seoTitle = z
-	.string()
-	.min(1, "Title is required")
-	.refine(
-		(val) => val.length <= SEO_DEFAULTS.limits.titleMaxLength,
-		(val) => ({
-			message: `Title is too long (${val.length} chars). Maximum recommended: ${SEO_DEFAULTS.limits.titleMaxLength} chars. It may be truncated in search results.`,
-		}),
-	);
+const seoTitle = z.string().min(1, "Title is required");
 
 // =============================================================================
 // COLLECTIONS
