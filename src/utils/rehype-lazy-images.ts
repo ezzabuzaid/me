@@ -4,17 +4,12 @@
  * This plugin:
  * - Adds loading="lazy" to images (except first image)
  * - Adds decoding="async" to all images
- * - Adds width/height attributes if missing (for CLS prevention)
  * - Adds fetchpriority="high" to first image (LCP optimization)
  */
-
-import type { Root, Element } from "hast";
-import { visit } from "unist-util-visit";
 
 export interface RehypeLazyImagesOptions {
 	/**
 	 * Skip lazy loading for the first N images
-	 * Useful for above-the-fold images that should load immediately
 	 * @default 1
 	 */
 	skipFirst?: number;
@@ -24,34 +19,36 @@ export interface RehypeLazyImagesOptions {
 	 * @default true
 	 */
 	prioritizeFirst?: boolean;
+}
 
-	/**
-	 * Default width for images without width attribute
-	 * @default undefined (no default width)
-	 */
-	defaultWidth?: number;
+interface HastNode {
+	type: string;
+	tagName?: string;
+	properties?: Record<string, unknown>;
+	children?: HastNode[];
+}
 
-	/**
-	 * Default height for images without height attribute
-	 * @default undefined (no default height)
-	 */
-	defaultHeight?: number;
+function visitImages(
+	node: HastNode,
+	callback: (node: HastNode) => void,
+): void {
+	if (node.type === "element" && node.tagName === "img") {
+		callback(node);
+	}
+	if (node.children) {
+		for (const child of node.children) {
+			visitImages(child, callback);
+		}
+	}
 }
 
 export function rehypeLazyImages(options: RehypeLazyImagesOptions = {}) {
-	const {
-		skipFirst = 1,
-		prioritizeFirst = true,
-		defaultWidth,
-		defaultHeight,
-	} = options;
+	const { skipFirst = 1, prioritizeFirst = true } = options;
 
-	return (tree: Root) => {
+	return (tree: HastNode) => {
 		let imageIndex = 0;
 
-		visit(tree, "element", (node: Element) => {
-			if (node.tagName !== "img") return;
-
+		visitImages(tree, (node) => {
 			const properties = node.properties || {};
 			node.properties = properties;
 
@@ -64,14 +61,6 @@ export function rehypeLazyImages(options: RehypeLazyImagesOptions = {}) {
 			} else if (prioritizeFirst && imageIndex === 0) {
 				// Add high priority to first image for LCP
 				properties.fetchpriority = "high";
-			}
-
-			// Add default dimensions if not present (prevents CLS)
-			if (!properties.width && defaultWidth) {
-				properties.width = defaultWidth;
-			}
-			if (!properties.height && defaultHeight) {
-				properties.height = defaultHeight;
 			}
 
 			// Ensure alt text exists (accessibility)

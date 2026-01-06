@@ -6,7 +6,7 @@
  */
 
 import type { CollectionEntry } from "astro:content";
-import { AUTHOR, SEO_DEFAULTS, SITE, STRUCTURED_DATA } from "~/config/seo";
+import { AUTHOR, SEO_DEFAULTS, SITE } from "~/config/seo";
 
 // =============================================================================
 // METADATA GENERATION

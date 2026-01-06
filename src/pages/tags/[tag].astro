@@ -5,7 +5,6 @@ import { ArrowLeft, Tag } from "lucide-preact";
 import Footer from "~/components/Footer.astro";
 import Head from "~/components/Head.astro";
 import List from "~/components/Widgets/List.astro";
-import StructuredData from "~/components/StructuredData.astro";
 import Document from "~/layouts/Document.astro";
 import {
 	filterPosts,
@@ -113,14 +112,13 @@ const relatedTags = Array.from(allTagCounts.entries())
 	keywords={[tag, "tutorial", "guide", "web development"]}
 />
 
-<!-- Additional Collection Schema -->
-<script
-	type="application/ld+json"
-	is:inline
-	set:html={JSON.stringify(collectionSchema)}
-/>
-
 <Document>
+	<!-- Additional Collection Schema -->
+	<script
+		type="application/ld+json"
+		is:inline
+		set:html={JSON.stringify(collectionSchema)}
+	/>
 	<main
 		class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 space-y-12 pb-8"
 	>
