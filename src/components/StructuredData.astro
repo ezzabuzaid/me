@@ -1,163 +1,282 @@
 ---
 import type { CollectionEntry } from "astro:content";
-import { AUTHOR, SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from "~/constants";
+import { AUTHOR, SEO_DEFAULTS, SITE } from "~/config/seo";
 
 export interface Props {
-  type?: "website" | "article" | "person" | "blog" | undefined;
-  article?: CollectionEntry<"posts">["data"] & {
-    slug?: string;
-    tags?: string[];
-    wordCount?: number;
-  } | undefined;
-  breadcrumbs?: Array<{ name: string; url: string }> | undefined;
+	type?: "website" | "article" | "person" | "blog" | undefined;
+	article?:
+		| (CollectionEntry<"posts">["data"] & {
+				slug?: string;
+				tags?: string[];
+				wordCount?: number;
+		  })
+		| undefined;
+	breadcrumbs?: Array<{ name: string; url: string }> | undefined;
 }
 
 const { type = "website", article, breadcrumbs } = Astro.props;
 
+// =============================================================================
+// SCHEMA GENERATORS
+// =============================================================================
+
+/**
+ * Generate Organization schema - used for publisher info
+ */
+function generateOrganizationSchema() {
+	return {
+		"@type": "Organization",
+		name: SITE.name,
+		url: SITE.url,
+		logo: {
+			"@type": "ImageObject",
+			url: `${SITE.url}/favicon.svg`,
+			width: 512,
+			height: 512,
+		},
+		sameAs: [
+			AUTHOR.social.github.url,
+			AUTHOR.social.twitter.url,
+			AUTHOR.social.linkedin.url,
+		],
+	};
+}
+
+/**
+ * Generate WebSite schema with search action
+ */
 function generateWebsiteSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "WebSite",
-    name: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    url: SITE_URL,
-    author: {
-      "@type": "Person",
-      name: AUTHOR.name,
-      url: AUTHOR.url,
-      email: AUTHOR.email,
-      description: AUTHOR.bio,
-      sameAs: [
-        `https://github.com/${AUTHOR.social.github}`,
-        `https://twitter.com/${AUTHOR.social.twitter.replace("@", "")}`,
-        `https://linkedin.com/in/${AUTHOR.social.linkedin}`,
-      ],
-    },
-    potentialAction: {
-      "@type": "SearchAction",
-      target: `${SITE_URL}/search?q={search_term_string}`,
-      "query-input": "required name=search_term_string",
-    },
-  };
+	return {
+		"@context": "https://schema.org",
+		"@type": "WebSite",
+		"@id": `${SITE.url}/#website`,
+		name: SITE.name,
+		description: SITE.description,
+		url: SITE.url,
+		inLanguage: SITE.language,
+		author: {
+			"@type": "Person",
+			"@id": `${SITE.url}/#author`,
+			name: AUTHOR.name,
+			url: AUTHOR.url,
+			email: AUTHOR.email,
+			description: AUTHOR.bio,
+			sameAs: [
+				AUTHOR.social.github.url,
+				AUTHOR.social.twitter.url,
+				AUTHOR.social.linkedin.url,
+			],
+		},
+		publisher: generateOrganizationSchema(),
+		potentialAction: {
+			"@type": "SearchAction",
+			target: {
+				"@type": "EntryPoint",
+				urlTemplate: `${SITE.url}/posts?q={search_term_string}`,
+			},
+			"query-input": "required name=search_term_string",
+		},
+	};
 }
 
+/**
+ * Generate Blog schema for the blog index
+ */
 function generateBlogSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Blog",
-    name: SITE_TITLE,
-    description: SITE_DESCRIPTION,
-    url: `${SITE_URL}/posts`,
-    author: {
-      "@type": "Person",
-      name: AUTHOR.name,
-      url: AUTHOR.url,
-      email: AUTHOR.email,
-      description: AUTHOR.bio,
-    },
-    publisher: {
-      "@type": "Person",
-      name: AUTHOR.name,
-      url: AUTHOR.url,
-    },
-  };
+	return {
+		"@context": "https://schema.org",
+		"@type": "Blog",
+		"@id": `${SITE.url}/posts/#blog`,
+		name: `${SITE.name} - Blog`,
+		description:
+			"Technical articles on TypeScript, Angular, React, Node.js, and modern web development.",
+		url: `${SITE.url}/posts`,
+		inLanguage: SITE.language,
+		author: {
+			"@type": "Person",
+			"@id": `${SITE.url}/#author`,
+			name: AUTHOR.name,
+			url: AUTHOR.url,
+			email: AUTHOR.email,
+			description: AUTHOR.bio,
+		},
+		publisher: generateOrganizationSchema(),
+		isPartOf: {
+			"@type": "WebSite",
+			"@id": `${SITE.url}/#website`,
+		},
+	};
 }
 
+/**
+ * Generate Person schema for author pages
+ */
 function generatePersonSchema() {
-  return {
-    "@context": "https://schema.org",
-    "@type": "Person",
-    name: AUTHOR.name,
-    url: AUTHOR.url,
-    email: AUTHOR.email,
-    description: AUTHOR.bio,
-    jobTitle: "Software Engineer",
-    knowsAbout: [
-      "TypeScript",
-      "JavaScript",
-      "Angular",
-      "React",
-      "Node.js",
-      "Software Engineering",
-      "Web Development",
-    ],
-    sameAs: [
-      `https://github.com/${AUTHOR.social.github}`,
-      `https://twitter.com/${AUTHOR.social.twitter.replace("@", "")}`,
-      `https://linkedin.com/in/${AUTHOR.social.linkedin}`,
-    ],
-  };
+	return {
+		"@context": "https://schema.org",
+		"@type": "Person",
+		"@id": `${SITE.url}/#author`,
+		name: AUTHOR.name,
+		givenName: AUTHOR.firstName,
+		familyName: AUTHOR.lastName,
+		url: AUTHOR.url,
+		email: AUTHOR.email,
+		description: AUTHOR.bio,
+		jobTitle: AUTHOR.jobTitle,
+		image: {
+			"@type": "ImageObject",
+			url: `${SITE.url}${AUTHOR.image}`,
+			width: 400,
+			height: 400,
+		},
+		knowsAbout: [
+			"TypeScript",
+			"JavaScript",
+			"Angular",
+			"React",
+			"Node.js",
+			"RxJS",
+			"Software Engineering",
+			"Web Development",
+		],
+		sameAs: [
+			AUTHOR.social.github.url,
+			AUTHOR.social.twitter.url,
+			AUTHOR.social.linkedin.url,
+		],
+		worksFor: {
+			"@type": "Organization",
+			name: "Self-Employed",
+		},
+	};
 }
 
+/**
+ * Generate BlogPosting schema for articles
+ */
 function generateArticleSchema() {
-  if (!article) return null;
+	if (!article) return null;
 
-  return {
-    "@context": "https://schema.org",
-    "@type": "BlogPosting",
-    headline: article.title,
-    description: article.description,
-    datePublished: article.publishedAt,
-    dateModified: article.lastModifiedAt || article.publishedAt,
-    author: {
-      "@type": "Person",
-      name: AUTHOR.name,
-      url: AUTHOR.url,
-      email: AUTHOR.email,
-    },
-    publisher: {
-      "@type": "Person",
-      name: AUTHOR.name,
-      url: AUTHOR.url,
-    },
-    url: `${SITE_URL}/posts/${article.slug}`,
-    mainEntityOfPage: {
-      "@type": "WebPage",
-      "@id": `${SITE_URL}/posts/${article.slug}`,
-    },
-    keywords: article.tags || [],
-    wordCount: article.wordCount || 0,
-    inLanguage: "en-US",
-  };
+	const articleUrl = `${SITE.url}/posts/${article.slug}`;
+	const imageUrl = `${articleUrl}/og.png`;
+
+	return {
+		"@context": "https://schema.org",
+		"@type": "BlogPosting",
+		"@id": `${articleUrl}/#article`,
+		headline: article.title,
+		description: article.description,
+		url: articleUrl,
+		datePublished: article.publishedAt,
+		dateModified: article.lastModifiedAt || article.publishedAt,
+		author: {
+			"@type": "Person",
+			"@id": `${SITE.url}/#author`,
+			name: AUTHOR.name,
+			url: AUTHOR.url,
+			email: AUTHOR.email,
+		},
+		publisher: generateOrganizationSchema(),
+		image: {
+			"@type": "ImageObject",
+			url: imageUrl,
+			width: SEO_DEFAULTS.defaultImageWidth,
+			height: SEO_DEFAULTS.defaultImageHeight,
+		},
+		mainEntityOfPage: {
+			"@type": "WebPage",
+			"@id": articleUrl,
+		},
+		isPartOf: {
+			"@type": "Blog",
+			"@id": `${SITE.url}/posts/#blog`,
+			name: `${SITE.name} - Blog`,
+		},
+		keywords: article.tags || [],
+		wordCount: article.wordCount || 0,
+		inLanguage: SITE.language,
+		articleSection: "Technology",
+		genre: "Technology Blog",
+		// Add speakable for articles with question-style titles
+		...(article.title.includes("?") && {
+			speakable: {
+				"@type": "SpeakableSpecification",
+				cssSelector: ["article h1", "article h2", "article p"],
+			},
+		}),
+	};
 }
 
+/**
+ * Generate BreadcrumbList schema
+ */
 function generateBreadcrumbSchema() {
-  if (!breadcrumbs || breadcrumbs.length === 0) return null;
+	if (!breadcrumbs || breadcrumbs.length === 0) return null;
 
-  return {
-    "@context": "https://schema.org",
-    "@type": "BreadcrumbList",
-    itemListElement: breadcrumbs.map((crumb, index) => ({
-      "@type": "ListItem",
-      position: index + 1,
-      name: crumb.name,
-      item: crumb.url,
-    })),
-  };
+	return {
+		"@context": "https://schema.org",
+		"@type": "BreadcrumbList",
+		itemListElement: breadcrumbs.map((crumb, index) => ({
+			"@type": "ListItem",
+			position: index + 1,
+			name: crumb.name,
+			item: crumb.url,
+		})),
+	};
 }
+
+// =============================================================================
+// SCHEMA SELECTION
+// =============================================================================
 
 let schema;
 switch (type) {
-  case "article":
-    schema = generateArticleSchema();
-    break;
-  case "person":
-    schema = generatePersonSchema();
-    break;
-  case "blog":
-    schema = generateBlogSchema();
-    break;
-  default:
-    schema = generateWebsiteSchema();
+	case "article":
+		schema = generateArticleSchema();
+		break;
+	case "person":
+		schema = generatePersonSchema();
+		break;
+	case "blog":
+		schema = generateBlogSchema();
+		break;
+	default:
+		schema = generateWebsiteSchema();
 }
 
 const breadcrumbSchema = generateBreadcrumbSchema();
+
+// For non-article pages, also include the person schema for richer author info
+const includePersonSchema = type !== "person" && type !== "article";
+const personSchema = includePersonSchema ? generatePersonSchema() : null;
 ---
 
-{schema && (
-	<script type="application/ld+json" is:inline set:html={JSON.stringify(schema)} />
-)}
+{
+	schema && (
+		<script
+			type="application/ld+json"
+			is:inline
+			set:html={JSON.stringify(schema)}
+		/>
+	)
+}
 
-{breadcrumbSchema && (
-	<script type="application/ld+json" is:inline set:html={JSON.stringify(breadcrumbSchema)} />
-)}
+{
+	breadcrumbSchema && (
+		<script
+			type="application/ld+json"
+			is:inline
+			set:html={JSON.stringify(breadcrumbSchema)}
+		/>
+	)
+}
+
+{
+	personSchema && (
+		<script
+			type="application/ld+json"
+			is:inline
+			set:html={JSON.stringify(personSchema)}
+		/>
+	)
+}

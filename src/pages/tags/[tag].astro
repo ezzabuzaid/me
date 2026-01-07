@@ -1,0 +1,185 @@
+---
+import { getCollection } from "astro:content";
+import { ArrowLeft, Tag } from "lucide-preact";
+
+import Footer from "~/components/Footer.astro";
+import Head from "~/components/Head.astro";
+import List from "~/components/Widgets/List.astro";
+import Document from "~/layouts/Document.astro";
+import {
+	filterPosts,
+	mapPostToListItem,
+	sortPostsByPublishedAt,
+} from "~/utils/content";
+import {
+	extractAllTags,
+	generateTagSlug,
+	generateCollectionPageSchema,
+} from "~/utils/seo";
+import { SITE } from "~/config/seo";
+
+import type { GetStaticPaths } from "astro";
+
+export const getStaticPaths = (async () => {
+	const posts = await getCollection("posts", filterPosts({ archived: false }));
+	const tagCounts = extractAllTags(posts);
+
+	// Create a path for each unique tag
+	const paths = Array.from(tagCounts.entries()).map(([tag, count]) => {
+		const slug = generateTagSlug(tag);
+		// Find the original casing from posts
+		const displayName =
+			posts
+				.flatMap((p) => p.data.tags || [])
+				.find((t) => t.toLowerCase() === tag) || tag;
+
+		// Get posts with this tag
+		const tagPosts = posts
+			.filter((p) =>
+				(p.data.tags || []).some((t) => t.toLowerCase() === tag),
+			)
+			.sort(sortPostsByPublishedAt);
+
+		return {
+			params: { tag: slug },
+			props: {
+				tag: displayName,
+				tagSlug: slug,
+				posts: tagPosts,
+				count,
+			},
+		};
+	});
+
+	return paths;
+}) satisfies GetStaticPaths;
+
+interface Props {
+	tag: string;
+	tagSlug: string;
+	posts: Awaited<ReturnType<typeof getCollection<"posts">>>;
+	count: number;
+}
+
+const { tag, tagSlug, posts, count } = Astro.props;
+
+// Map posts to list items
+const listItems = posts.map(mapPostToListItem);
+
+// Page metadata
+const pageTitle = `${tag} Articles`;
+const pageDescription = `Browse ${count} article${count === 1 ? "" : "s"} about ${tag}. Tutorials, guides, and practical examples for developers.`;
+const canonicalUrl = `${SITE.url}/tags/${tagSlug}`;
+
+// Breadcrumbs for structured data
+const breadcrumbs = [
+	{ name: "Home", url: SITE.url },
+	{ name: "Topics", url: `${SITE.url}/tags` },
+	{ name: tag, url: canonicalUrl },
+];
+
+// Collection page schema
+const collectionSchema = generateCollectionPageSchema({
+	name: pageTitle,
+	description: pageDescription,
+	url: canonicalUrl,
+	itemCount: count,
+});
+
+// Get all tags for the "Browse more topics" section
+const allPosts = await getCollection("posts", filterPosts({ archived: false }));
+const allTagCounts = extractAllTags(allPosts);
+const relatedTags = Array.from(allTagCounts.entries())
+	.filter(([t]) => t !== tag.toLowerCase())
+	.sort((a, b) => b[1] - a[1])
+	.slice(0, 6)
+	.map(([t, c]) => ({
+		name: t,
+		slug: generateTagSlug(t),
+		count: c,
+		displayName:
+			allPosts
+				.flatMap((p) => p.data.tags || [])
+				.find((pt) => pt.toLowerCase() === t) || t,
+	}));
+---
+
+<Head
+	title={pageTitle}
+	description={pageDescription}
+	type="website"
+	breadcrumbs={breadcrumbs}
+	keywords={[tag, "tutorial", "guide", "web development"]}
+/>
+
+<Document>
+	<!-- Additional Collection Schema -->
+	<script
+		type="application/ld+json"
+		is:inline
+		set:html={JSON.stringify(collectionSchema)}
+	/>
+	<main
+		class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 space-y-12 pb-8"
+	>
+		<!-- Page Header -->
+		<section class="space-y-4 pt-8">
+			<div class="flex items-center space-x-3">
+				<Tag class="w-6 h-6 text-primary-500" />
+				<h1
+					class="font-[Fraunces] text-4xl sm:text-5xl font-bold tracking-tight text-gray-50 leading-[0.9] capitalize"
+				>
+					{tag}
+				</h1>
+			</div>
+			<p class="text-gray-500 text-base">
+				{count}
+				{count === 1 ? "article" : "articles"} about {tag.toLowerCase()}
+			</p>
+		</section>
+
+		<!-- Posts List -->
+		<section class="z-10 space-y-6">
+			<List id={`posts-${tagSlug}`} items={listItems} variant="borderless" />
+		</section>
+
+		<!-- Related Topics -->
+		{
+			relatedTags.length > 0 && (
+				<section class="z-10 space-y-6">
+					<h2 class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-500">
+						<span class="text-gray-600 mr-2">◇</span>
+						Browse More Topics
+					</h2>
+					<div class="flex flex-wrap gap-2">
+						{relatedTags.map(({ displayName, slug, count }) => (
+							<a
+								href={`/tags/${slug}`}
+								class="inline-flex items-center space-x-2 px-3 py-1.5 bg-gray-900/50 border border-gray-800 hover:border-primary-500/50 hover:bg-gray-900 default-transition font-mono text-xs text-gray-400 hover:text-primary-500"
+							>
+								<span class="capitalize">{displayName}</span>
+								<span class="text-gray-600">({count})</span>
+							</a>
+						))}
+					</div>
+				</section>
+			)
+		}
+	</main>
+
+	<Footer class="max-w-3xl border-t border-gray-800">
+		<div
+			class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0 space-x-4"
+		>
+			<a
+				class="default-focus mt-4 default-transition group inline-flex items-center justify-center space-x-2 px-3 py-1 font-mono text-xs uppercase tracking-wider text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50"
+				href="/tags"
+			>
+				<ArrowLeft
+					class="w-4 h-4 default-transition transform group-hover:-translate-x-1"
+				/>
+				<span>All topics</span>
+			</a>
+		</div>
+	</Footer>
+</Document>

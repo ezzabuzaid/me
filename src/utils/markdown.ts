@@ -1,17 +1,18 @@
-import { statSync } from 'node:fs';
+import { statSync } from "node:fs";
 
-import { rehypeAccessibleEmojis } from 'rehype-accessible-emojis';
-import rehypeAutolinkHeadingsPlugin from 'rehype-autolink-headings';
-import rehypeExternalLinksPlugin from 'rehype-external-links';
-import rehypePrettyCodePlugin from 'rehype-pretty-code';
-import rehypeSlugPlugin from 'rehype-slug';
+import { rehypeAccessibleEmojis } from "rehype-accessible-emojis";
+import rehypeAutolinkHeadingsPlugin from "rehype-autolink-headings";
+import rehypeExternalLinksPlugin from "rehype-external-links";
+import rehypePrettyCodePlugin from "rehype-pretty-code";
+import rehypeSlugPlugin from "rehype-slug";
 
-import type { RehypePlugins, RemarkPlugins } from 'astro';
+import type { RehypePlugins, RemarkPlugins } from "astro";
 
-import type { Options as RehypeAutolinkHeadingsOptions } from 'rehype-autolink-headings';
-import type { Options as RehypeExternalLinksOptions } from 'rehype-external-links';
-import type { Options as RehypePrettyCodeOptions } from 'rehype-pretty-code';
-import { remarkCustomCallouts } from './remark.mjs';
+import type { Options as RehypeAutolinkHeadingsOptions } from "rehype-autolink-headings";
+import type { Options as RehypeExternalLinksOptions } from "rehype-external-links";
+import type { Options as RehypePrettyCodeOptions } from "rehype-pretty-code";
+import { remarkCustomCallouts } from "./remark.mjs";
+import { rehypeLazyImages } from "./rehype-lazy-images";
 
 // Note: Ordering of plugins DOES matter
 export const rehypePlugins: RehypePlugins = [
@@ -21,7 +22,7 @@ export const rehypePlugins: RehypePlugins = [
 	// Add anchor links to headings
 	[
 		rehypeAutolinkHeadingsPlugin,
-		{ behavior: 'prepend' } satisfies RehypeAutolinkHeadingsOptions,
+		{ behavior: "prepend" } satisfies RehypeAutolinkHeadingsOptions,
 	],
 
 	// Add syntax highlighting to code blocks
@@ -29,8 +30,8 @@ export const rehypePlugins: RehypePlugins = [
 		rehypePrettyCodePlugin,
 		{
 			theme: {
-				dark: 'github-dark',
-				light: 'github-light',
+				dark: "github-dark",
+				light: "github-light",
 			},
 		} satisfies RehypePrettyCodeOptions,
 	],
@@ -43,9 +44,18 @@ export const rehypePlugins: RehypePlugins = [
 	[
 		rehypeExternalLinksPlugin,
 		{
-			target: '_blank',
-			rel: ['noopener', 'noreferrer'],
+			target: "_blank",
+			rel: ["noopener", "noreferrer"],
 		} satisfies RehypeExternalLinksOptions,
+	],
+
+	// Add lazy loading to images for performance
+	[
+		rehypeLazyImages,
+		{
+			skipFirst: 1, // Don't lazy load first image (above the fold)
+			prioritizeFirst: true, // Add fetchpriority to first image
+		},
 	],
 ];
 
