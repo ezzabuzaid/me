@@ -1,0 +1,290 @@
+---
+import { ArrowLeft, Dumbbell, Cookie, Footprints } from "lucide-preact";
+
+import Footer from "~/components/Footer.astro";
+import Head from "~/components/Head.astro";
+import { ContributionChart } from "~/components/ContributionChart";
+import Document from "~/layouts/Document.astro";
+
+// Generate sample data for the past year
+function generateSampleData(
+  probability: number,
+  maxCount: number = 1
+): { date: string; count: number }[] {
+  const data: { date: string; count: number }[] = [];
+  const today = new Date();
+
+  for (let i = 0; i < 365; i++) {
+    const date = new Date(today);
+    date.setDate(date.getDate() - i);
+    const dateStr = date.toISOString().split("T")[0] as string;
+
+    // Randomly generate data based on probability
+    const hasActivity = Math.random() < probability;
+    const count = hasActivity ? Math.floor(Math.random() * maxCount) + 1 : 0;
+
+    data.push({ date: dateStr, count });
+  }
+
+  return data;
+}
+
+// Generate realistic sample data
+// Gym: ~4-5 times per week
+const gymData = generateSampleData(0.65, 2);
+
+// No sugar: ~5-6 days per week (tracking successful days)
+const noSugarData = generateSampleData(0.75, 1);
+
+// Walking: daily with varying intensity
+const walkingData = generateSampleData(0.85, 5);
+
+// Calculate streaks and stats
+function calculateStats(data: { date: string; count: number }[]) {
+  const sortedData = [...data].sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  );
+
+  let currentStreak = 0;
+  let longestStreak = 0;
+  let tempStreak = 0;
+  let totalDays = 0;
+
+  for (const item of sortedData) {
+    if (item.count > 0) {
+      tempStreak++;
+      totalDays++;
+      if (tempStreak > longestStreak) {
+        longestStreak = tempStreak;
+      }
+    } else {
+      if (currentStreak === 0 && tempStreak > 0) {
+        currentStreak = tempStreak;
+      }
+      tempStreak = 0;
+    }
+  }
+
+  // Check if we're still in a streak (started from today)
+  const firstItem = sortedData[0];
+  if (firstItem && firstItem.count > 0) {
+    currentStreak = 0;
+    for (const item of sortedData) {
+      if (item.count > 0) currentStreak++;
+      else break;
+    }
+  }
+
+  return { currentStreak, longestStreak, totalDays };
+}
+
+const gymStats = calculateStats(gymData);
+const noSugarStats = calculateStats(noSugarData);
+const walkingStats = calculateStats(walkingData);
+---
+
+<Head
+  title="Progress"
+  description="Track my fitness progress including gym workouts, sugar-free days, and daily walking habits."
+/>
+
+<Document>
+  <main
+    class="flex flex-col h-full mx-auto max-w-4xl px-4 sm:px-6 lg:px-8 py-16 space-y-12 pb-8"
+  >
+    <!-- Brutalist Hero -->
+    <section class="space-y-4 pt-8">
+      <h1
+        class="font-[Fraunces] text-5xl sm:text-6xl font-bold tracking-tight text-gray-50 leading-[0.9]"
+      >
+        <span class="text-primary-500">◇</span> Progress
+      </h1>
+      <p class="text-gray-500 text-base">
+        Tracking my fitness journey. GitHub-style contribution charts for gym
+        workouts, sugar-free days, and walking habits.
+      </p>
+    </section>
+
+    <!-- Stats Overview -->
+    <section class="grid grid-cols-3 gap-4">
+      <div
+        class="bg-gray-900 border border-gray-800 p-4 hover:border-green-500/50 transition-colors duration-200"
+      >
+        <div class="flex items-center gap-2 mb-2">
+          <Dumbbell className="w-4 h-4 text-green-500" />
+          <span class="font-mono text-xs text-gray-500 uppercase tracking-wider"
+            >Gym</span
+          >
+        </div>
+        <div class="font-[Fraunces] text-2xl text-gray-100">
+          {gymStats.currentStreak}
+        </div>
+        <div class="font-mono text-xs text-gray-600">day streak</div>
+      </div>
+
+      <div
+        class="bg-gray-900 border border-gray-800 p-4 hover:border-purple-500/50 transition-colors duration-200"
+      >
+        <div class="flex items-center gap-2 mb-2">
+          <Cookie className="w-4 h-4 text-purple-500" />
+          <span class="font-mono text-xs text-gray-500 uppercase tracking-wider"
+            >No Sugar</span
+          >
+        </div>
+        <div class="font-[Fraunces] text-2xl text-gray-100">
+          {noSugarStats.currentStreak}
+        </div>
+        <div class="font-mono text-xs text-gray-600">day streak</div>
+      </div>
+
+      <div
+        class="bg-gray-900 border border-gray-800 p-4 hover:border-blue-500/50 transition-colors duration-200"
+      >
+        <div class="flex items-center gap-2 mb-2">
+          <Footprints className="w-4 h-4 text-blue-500" />
+          <span class="font-mono text-xs text-gray-500 uppercase tracking-wider"
+            >Walking</span
+          >
+        </div>
+        <div class="font-[Fraunces] text-2xl text-gray-100">
+          {walkingStats.currentStreak}
+        </div>
+        <div class="font-mono text-xs text-gray-600">day streak</div>
+      </div>
+    </section>
+
+    <!-- Charts -->
+    <section class="space-y-8">
+      <!-- Gym Chart -->
+      <div
+        class="bg-gray-950 border border-gray-800 p-6 hover:border-green-500/30 transition-colors duration-200"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <div
+            class="w-8 h-8 flex items-center justify-center border border-gray-800 bg-gray-900"
+          >
+            <Dumbbell className="w-4 h-4 text-green-500" />
+          </div>
+          <div>
+            <span
+              class="font-mono text-xs text-gray-600 uppercase tracking-wider"
+              >Longest streak: {gymStats.longestStreak} days</span
+            >
+          </div>
+        </div>
+        <ContributionChart
+          client:load
+          data={gymData}
+          title="Gym Workouts"
+          color="green"
+          label="workouts"
+        />
+      </div>
+
+      <!-- No Sugar Chart -->
+      <div
+        class="bg-gray-950 border border-gray-800 p-6 hover:border-purple-500/30 transition-colors duration-200"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <div
+            class="w-8 h-8 flex items-center justify-center border border-gray-800 bg-gray-900"
+          >
+            <Cookie className="w-4 h-4 text-purple-500" />
+          </div>
+          <div>
+            <span
+              class="font-mono text-xs text-gray-600 uppercase tracking-wider"
+              >Longest streak: {noSugarStats.longestStreak} days</span
+            >
+          </div>
+        </div>
+        <ContributionChart
+          client:load
+          data={noSugarData}
+          title="Sugar-Free Days"
+          color="purple"
+          label="days"
+        />
+      </div>
+
+      <!-- Walking Chart -->
+      <div
+        class="bg-gray-950 border border-gray-800 p-6 hover:border-blue-500/30 transition-colors duration-200"
+      >
+        <div class="flex items-center gap-3 mb-4">
+          <div
+            class="w-8 h-8 flex items-center justify-center border border-gray-800 bg-gray-900"
+          >
+            <Footprints className="w-4 h-4 text-blue-500" />
+          </div>
+          <div>
+            <span
+              class="font-mono text-xs text-gray-600 uppercase tracking-wider"
+              >Longest streak: {walkingStats.longestStreak} days</span
+            >
+          </div>
+        </div>
+        <ContributionChart
+          client:load
+          data={walkingData}
+          title="Daily Walking"
+          color="blue"
+          label="walks"
+        />
+      </div>
+    </section>
+
+    <!-- Terminal-style summary -->
+    <section class="border border-gray-800 bg-gray-950">
+      <div
+        class="flex items-center gap-2 px-4 py-3 border-b border-gray-800 bg-gray-900"
+      >
+        <div class="w-3 h-3 bg-[#ff5f57]"></div>
+        <div class="w-3 h-3 bg-[#ffbd2e]"></div>
+        <div class="w-3 h-3 bg-[#28ca42]"></div>
+        <span class="ml-3 font-mono text-xs text-gray-500 uppercase tracking-wider"
+          >stats.sh</span
+        >
+      </div>
+      <div class="p-4 font-mono text-sm">
+        <p class="text-gray-500">
+          <span class="text-primary-500">$</span> cat yearly_summary.txt
+        </p>
+        <div class="mt-3 space-y-1 text-gray-400">
+          <p>
+            <span class="text-green-500">gym:</span>
+            {gymStats.totalDays} workouts this year
+          </p>
+          <p>
+            <span class="text-purple-500">no_sugar:</span>
+            {noSugarStats.totalDays} successful days
+          </p>
+          <p>
+            <span class="text-blue-500">walking:</span>
+            {walkingStats.totalDays} active days
+          </p>
+        </div>
+        <p class="mt-3 text-gray-600">
+          <span class="text-primary-500">$</span>
+          <span class="animate-blink">_</span>
+        </p>
+      </div>
+    </section>
+  </main>
+
+  <Footer class="max-w-4xl border-t border-gray-800">
+    <div
+      class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
+    >
+      <a
+        class="default-focus mt-4 default-transition group inline-flex items-center justify-center space-x-2 px-3 py-1 font-mono text-xs uppercase tracking-wider text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50"
+        href="/"
+      >
+        <ArrowLeft
+          className="w-4 h-4 default-transition transform group-hover:-translate-x-1"
+        />
+        <span>Go back</span>
+      </a>
+    </div>
+  </Footer>
+</Document>
