@@ -114,7 +114,10 @@ export function ContributionChart({ data, title, color = "green", label }: Contr
     const firstDay = week[0];
     if (firstDay && firstDay.date.getMonth() !== lastMonth) {
       lastMonth = firstDay.date.getMonth();
-      monthLabels.push({ month: months[lastMonth], weekIndex });
+      const monthName = months[lastMonth];
+      if (monthName) {
+        monthLabels.push({ month: monthName, weekIndex });
+      }
     }
   });
 
