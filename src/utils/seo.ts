@@ -53,8 +53,7 @@ export function validateDescription(description: string): {
 	optimized: string;
 	warnings: string[];
 } {
-	const { descriptionMinLength, descriptionMaxLength, descriptionIdealLength } =
-		SEO_DEFAULTS.limits;
+	const { descriptionMinLength, descriptionMaxLength } = SEO_DEFAULTS.limits;
 
 	const warnings: string[] = [];
 	let optimized = description.trim();

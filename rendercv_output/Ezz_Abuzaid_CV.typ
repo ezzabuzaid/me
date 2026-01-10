@@ -85,12 +85,13 @@
 
 = Ezz Abuzaid
 
-  #headline([Software Engineer & AI Agent Developer])
+  #headline([Software Engineer])
 
 #connections(
   [#connection-with-icon("location-dot")[Amman, Jordan]],
   [#link("mailto:ezzabuzaid@gmail.com", icon: false, if-underline: false, if-color: false)[#connection-with-icon("envelope")[ezzabuzaid\@gmail.com]]],
   [#link("tel:+962-7-9280-7794", icon: false, if-underline: false, if-color: false)[#connection-with-icon("phone")[07 9280 7794]]],
+  [#link("https://ezz.sh/", icon: false, if-underline: false, if-color: false)[#connection-with-icon("link")[ezz.sh]]],
   [#link("https://linkedin.com/in/ezzabuzaid", icon: false, if-underline: false, if-color: false)[#connection-with-icon("linkedin")[ezzabuzaid]]],
   [#link("https://github.com/ezzabuzaid", icon: false, if-underline: false, if-color: false)[#connection-with-icon("github")[ezzabuzaid]]],
 )
@@ -98,7 +99,7 @@
 
 == Summary
 
-Software engineer with 8 years of experience building developer tools, frameworks, and AI-powered applications. Specialized in AI agent development with 2 years of production experience building LLM applications, autonomous agents, RAG systems, and multi-agent architectures. Creator of multiple open-source frameworks including DeepAgents (agent development), January (backend DSL), and Serverize (container platform). Strong track record of rapidly shipping production systems.
+Self-taught builder with 8 years shipping production software and 2 years building AI agents and LLM applications. Created multiple open-source frameworks from scratch including DeepAgents (agent orchestration), SDK-IT (SDK generation), and Serverize (container platform). Track record of rapidly turning ideas into working systems - from parsers and compilers to RAG pipelines and multi-agent architectures.
 
 == Projects
 
@@ -108,38 +109,80 @@ Software engineer with 8 years of experience building developer tools, framework
 
   ],
   [
-    Jan 2023 – present
+    July 2025 – present
 
   ],
   main-column-second-row: [
     #summary[TypeScript-native AI agent framework designed to be batteries-included]
 
-    - Built comprehensive agent development framework for the TypeScript\/JavaScript ecosystem
+    - Implements agent handoffs inspired by OpenAI Swarm for orchestrating multi-agent systems
 
-    - Simpler and more accessible alternative to LangChain for TS developers
+    - Context engine for token estimation, compaction strategies, and structured system prompts
 
-    - Supports autonomous agents, RAG systems, and multi-agent architectures
+    - Includes retrieval package with sqlite-vec for vector search and multi-source connectors (GitHub, RSS, files)
 
   ],
 )
 
 #regular-entry(
   [
-    #strong[#link("https://github.com/ezzabuzaid/january")[January]]
+    #strong[Proposal Generator Agent]
 
   ],
   [
-    Jan 2022 – present
+    Jan 2024
 
   ],
   main-column-second-row: [
-    #summary[TypeScript backend framework with compile-time DSL and workflow-based architecture]
+    #summary[Agentic workflow for business proposal drafting]
 
-    - Designed internal DSL using compile-time primitives for type-safe backend development
+    - Human-in-the-loop design where users select context, AI drafts, users comment, AI refines
 
-    - Workflow-based architecture that simplifies complex backend operations
+    - Multi-turn agent with iterative feedback loops
 
-    - Automatic code generation reduces boilerplate and enforces consistent patterns
+    - Harvests user-provided files to learn tone, design, and style
+
+  ],
+)
+
+#regular-entry(
+  [
+    #strong[#link("https://limerence.january.sh/")[Text2SQL Agent]]
+
+  ],
+  [
+    Oct 2025
+
+  ],
+  main-column-second-row: [
+    #summary[AI agent that converts natural language queries to SQL]
+
+    - Converts natural language to valid SQLite queries with parser validation
+
+    - Supports drawing various charts from query results
+
+    - Creates domain-specific agents through table\/view filtering
+
+  ],
+)
+
+#regular-entry(
+  [
+    #strong[#link("https://github.com/januarylabs/sdk-it")[SDK-IT]]
+
+  ],
+  [
+    Jan 2024 – present
+
+  ],
+  main-column-second-row: [
+    #summary[Developer tool for SDK generation and OpenAPI automation]
+
+    - Generates type-safe SDKs from OpenAPI specs and OpenAPI specs from TypeScript code
+
+    - First-party React Query integration for frontend data fetching
+
+    - Isomorphic design enables backend integration testing
 
   ],
 )
@@ -150,59 +193,17 @@ Software engineer with 8 years of experience building developer tools, framework
 
   ],
   [
-    June 2023 – present
+    Jan 2024 – present
 
   ],
   main-column-second-row: [
     #summary[Self-hosted container platform for development deployments]
 
-    - Built from idea to working product in under 1 month
+    - Auto-generates Dockerfiles by analyzing codebase configuration
 
-    - Features named channels with versioned releases and per-channel secrets management
+    - Supports 7+ frameworks including Next.js, Nuxt, Astro, and FastAPI
 
-    - Container-based architecture similar to fly.io but optimized for development workflows
-
-  ],
-)
-
-#regular-entry(
-  [
-    #strong[#link("https://github.com/ezzabuzaid/sqlite-parser")[sqlite-parser]]
-
-  ],
-  [
-    Jan 2023
-
-  ],
-  main-column-second-row: [
-    #summary[SQLite query parser written from scratch]
-
-    - Implemented parser for core SQL subset (SELECT, INSERT, UPDATE, DELETE)
-
-    - Built as deep-dive learning exercise into compiler\/parser design
-
-    - Foundation for text2sql agent project
-
-  ],
-)
-
-#regular-entry(
-  [
-    #strong[Text2SQL Agent]
-
-  ],
-  [
-    Jan 2023
-
-  ],
-  main-column-second-row: [
-    #summary[AI agent that converts natural language queries to SQL]
-
-    - Converts natural language to valid SQLite queries
-
-    - Integrates with sqlite-parser for query validation
-
-    - Demonstrates practical application of LLM + traditional tools
+    - Secure secrets management with encrypted environment variables
 
   ],
 )
@@ -211,7 +212,7 @@ Software engineer with 8 years of experience building developer tools, framework
 
 #regular-entry(
   [
-    #strong[Senior Software Engineer], Kortext -- Remote
+    #strong[Senior Software Engineer], Kortext -- Contract - Remote
 
   ],
   [
@@ -229,14 +230,14 @@ Software engineer with 8 years of experience building developer tools, framework
 
     - Drove technical improvements through written proposals and RFC process
 
-    - Led code reviews, technical decisions, and mentored team members
+    - Collaborated with QA, product managers, and designers to deliver features and resolve cross-functional issues
 
   ],
 )
 
 #regular-entry(
   [
-    #strong[Software Engineer], Equiti.com -- Amman, Jordan
+    #strong[Senior Software Engineer], Equiti Group -- Amman, Jordan
 
   ],
   [
@@ -246,19 +247,15 @@ Software engineer with 8 years of experience building developer tools, framework
   main-column-second-row: [
     #summary[International CFD Forex broker]
 
-    - Built Front-End CRM from scratch using Angular 9 and Material Design
+    - Built Front-End CRM from scratch using Angular.
 
-    - Decreased loading latency by leveraging Angular SSR and PWA
-
-    - Converted Monolithic .NetCore project to Microservices using Node.js and .Net 5 with gRPC
+    - Contributed to converting monolithic .NetCore project to microservices using Node.js and .Net 5 with gRPC
 
     - Utilized Node.js to send RabbitMQ messages to browser via SSE
 
     - Handled stock data streams using reactive programming (RxJS and Rx.NET)
 
     - Established CI pipelines in Azure DevOps for Angular, Node.js, .NetCore, and Flutter
-
-    - Optimized SEO for multiple web products (TradeHub.com, FXPesa.com)
 
     - Wrote automated tests in JavaScript and C\# for product quality and stability
 
@@ -275,17 +272,9 @@ Software engineer with 8 years of experience building developer tools, framework
 
   ],
   main-column-second-row: [
-    - Developed Food delivery application using Node.js, MySQL, TypeORM, TypeScript, and Angular
+    - Built food delivery application from scratch using Node.js, TypeScript, and Angular
 
-    - Implemented policy-based caching in browser to increase data retrieval speed
-
-    - Integrated Firebase Realtime-Database to track drivers' locations
-
-    - Built PWA features including Add To Home Screen, Push Notifications, and Offline mode
-
-    - Built Angular boilerplate project used as template for 3 other projects
-
-    - Migrated application from Angular 2 to Angular 7
+    - Integrated Firebase Realtime-Database for live driver location tracking
 
   ],
 )
@@ -313,30 +302,12 @@ Software engineer with 8 years of experience building developer tools, framework
 
 == Skills
 
-#strong[Languages:] TypeScript, JavaScript, C\#
+#strong[AI\/ML:] LLM Applications, RAG Systems, Agent Architectures, OpenAI API, Vercel AI SDK
 
-#strong[Frontend:] Angular, RxJS, Material Design, PWA, SSR, Sass, Bootstrap
+#strong[Languages:] TypeScript, C\# and Dart.
 
-#strong[Backend:] Node.js, Express.js, .NetCore, gRPC, TypeORM, MySQL
+#strong[Backend:] Node.js, .NetCore, gRPC, Prisma, PostgreSQL.
 
-#strong[AI\/ML:] OpenAI API, Vercel AI SDK, LLM Applications, RAG, Agent Architectures
+#strong[Frontend:] React, Angular, RxJS, PWA, SSR.
 
-#strong[Infrastructure:] Docker, Azure DevOps, CI\/CD, Firebase, RabbitMQ, Git
-
-#strong[Testing:] Jasmine, Jest, xUnit, Automated Testing
-
-#strong[Tools:] GitHub, Jira, Microsoft DevOps, Azure
-
-#strong[Research Interests:] AI Agents, Code AI, Tool Use, Agent Reasoning & Memory
-
-== Technical Strengths
-
-Builder Mentality: 8 years shipping production software, from parsers to platforms
-
-AI Agent Expertise: 2 years building production AI agents for enterprise clients
-
-Framework Design: Created multiple developer frameworks (January, DeepAgents)
-
-Fast Learner: Self-taught AI development in 3-6 months; built Serverize in \< 1 month
-
-Open Source: Active contributor with public portfolio of significant projects
+#strong[Infrastructure:] Docker, GCP, Azure DevOps, CI\/CD, Firebase.

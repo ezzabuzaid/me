@@ -3,7 +3,7 @@ import { defineConfig, envField } from "astro/config";
 // Astro Integrations
 import mdx from "@astrojs/mdx";
 import preact from "@astrojs/preact";
-import sitemap from "@astrojs/sitemap";
+import sitemap, { ChangeFreqEnum, type SitemapItem } from "@astrojs/sitemap";
 import icon from "astro-icon";
 import robotsTxt from "astro-robots-txt";
 
@@ -59,7 +59,7 @@ function sitemapFilter(page: string): boolean {
 /**
  * Custom serializer to add priority and changefreq based on page type
  */
-function sitemapSerialize(item: { url: string; lastmod?: string }) {
+function sitemapSerialize(item: SitemapItem): SitemapItem {
 	const url = item.url;
 
 	// Homepage - highest priority
@@ -67,7 +67,7 @@ function sitemapSerialize(item: { url: string; lastmod?: string }) {
 		return {
 			...item,
 			priority: 1.0,
-			changefreq: "weekly" as const,
+			changefreq: ChangeFreqEnum.WEEKLY,
 		};
 	}
 
@@ -76,7 +76,7 @@ function sitemapSerialize(item: { url: string; lastmod?: string }) {
 		return {
 			...item,
 			priority: 0.9,
-			changefreq: "daily" as const,
+			changefreq: ChangeFreqEnum.DAILY,
 		};
 	}
 
@@ -85,7 +85,7 @@ function sitemapSerialize(item: { url: string; lastmod?: string }) {
 		return {
 			...item,
 			priority: 0.8,
-			changefreq: "monthly" as const,
+			changefreq: ChangeFreqEnum.MONTHLY,
 		};
 	}
 
@@ -94,7 +94,7 @@ function sitemapSerialize(item: { url: string; lastmod?: string }) {
 		return {
 			...item,
 			priority: 0.7,
-			changefreq: "weekly" as const,
+			changefreq: ChangeFreqEnum.WEEKLY,
 		};
 	}
 
@@ -103,7 +103,7 @@ function sitemapSerialize(item: { url: string; lastmod?: string }) {
 		return {
 			...item,
 			priority: 0.6,
-			changefreq: "monthly" as const,
+			changefreq: ChangeFreqEnum.MONTHLY,
 		};
 	}
 
@@ -111,7 +111,7 @@ function sitemapSerialize(item: { url: string; lastmod?: string }) {
 	return {
 		...item,
 		priority: 0.5,
-		changefreq: "monthly" as const,
+		changefreq: ChangeFreqEnum.MONTHLY,
 	};
 }
 

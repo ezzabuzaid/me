@@ -1,10 +1,11 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/rendercv/rendercv/refs/tags/v2.6/schema.json
 cv:
   name: Ezz Abuzaid
-  headline: Software Engineer & AI Agent Developer
+  headline: Software Engineer
   location: Amman, Jordan
   email: ezzabuzaid@gmail.com
   phone: "+962792807794"
+  website: https://ezz.sh
   social_networks:
     - network: LinkedIn
       username: ezzabuzaid
@@ -12,80 +13,78 @@ cv:
       username: ezzabuzaid
   sections:
     summary:
-      - Software engineer with 8 years of experience building developer tools, frameworks, and AI-powered applications. Specialized in AI agent development with 2 years of production experience building LLM applications, autonomous agents, RAG systems, and multi-agent architectures. Creator of multiple open-source frameworks including DeepAgents (agent development), January (backend DSL), and Serverize (container platform). Strong track record of rapidly shipping production systems.
+      - Self-taught builder with 8 years shipping production software and 2 years building AI agents and LLM applications. Created multiple open-source frameworks from scratch including DeepAgents (agent orchestration), SDK-IT (SDK generation), and Serverize (container platform). Track record of rapidly turning ideas into working systems - from parsers and compilers to RAG pipelines and multi-agent architectures.
 
     projects:
       - name: "[DeepAgents](https://github.com/ezzabuzaid/deepagents)"
-        start_date: 2023-01
+        start_date: 2025-07
         end_date: present
         summary: TypeScript-native AI agent framework designed to be batteries-included
         highlights:
-          - Built comprehensive agent development framework for the TypeScript/JavaScript ecosystem
-          - Simpler and more accessible alternative to LangChain for TS developers
-          - Supports autonomous agents, RAG systems, and multi-agent architectures
+          - Implements agent handoffs inspired by OpenAI Swarm for orchestrating multi-agent systems
+          - Context engine for token estimation, compaction strategies, and structured system prompts
+          - Includes retrieval package with sqlite-vec for vector search and multi-source connectors (GitHub, RSS, files)
 
-      - name: "[January](https://github.com/ezzabuzaid/january)"
-        start_date: 2022-01
-        end_date: present
-        summary: TypeScript backend framework with compile-time DSL and workflow-based architecture
+      - name: Proposal Generator Agent
+        date: "2024"
+        summary: Agentic workflow for business proposal drafting
         highlights:
-          - Designed internal DSL using compile-time primitives for type-safe backend development
-          - Workflow-based architecture that simplifies complex backend operations
-          - Automatic code generation reduces boilerplate and enforces consistent patterns
+          - Human-in-the-loop design where users select context, AI drafts, users comment, AI refines
+          - Multi-turn agent with iterative feedback loops
+          - Harvests user-provided files to learn tone, design, and style
+
+      - name: "[Text2SQL Agent](https://limerence.january.sh/)"
+        date: "2025-10"
+        summary: AI agent that converts natural language queries to SQL
+        highlights:
+          - Converts natural language to valid SQLite queries with parser validation
+          - Supports drawing various charts from query results
+          - Creates domain-specific agents through table/view filtering
+
+      - name: "[SDK-IT](https://github.com/januarylabs/sdk-it)"
+        start_date: 2024-01
+        end_date: present
+        summary: Developer tool for SDK generation and OpenAPI automation
+        highlights:
+          - Generates type-safe SDKs from OpenAPI specs and OpenAPI specs from TypeScript code
+          - First-party React Query integration for frontend data fetching
+          - Isomorphic design enables backend integration testing
 
       - name: "[Serverize](https://github.com/ezzabuzaid/serverize)"
-        start_date: 2023-06
+        start_date: 2024-01
         end_date: present
         summary: Self-hosted container platform for development deployments
         highlights:
-          - Built from idea to working product in under 1 month
-          - Features named channels with versioned releases and per-channel secrets management
-          - Container-based architecture similar to fly.io but optimized for development workflows
-
-      - name: "[sqlite-parser](https://github.com/ezzabuzaid/sqlite-parser)"
-        date: "2023"
-        summary: SQLite query parser written from scratch
-        highlights:
-          - Implemented parser for core SQL subset (SELECT, INSERT, UPDATE, DELETE)
-          - Built as deep-dive learning exercise into compiler/parser design
-          - Foundation for text2sql agent project
-
-      - name: Text2SQL Agent
-        date: "2023"
-        summary: AI agent that converts natural language queries to SQL
-        highlights:
-          - Converts natural language to valid SQLite queries
-          - Integrates with sqlite-parser for query validation
-          - Demonstrates practical application of LLM + traditional tools
+          - Auto-generates Dockerfiles by analyzing codebase configuration
+          - Supports 7+ frameworks including Next.js, Nuxt, Astro, and FastAPI
+          - Secure secrets management with encrypted environment variables
 
     experience:
       - company: Kortext
         position: Senior Software Engineer
         start_date: 2021-10
         end_date: present
-        location: Remote
+        location: Contract - Remote
         summary: EdTech platform for digital learning
         highlights:
           - Utilized TypeScript Compiler API to accelerate Angular upgrades via automatic migrations
           - Implemented and engineered the UX of Kortext AI chatbot
           - Restructured monolithic monorepo into domain-based architecture for team scalability
           - Drove technical improvements through written proposals and RFC process
-          - Led code reviews, technical decisions, and mentored team members
+          - Collaborated with QA, product managers, and designers to deliver features and resolve cross-functional issues
 
-      - company: Equiti.com
-        position: Software Engineer
+      - company: Equiti Group
+        position: Senior Software Engineer
         start_date: 2019-03
         end_date: 2021-10
         location: Amman, Jordan
         summary: International CFD Forex broker
         highlights:
-          - Built Front-End CRM from scratch using Angular 9 and Material Design
-          - Decreased loading latency by leveraging Angular SSR and PWA
-          - Converted Monolithic .NetCore project to Microservices using Node.js and .Net 5 with gRPC
+          - Built Front-End CRM from scratch using Angular.
+          - Contributed to converting monolithic .NetCore project to microservices using Node.js and .Net 5 with gRPC
           - Utilized Node.js to send RabbitMQ messages to browser via SSE
           - Handled stock data streams using reactive programming (RxJS and Rx.NET)
           - Established CI pipelines in Azure DevOps for Angular, Node.js, .NetCore, and Flutter
-          - Optimized SEO for multiple web products (TradeHub.com, FXPesa.com)
           - Wrote automated tests in JavaScript and C# for product quality and stability
 
       - company: NoventApp for Business Solutions
@@ -94,12 +93,10 @@ cv:
         end_date: 2019-03
         location: Amman, Jordan
         highlights:
-          - Developed Food delivery application using Node.js, MySQL, TypeORM, TypeScript, and Angular
-          - Implemented policy-based caching in browser to increase data retrieval speed
-          - Integrated Firebase Realtime-Database to track drivers' locations
+          - Built food delivery application from scratch using Node.js, TypeScript, and Angular
+          - Integrated Firebase Realtime-Database for live driver location tracking
           - Built PWA features including Add To Home Screen, Push Notifications, and Offline mode
-          - Built Angular boilerplate project used as template for 3 other projects
-          - Migrated application from Angular 2 to Angular 7
+          - Implemented policy-based caching in browser to increase data retrieval speed
 
     education:
       - institution: Al-Balqa Applied University - Faculty of Engineering
@@ -116,29 +113,16 @@ cv:
         details: Full Professional Proficiency
 
     skills:
-      - label: Languages
-        details: TypeScript, JavaScript, C#
-      - label: Frontend
-        details: Angular, RxJS, Material Design, PWA, SSR, Sass, Bootstrap
-      - label: Backend
-        details: Node.js, Express.js, .NetCore, gRPC, TypeORM, MySQL
       - label: AI/ML
-        details: OpenAI API, Vercel AI SDK, LLM Applications, RAG, Agent Architectures
+        details: LLM Applications, RAG Systems, Agent Architectures, OpenAI API, Vercel AI SDK
+      - label: Languages
+        details: TypeScript, C# and Dart.
+      - label: Backend
+        details: Node.js, .NetCore, gRPC, Prisma, PostgreSQL.
+      - label: Frontend
+        details: React, Angular, RxJS, PWA, SSR.
       - label: Infrastructure
-        details: Docker, Azure DevOps, CI/CD, Firebase, RabbitMQ, Git
-      - label: Testing
-        details: Jasmine, Jest, xUnit, Automated Testing
-      - label: Tools
-        details: GitHub, Jira, Microsoft DevOps, Azure
-      - label: Research Interests
-        details: AI Agents, Code AI, Tool Use, Agent Reasoning & Memory
-
-    technical_strengths:
-      - "Builder Mentality: 8 years shipping production software, from parsers to platforms"
-      - "AI Agent Expertise: 2 years building production AI agents for enterprise clients"
-      - "Framework Design: Created multiple developer frameworks (January, DeepAgents)"
-      - "Fast Learner: Self-taught AI development in 3-6 months; built Serverize in < 1 month"
-      - "Open Source: Active contributor with public portfolio of significant projects"
+        details: Docker, GCP, Azure DevOps, CI/CD, Firebase.
 
 design:
   theme: engineeringclassic
