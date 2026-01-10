@@ -5,7 +5,7 @@ interface SearchItem {
   id: string;
   title: string;
   url: string;
-  type: 'page' | 'post';
+  type: 'page' | 'post' | 'tag';
   excerpt?: string;
   featured?: number;
   isFeatured?: boolean;

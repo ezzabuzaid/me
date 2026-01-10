@@ -59,7 +59,8 @@ function sitemapFilter(page: string): boolean {
 /**
  * Custom serializer to add priority and changefreq based on page type
  */
-function sitemapSerialize(item: { url: string; lastmod?: string }) {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+function sitemapSerialize(item: { url: string; lastmod?: string }): any {
 	const url = item.url;
 
 	// Homepage - highest priority

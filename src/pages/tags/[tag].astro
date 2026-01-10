@@ -1,6 +1,6 @@
 ---
 import { getCollection } from "astro:content";
-import { ArrowLeft, Tag } from "lucide-preact";
+import { ArrowLeft, Tag as TagIcon } from "lucide-preact";
 
 import Footer from "~/components/Footer.astro";
 import Head from "~/components/Head.astro";
@@ -125,7 +125,7 @@ const relatedTags = Array.from(allTagCounts.entries())
 		<!-- Page Header -->
 		<section class="space-y-4 pt-8">
 			<div class="flex items-center space-x-3">
-				<Tag class="w-6 h-6 text-primary-500" />
+				<TagIcon className="w-6 h-6 text-primary-500" />
 				<h1
 					class="font-[Fraunces] text-4xl sm:text-5xl font-bold tracking-tight text-gray-50 leading-[0.9] capitalize"
 				>
