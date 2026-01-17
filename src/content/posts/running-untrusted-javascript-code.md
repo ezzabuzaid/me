@@ -1,28 +1,18 @@
 ---
-publishedAt: '2024-07-16T00:00:00'
-title: 'How to Safely Run Untrusted JavaScript Code (7 Methods)'
-description: 'Execute user-submitted JavaScript securely. Compare Web Workers, isolated-vm, WASM sandboxes, Docker, and static analysis with code examples.'
+publishedAt: "2024-07-16T00:00:00"
+title: "How to Safely Run Untrusted JavaScript Code (7 Methods)"
+description: "Execute user-submitted JavaScript securely. Compare Web Workers, isolated-vm, WASM sandboxes, Docker, and static analysis with code examples."
 featured: 3
-tags: ['JavaScript', 'Security', 'Web Workers', 'WebAssembly', 'Docker', 'Node.js']
+tags:
+  ["JavaScript", "Security", "Web Workers", "WebAssembly", "Docker", "Node.js"]
 ---
-
-
 
 > [!NOTE]
 > This is about running JavaScript and TypeScript code only. That being said, the writing might also be the direction to run other code in other languages.
 
-
 Allowing users to execute their code within your application opens up a world of customization and functionality, yet it also exposes your platform to significant security threats.
 
-January features an editor that allows users to write CanonLang, an internal TypeScript DSL. This DSL defines and shapes users’ APIs through the concept of workflows and is later executed to create a data structure that the compiler can understand.
-
-We have searched for the best way to execute the code securely for quite some time. Given that it is user code, everything is expected, from halting the servers (it could be infinity loops) to stealing sensitive information.
-
-We started by using Docker to run the code, but soon enough, the language capabilities mandated more than passing the code through the container shell. Besides, for some reason, the server memory spikes frequently; we run the code inside self-removable containers on every 1s debounced keystroke. (You can do better!)
-
-In the end, we choose not to run the code indirectly but rather statically; simply put, figure out the parts that need to be executed and then do that in the host machine. That also advantaged us by being mistake tolerant, so as long as there is code that can be run (and syntactically correct), it’ll, despite other incomplete code.
-
-This article will explore various strategies to mitigate run user code, including Web Workers, static code analysis, and more…
+This article will explore various strategies to mitigate running user code, including Web Workers, static code analysis, and more…
 
 ## You should care
 
@@ -58,7 +48,7 @@ eval('console.log("I am dangerous!")');
 When you run this code, it logs that message. Essentially, eval is a JS interpreter capable of accessing the global/window scope.
 
 ```ts
-const res = await eval('fetch(`https://jsonplaceholder.typicode.com/users`)');
+const res = await eval("fetch(`https://jsonplaceholder.typicode.com/users`)");
 const users = await res.json();
 ```
 
@@ -82,27 +72,27 @@ Time box execution can be done by running the code in a web worker and using `se
 
 ```ts
 async function timebox(code, timeout = 5000) {
-	const worker = new Worker('user-runner-worker.js');
-	worker.postMessage(code);
+  const worker = new Worker("user-runner-worker.js");
+  worker.postMessage(code);
 
-	const timerId = setTimeout(() => {
-		worker.terminate();
-		reject(new Error('Code execution timed out'));
-	}, timeout);
+  const timerId = setTimeout(() => {
+    worker.terminate();
+    reject(new Error("Code execution timed out"));
+  }, timeout);
 
-	return new Promise((resolve, reject) => {
-		worker.onmessage = (event) => {
-			clearTimeout(timerId);
-			resolve(event.data);
-		};
-		worker.onerror = (error) => {
-			clearTimeout(timerId);
-			reject(error);
-		};
-	});
+  return new Promise((resolve, reject) => {
+    worker.onmessage = (event) => {
+      clearTimeout(timerId);
+      resolve(event.data);
+    };
+    worker.onerror = (error) => {
+      clearTimeout(timerId);
+      reject(error);
+    };
+  });
 }
 
-await timebox('while (true) {}');
+await timebox("while (true) {}");
 ```
 
 ### Function Constructor
@@ -110,7 +100,7 @@ await timebox('while (true) {}');
 This is similar to eval but it’s a bit safer since it can’t access the enclosing scope.
 
 ```ts
-const userFunction = new Function('param', 'console.log(param);');
+const userFunction = new Function("param", "console.log(param);");
 userFunction(2);
 ```
 
@@ -122,9 +112,9 @@ The function constructor can’t access the enclosing scope so that the followin
 
 ```ts
 function fnConstructorCannotUseMyScope() {
-	let localVar = 'local value';
-	const userFunction = new Function('return localVar');
-	return userFunction();
+  let localVar = "local value";
+  const userFunction = new Function("return localVar");
+  return userFunction();
 }
 ```
 
@@ -141,7 +131,7 @@ To put more restrictions in place, consider disallowing using global objects lik
 [Isolated-VM](https://www.npmjs.com/package/isolated-vm#security) is a library that allows you to run code in a separate VM (v8's Isolate interface)
 
 ```ts
-import ivm from 'isolated-vm';
+import ivm from "isolated-vm";
 
 const code = `count += 5;`;
 
@@ -150,7 +140,7 @@ const script = isolate.compileScriptSync(code);
 const context = isolate.createContextSync();
 
 const jail = context.global;
-jail.setSync('log', console.log);
+jail.setSync("log", console.log);
 
 context.evalSync('log("hello world")');
 ```
@@ -165,10 +155,10 @@ What is fascinating about it is that you’ll use ￼`eval`￼ to run the code, 
 
 ```ts
 function evaluate() {
-	const { code, input } = JSON.parse(Host.inputString());
-	const func = eval(code);
-	const result = func(input).toString();
-	Host.outputString(result);
+  const { code, input } = JSON.parse(Host.inputString());
+  const func = eval(code);
+  const result = func(input).toString();
+  Host.outputString(result);
 }
 
 module.exports = { evaluate };
@@ -178,8 +168,8 @@ You'll have to compile the above code first using Extism, which will output a Wa
 
 ```ts
 const message = {
-	input: '1,2,3,4,5',
-	code: `
+  input: "1,2,3,4,5",
+  code: `
         const sum = (str) => str
           .split(',')
           .reduce((acc, curr) => acc + parseInt(curr), 0);
@@ -197,29 +187,29 @@ We're now moving to the server-side, Docker is a great option to run code in an 
 You can use `dockerode` to run the code in a container.
 
 ```ts
-import Docker from 'dockerode';
+import Docker from "dockerode";
 const docker = new Docker();
 
 const code = `console.log("hello world")`;
 const container = await docker.createContainer({
-	Image: 'node:latest',
-	Cmd: ['node', '-e', code],
-	User: 'node',
-	WorkingDir: '/app',
-	AttachStdout: true,
-	AttachStderr: true,
-	OpenStdin: false,
-	AttachStdin: false,
-	Tty: true,
-	NetworkDisabled: true,
-	HostConfig: {
-		AutoRemove: true,
-		ReadonlyPaths: ['/'],
-		ReadonlyRootfs: true,
-		CapDrop: ['ALL'],
-		Memory: 8 * 1024 * 1024,
-		SecurityOpt: ['no-new-privileges'],
-	},
+  Image: "node:latest",
+  Cmd: ["node", "-e", code],
+  User: "node",
+  WorkingDir: "/app",
+  AttachStdout: true,
+  AttachStderr: true,
+  OpenStdin: false,
+  AttachStdin: false,
+  Tty: true,
+  NetworkDisabled: true,
+  HostConfig: {
+    AutoRemove: true,
+    ReadonlyPaths: ["/"],
+    ReadonlyRootfs: true,
+    CapDrop: ["ALL"],
+    Memory: 8 * 1024 * 1024,
+    SecurityOpt: ["no-new-privileges"],
+  },
 });
 ```
 
@@ -245,30 +235,30 @@ Well, same story with one (could be optional) extra step: Transpile the code to 
 
 ```ts
 async function build(userCode: string) {
-	const result = await esbuild.build({
-		stdin: {
-			contents: `${userCode}`,
-			loader: 'ts',
-			resolveDir: __dirname,
-		},
-		inject: [
-			// In case you want to inject some code
-		],
-		platform: 'node',
-		write: false,
-		treeShaking: false,
-		sourcemap: false,
-		minify: false,
-		drop: ['debugger', 'console'],
-		keepNames: true,
-		format: 'cjs',
-		bundle: true,
-		target: 'es2022',
-		plugins: [
-			nodeExternalsPlugin(), // make all the non-native modules external
-		],
-	});
-	return result.outputFiles![0].text;
+  const result = await esbuild.build({
+    stdin: {
+      contents: `${userCode}`,
+      loader: "ts",
+      resolveDir: __dirname,
+    },
+    inject: [
+      // In case you want to inject some code
+    ],
+    platform: "node",
+    write: false,
+    treeShaking: false,
+    sourcemap: false,
+    minify: false,
+    drop: ["debugger", "console"],
+    keepNames: true,
+    format: "cjs",
+    bundle: true,
+    target: "es2022",
+    plugins: [
+      nodeExternalsPlugin(), // make all the non-native modules external
+    ],
+  });
+  return result.outputFiles![0].text;
 }
 ```
 
@@ -283,11 +273,8 @@ Additionally, you can avoid transpiling altogether by running the code using **D
 
 Running user code is a double-edged sword. It can provide a lot of functionality and customization to your platform, but it also exposes you to significant security risks. It’s essential to understand the risks and take appropriate measures to mitigate them and remember that the more isolated the environment, the safer it is.
 
-Drop your comments in the [github discussion](https://github.com/JanuaryLabs/.github/discussions/15)
-
 ## References
 
-- [January instant compilation](https://january.sh/posts/instant-compilation)
 - [Running untrusted JavaScript in Node.js](https://pixeljets.com/blog/executing-untrusted-javascript/)
 - [How do languages support executing untrusted user code at runtime?](https://langdev.stackexchange.com/a/2861)
 - [Safely Evaluating JavaScript with Context Data](https://www.codeproject.com/Tips/5299942/Safely-Evaluating-JavaScript-with-Context-Data)
