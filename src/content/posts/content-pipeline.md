@@ -20,7 +20,11 @@ Before any automation runs, I needed topics. I sat down with Claude Code and poi
 
 **Codebase notes** — TODOs, inline comments, README gaps. The codebase itself tells you what's undocumented.
 
-From those four sources, I curated a content calendar — a prioritized list of topics, assigned to the right series, with a publishing schedule. That calendar is the brain. Everything downstream just executes it.
+**Pricing page** — Every feature listed on the pricing page deserves its own explanation. If a feature exists but has no dedicated article, that's a Feature Spotlight waiting to be written.
+
+**Google Search Console** — Impressions tell me what resonates. Keywords tell me what's missing. A keyword cluster with no coverage is a gap worth filling.
+
+From those six sources, I curated a content calendar — a prioritized list of topics, assigned to the right series, with a publishing schedule. That calendar is the brain. Everything downstream just executes it.
 
 ## The Series
 
@@ -39,7 +43,7 @@ I split my content into four series, each with its own purpose and rhythm.
 Each series has its own Codex automation — a scheduled task with a prompt that tells it what to write next. The automations don’t decide what to write; the content calendar already answers that. They just pick up the next topic and execute.
 
 <div class="pipeline-flow">
-  <div class="stage"><span class="label">Sources</span><span class="desc">Gmail, Google Tasks, git commits, codebase notes</span></div>
+  <div class="stage"><span class="label">Sources</span><span class="desc">Gmail, Google Tasks, git commits, codebase notes, pricing page, GSC</span></div>
   <div class="arrow">↓</div>
   <div class="stage"><span class="label">Calendar</span><span class="desc">Prioritized topics assigned to series</span></div>
   <div class="arrow">↓</div>
