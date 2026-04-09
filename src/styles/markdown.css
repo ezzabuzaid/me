@@ -439,6 +439,70 @@ figcaption[data-language="astro"]::before {
   margin: 0;
 }
 
+/* Pipeline Flow */
+.prose .pipeline-flow {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+  margin: 1.5rem 0;
+}
+
+.prose .pipeline-flow .stage {
+  background: var(--color-gray-darker);
+  border: 1px solid var(--color-border);
+  padding: 0.75rem 1rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
+}
+
+.prose .pipeline-flow .stage .label {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-coral);
+  white-space: nowrap;
+  min-width: 5rem;
+}
+
+.prose .pipeline-flow .stage .desc {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--color-gray-300);
+}
+
+.prose .pipeline-flow .arrow {
+  text-align: center;
+  color: var(--color-gray);
+  font-size: 1rem;
+  padding: 0.25rem 0;
+  line-height: 1;
+}
+
+/* Content Graph */
+.prose .content-graph {
+  background: var(--color-gray-darker);
+  border: 1px solid var(--color-border);
+  padding: 1.25rem 1.5rem;
+  margin: 1.5rem 0;
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  line-height: 1.8;
+  color: var(--color-gray-300);
+  overflow-x: auto;
+  white-space: pre;
+}
+
+.prose .content-graph .node {
+  color: var(--color-foreground);
+  font-weight: 600;
+}
+
+.prose .content-graph .edge {
+  color: var(--color-coral);
+}
+
 /* Reduced motion - show both words statically */
 @media (prefers-reduced-motion: reduce) {
   .prose .word-swap .from,

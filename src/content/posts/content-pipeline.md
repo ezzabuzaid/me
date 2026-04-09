@@ -2,6 +2,7 @@
 title: "Content Pipeline"
 description: "How I use Codex automations and a custom agent skill to publish four blog series on a schedule without burning out."
 publishedAt: "2026-04-09T00:00:00.00Z"
+featured: 1
 tags: ["AI", "Agents", "Automation", "Writing"]
 ---
 
@@ -37,7 +38,30 @@ I split my content into four series, each with its own purpose and rhythm.
 
 Each series has its own Codex automation — a scheduled task with a prompt that tells it what to write next. The automations don’t decide what to write; the content calendar already answers that. They just pick up the next topic and execute.
 
-The drafts come from an agent skill I built specifically for writing blog posts. It takes the topic, researches the codebase for context, and produces a full draft. I do the final review — read it, fix the parts that sound off, add personal touches, and publish. The agent handles the blank-page problem; I handle the voice.
+<div class="pipeline-flow">
+  <div class="stage"><span class="label">Sources</span><span class="desc">Gmail, Google Tasks, git commits, codebase notes</span></div>
+  <div class="arrow">↓</div>
+  <div class="stage"><span class="label">Calendar</span><span class="desc">Prioritized topics assigned to series</span></div>
+  <div class="arrow">↓</div>
+  <div class="stage"><span class="label">Codex</span><span class="desc">Scheduled automation picks up next topic</span></div>
+  <div class="arrow">↓</div>
+  <div class="stage"><span class="label">Agent</span><span class="desc">Writing skill drafts the full post</span></div>
+  <div class="arrow">↓</div>
+  <div class="stage"><span class="label">Review</span><span class="desc">I read, fix tone, add personal touches</span></div>
+  <div class="arrow">↓</div>
+  <div class="stage"><span class="label">Publish</span><span class="desc">Ship to site, syndicate to socials</span></div>
+</div>
+
+Here’s what a typical automation prompt looks like:
+
+<div class="bt-card">
+Write next from <span class="hl">Calendar</span> blog using <span class="hl">.claude/skills/blog-writer/SKILL.md</span>. Strictly follow all phases, spawn all subagents and see all skill references.
+</div>
+
+The drafts come from an agent skill I built specifically for writing blog posts. It takes the topic, researches the codebase for context, and produces a full draft. I do the final review — read it, fix the parts that sound off, add personal touches, and publish.
+
+> [!TIP] The division of labor
+> The agent handles the blank-page problem. I handle the voice.
 
 The site has a library of rich components — animated callouts, interactive code blocks, comparison tables, and more. The agent is equipped with an animation skill and encouraged to reach for these components instead of plain text whenever they serve the content. Each time it writes a post, it can reuse an existing component or create a new one tailored to the piece. Over time, this grows the component library organically. Posts written months apart end up sharing visual language, and the library gets richer with every draft.
 
@@ -45,7 +69,15 @@ The site has a library of rich components — animated callouts, interactive cod
 
 Right now, the content calendar is a flat list — topics in order, assigned to series. That’s fine for getting started. But flat lists don’t capture how content actually relates.
 
-Every post I write links back to other posts. The Engineering Deep Dive on a caching decision links to the Feature Spotlight that explains the feature it caches for. A Need & Want post links to the Dev Log entry where I first ran into the problem. These backlinks form a graph, and as the graph grows, the calendar should reflect it.
+Every post I write links back to other posts. These backlinks form a graph, and as the graph grows, the calendar should reflect it.
+
+<div class="content-graph"><span class="node">[Engineering Deep Dive: Caching]</span>
+        <span class="edge">↓</span>              <span class="edge">↘</span>
+<span class="node">[Feature Spotlight: CDN]</span>  <span class="edge">→</span>  <span class="node">[Dev Log: Cache Bugs]</span>
+        <span class="edge">↑</span>
+<span class="node">[Need & Want: Speed Request]</span></div>
+
+The Engineering Deep Dive on a caching decision links to the Feature Spotlight that explains the feature it caches for. A Need & Want post links to the Dev Log entry where I first ran into the problem.
 
 The next step is to feed Google Search Console data back into the calendar in a structured way. Two signals matter most: which posts get the most impressions, and what keywords people search for. Impressions tell me what resonates. Keywords tell me what’s missing.
 
@@ -55,7 +87,10 @@ The goal is a content graph, not a content calendar. Linear planning gets you st
 
 ## Syndication
 
-A blog post that lives only on my site reaches whoever already visits my site — which, starting from zero, is nobody. So each post needs to travel.
+> [!NOTE] Reality check
+> A blog post that lives only on my site reaches whoever already visits my site — which, starting from zero, is nobody.
+
+So each post needs to travel.
 
 The plan is to syndicate to X and LinkedIn. Not the full article — a shorter version adapted to each platform, linking back to the original. A thread on X that pulls out the key insight. A LinkedIn post that frames it for a broader audience. Same core idea, different packaging.
 
