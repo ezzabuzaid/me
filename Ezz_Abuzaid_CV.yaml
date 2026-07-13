@@ -13,7 +13,12 @@ cv:
       username: ezzabuzaid
   sections:
     summary:
-      - Self-taught builder with 8 years shipping production software and 2 years building AI agents and LLM applications. Created multiple open-source frameworks from scratch including DeepAgents (agent orchestration), SDK-IT (SDK generation), and Serverize (container platform). Track record of rapidly turning ideas into working systems - from parsers and compilers to RAG pipelines and multi-agent architectures.
+      - Self-taught builder with over 9 years shipping production software.
+        Created multiple open-source frameworks from scratch including
+        DeepAgents (agent orchestration), SDK-IT (SDK generation), and Serverize
+        (container platform). Track record of rapidly turning ideas into working
+        systems - from parsers and compilers to RAG pipelines and multi-agent
+        architectures.
 
     projects:
       - name: "[DeepAgents](https://github.com/ezzabuzaid/deepagents)"
@@ -21,23 +26,28 @@ cv:
         end_date: present
         summary: TypeScript-native AI agent framework designed to be batteries-included
         highlights:
-          - Implements agent handoffs inspired by OpenAI Swarm for orchestrating multi-agent systems
-          - Context engine for token estimation, compaction strategies, and structured system prompts
-          - Includes retrieval package with sqlite-vec for vector search and multi-source connectors (GitHub, RSS, files)
+          - Implements agent handoffs inspired by OpenAI Swarm for orchestrating
+            multi-agent systems
+          - Context engine for token estimation, compaction strategies, and
+            structured system prompts
+          - Includes retrieval package with sqlite-vec for vector search and
+            multi-source connectors (GitHub, RSS, files)
 
       - name: Proposal Generator Agent
         date: "2024"
         summary: Agentic workflow for business proposal drafting
         highlights:
-          - Human-in-the-loop design where users select context, AI drafts, users comment, AI refines
+          - Human-in-the-loop design where users select context, AI drafts,
+            users comment, AI refines
           - Multi-turn agent with iterative feedback loops
           - Harvests user-provided files to learn tone, design, and style
 
-      - name: "[Text2SQL Agent](https://limerence.january.sh/)"
+      - name: "[Text2SQL Agent](https://limerence.sh/)"
         date: "2025-10"
         summary: AI agent that converts natural language queries to SQL
         highlights:
-          - Converts natural language to valid SQLite queries with parser validation
+          - Converts natural language to valid SQLite queries with parser
+            validation
           - Supports drawing various charts from query results
           - Creates domain-specific agents through table/view filtering
 
@@ -46,7 +56,8 @@ cv:
         end_date: present
         summary: Developer tool for SDK generation and OpenAPI automation
         highlights:
-          - Generates type-safe SDKs from OpenAPI specs and OpenAPI specs from TypeScript code
+          - Generates type-safe SDKs from OpenAPI specs and OpenAPI specs from
+            TypeScript code
           - First-party React Query integration for frontend data fetching
           - Isomorphic design enables backend integration testing
 
@@ -60,18 +71,39 @@ cv:
           - Secure secrets management with encrypted environment variables
 
     experience:
-      - company: Kortext
+      - company: Phi Science Institute
+        position: AI Engineer
+        start_date: 2024-05
+        end_date: present
+        location: Amman, Jordan
+        summary: Transforming AI and deep-tech education across the Arab region;
+          precision-education platform for young researchers
+
+      - company: Limerence
         position: Senior Software Engineer
         start_date: 2021-10
-        end_date: present
-        location: Contract - Remote
-        summary: EdTech platform for digital learning
+        end_date: 2024-05
+        location: Amman, Jordan
+        summary: Natural-language interface to databases — connects to Postgres, MySQL,
+          and BigQuery and have business questions answered in plain language with the SQL
+          behind every answer
         highlights:
-          - Utilized TypeScript Compiler API to accelerate Angular upgrades via automatic migrations
-          - Implemented and engineered the UX of Kortext AI chatbot
-          - Restructured monolithic monorepo into domain-based architecture for team scalability
-          - Drove technical improvements through written proposals and RFC process
-          - Collaborated with QA, product managers, and designers to deliver features and resolve cross-functional issues
+          - Utilized TypeScript Compiler API to accelerate Angular upgrades via
+            automatic migrations
+          - Implemented and engineered the UX of Limerence AI chatbot
+          - Restructured monolithic monorepo into domain-based architecture for
+            team scalability
+          - Drove technical improvements through written proposals and RFC
+            process
+          - Collaborated with QA, product managers, and designers to deliver
+            features and resolve cross-functional issues
+          - Designed and built a Text2SQL harness; SQL parser validation, schema
+            introspection, retry loops, multi-turn conversational memory,
+            streaming with token estimation and context compaction, and
+            tool-calling orchestration — powering the chatbot end-to-end
+          - Built a domain-knowledge injection layer (terms, hints, guardrails,
+            examples, workflows) to create specialized agents per domain and use
+            case
 
       - company: Equiti Group
         position: Senior Software Engineer
@@ -81,11 +113,15 @@ cv:
         summary: International CFD Forex broker
         highlights:
           - Built Front-End CRM from scratch using Angular.
-          - Contributed to converting monolithic .NetCore project to microservices using Node.js and .Net 5 with gRPC
+          - Contributed to converting monolithic .NetCore project to
+            microservices using Node.js and .Net 5 with gRPC
           - Utilized Node.js to send RabbitMQ messages to browser via SSE
-          - Handled stock data streams using reactive programming (RxJS and Rx.NET)
-          - Established CI pipelines in Azure DevOps for Angular, Node.js, .NetCore, and Flutter
-          - Wrote automated tests in JavaScript and C# for product quality and stability
+          - Handled stock data streams using reactive programming (RxJS and
+            Rx.NET)
+          - Established CI pipelines in Azure DevOps for Angular, Node.js,
+            .NetCore, and Flutter
+          - Wrote automated tests in JavaScript and C# for product quality and
+            stability
 
       - company: NoventApp for Business Solutions
         position: JavaScript Engineer
@@ -93,18 +129,14 @@ cv:
         end_date: 2019-03
         location: Amman, Jordan
         highlights:
-          - Built food delivery application from scratch using Node.js, TypeScript, and Angular
-          - Integrated Firebase Realtime-Database for live driver location tracking
-          - Built PWA features including Add To Home Screen, Push Notifications, and Offline mode
-          - Implemented policy-based caching in browser to increase data retrieval speed
-
-    education:
-      - institution: Al-Balqa Applied University - Faculty of Engineering
-        area: Computer Engineering
-        degree: BS
-        start_date: 2016-09
-        end_date: 2020-06
-        location: Amman, Jordan
+          - Built food delivery application from scratch using Node.js,
+            TypeScript, and Angular
+          - Integrated Firebase Realtime-Database for live driver location
+            tracking
+          - Built PWA features including Add To Home Screen, Push Notifications,
+            and Offline mode
+          - Implemented policy-based caching in browser to increase data
+            retrieval speed
 
     languages:
       - label: Arabic
@@ -114,7 +146,8 @@ cv:
 
     skills:
       - label: AI/ML
-        details: LLM Applications, RAG Systems, Agent Architectures, OpenAI API, Vercel AI SDK
+        details: LLM Applications, RAG Systems, Agent Architectures, OpenAI API, Vercel
+          AI SDK
       - label: Languages
         details: TypeScript, C# and Dart.
       - label: Backend

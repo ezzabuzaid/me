@@ -99,7 +99,7 @@
 
 == Summary
 
-Self-taught builder with 8 years shipping production software and 2 years building AI agents and LLM applications. Created multiple open-source frameworks from scratch including DeepAgents (agent orchestration), SDK-IT (SDK generation), and Serverize (container platform). Track record of rapidly turning ideas into working systems - from parsers and compilers to RAG pipelines and multi-agent architectures.
+Self-taught builder with over 9 years shipping production software. Created multiple open-source frameworks from scratch including DeepAgents (agent orchestration), SDK-IT (SDK generation), and Serverize (container platform). Track record of rapidly turning ideas into working systems - from parsers and compilers to RAG pipelines and multi-agent architectures.
 
 == Projects
 
@@ -147,7 +147,7 @@ Self-taught builder with 8 years shipping production software and 2 years buildi
 
 #regular-entry(
   [
-    #strong[#link("https://limerence.january.sh/")[Text2SQL Agent]]
+    #strong[#link("https://limerence.sh/")[Text2SQL Agent]]
 
   ],
   [
@@ -212,25 +212,44 @@ Self-taught builder with 8 years shipping production software and 2 years buildi
 
 #regular-entry(
   [
-    #strong[Senior Software Engineer], Kortext -- Contract - Remote
+    #strong[AI Engineer], Phi Science Institute -- Amman, Jordan
 
   ],
   [
-    Oct 2021 – present
+    May 2024 – present
 
   ],
   main-column-second-row: [
-    #summary[EdTech platform for digital learning]
+    #summary[Transforming AI and deep-tech education across the Arab region; precision-education platform for young researchers]
+
+  ],
+)
+
+#regular-entry(
+  [
+    #strong[Senior Software Engineer], Limerence -- Amman, Jordan
+
+  ],
+  [
+    Oct 2021 – May 2024
+
+  ],
+  main-column-second-row: [
+    #summary[Natural-language interface to databases — connects to Postgres, MySQL, and BigQuery and have business questions answered in plain language with the SQL behind every answer]
 
     - Utilized TypeScript Compiler API to accelerate Angular upgrades via automatic migrations
 
-    - Implemented and engineered the UX of Kortext AI chatbot
+    - Implemented and engineered the UX of Limerence AI chatbot
 
     - Restructured monolithic monorepo into domain-based architecture for team scalability
 
     - Drove technical improvements through written proposals and RFC process
 
     - Collaborated with QA, product managers, and designers to deliver features and resolve cross-functional issues
+
+    - Designed and built a Text2SQL harness; SQL parser validation, schema introspection, retry loops, multi-turn conversational memory, streaming with token estimation and context compaction, and tool-calling orchestration — powering the chatbot end-to-end
+
+    - Built a domain-knowledge injection layer (terms, hints, guardrails, examples, workflows) to create specialized agents per domain and use case
 
   ],
 )
@@ -276,21 +295,10 @@ Self-taught builder with 8 years shipping production software and 2 years buildi
 
     - Integrated Firebase Realtime-Database for live driver location tracking
 
-  ],
-)
+    - Built PWA features including Add To Home Screen, Push Notifications, and Offline mode
 
-== Education
+    - Implemented policy-based caching in browser to increase data retrieval speed
 
-#education-entry(
-  [
-    #strong[Al-Balqa Applied University - Faculty of Engineering], BS in Computer Engineering -- Amman, Jordan
-
-  ],
-  [
-    Sept 2016 – June 2020
-
-  ],
-  main-column-second-row: [
   ],
 )
 
