@@ -1,5 +1,3 @@
-import avatarBase64 from "~/assets/avatar.jpeg?base64";
-
 import type { APIContext } from "astro";
 import type { CollectionEntry } from "astro:content";
 import type { JSX } from "preact/jsx-runtime";
@@ -10,21 +8,46 @@ interface OGPostProps {
 }
 
 export function OGPost({ post }: OGPostProps): JSX.Element {
+  const tag = post.data.tags?.[0] ?? "note";
+  const year = post.data.publishedAt.getFullYear();
+
   return (
-    <div tw="flex h-full w-full flex-col justify-between border-blue-600 border-b-[3rem] bg-white p-8">
-      <div tw="flex w-full grow flex-col justify-end rounded-xl p-4 pr-8">
-        <h1 tw="font-bold text-8xl text-gray-900">{post.data.title}</h1>
-
-        <div tw="flex items-center">
-          <p tw="grow text-4xl text-zinc-200">{post.data.description}</p>
-
-          <span tw="mx-8 h-full w-1 border-2 border-zinc-200" />
-
-          <img
-            alt="Avatar of the author of the post"
-            src={avatarBase64}
-            tw="h-24 w-24 rounded-full"
-          />
+    <div
+      tw="flex h-full w-full items-center justify-center p-16"
+      style={{
+        backgroundColor: "#e7e4dd",
+        fontFamily: "IBM Plex Sans",
+      }}
+    >
+      <div
+        tw="flex h-full w-full flex-col rounded-lg border p-14"
+        style={{ backgroundColor: "#fcfbf7", borderColor: "#d9d4c8" }}
+      >
+        <div
+          tw="text-2xl uppercase"
+          style={{ color: "#9c968a", letterSpacing: "0.2em" }}
+        >
+          {tag}
+        </div>
+        <h1
+          tw="mt-8 text-7xl font-medium"
+          style={{
+            color: "#1b1a17",
+            fontFamily: "Fraunces",
+            lineHeight: 1.1,
+            letterSpacing: "-0.02em",
+          }}
+        >
+          {post.data.title}
+        </h1>
+        <div tw="flex flex-1" />
+        <div
+          tw="flex w-full"
+          style={{ height: "2px", backgroundColor: "#d9d4c8" }}
+        />
+        <div tw="mt-6 flex w-full items-center justify-between text-2xl">
+          <span style={{ color: "#6b665b" }}>Ezz Abuzaid</span>
+          <span style={{ color: "#9c968a" }}>{year} · ezz.sh</span>
         </div>
       </div>
     </div>

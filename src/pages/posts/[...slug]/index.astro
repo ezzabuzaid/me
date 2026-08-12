@@ -1,24 +1,14 @@
 ---
 import { getCollection } from "astro:content";
-import { format } from "date-fns";
-import { ArrowLeft } from "lucide-preact";
 
-import Footer from "~/components/Footer.astro";
 import Head from "~/components/Head.astro";
-import PostNavigation from "~/components/PostNavigation.astro";
 import PostTags from "~/components/PostTags.astro";
 import RelatedPosts from "~/components/RelatedPosts.astro";
 import TableOfContents from "~/components/TableOfContents.astro";
 import { SITE_TITLE } from "~/constants";
 import { SITE } from "~/config/seo";
 import Document from "~/layouts/Document.astro";
-import { cn } from "~/utils/cn";
-import {
-	calculateReadingTime,
-	calculateWordCount,
-	filterPosts,
-	formatReadingTime,
-} from "~/utils/content";
+import { calculateWordCount, filterPosts } from "~/utils/content";
 import { findRelatedPosts } from "~/utils/seo";
 
 import "~/styles/markdown.css";
@@ -29,40 +19,19 @@ import type { CollectionEntry } from "astro:content";
 export async function getStaticPaths() {
 	const posts = await getCollection("posts", filterPosts({ archived: true }));
 
-	// Sort by date for consistent ordering
-	const sortedPosts = posts.sort(
-		(a, b) => b.data.publishedAt.valueOf() - a.data.publishedAt.valueOf(),
-	);
-
-	return sortedPosts.map((props, index) => ({
+	return posts.map((props) => ({
 		params: { slug: props.slug },
-		props: {
-			...props,
-			prevPost: sortedPosts[index + 1] ?? null,
-			nextPost: sortedPosts[index - 1] ?? null,
-			allPosts: posts,
-		},
+		props: { ...props, allPosts: posts },
 	}));
 }
 
 export type Props = CollectionEntry<"posts"> & {
-	prevPost: CollectionEntry<"posts"> | null;
-	nextPost: CollectionEntry<"posts"> | null;
 	allPosts: CollectionEntry<"posts">[];
 };
 
-const {
-	render: renderPost,
-	data: post,
-	body,
-	slug,
-	prevPost,
-	nextPost,
-	allPosts,
-} = Astro.props;
+const { render: renderPost, data: post, body, slug, allPosts } = Astro.props;
 const { Content, headings } = await renderPost();
 
-const readingTime = calculateReadingTime(body);
 const wordCount = calculateWordCount(body);
 
 // Find related posts based on shared tags
@@ -80,7 +49,6 @@ const articleData = {
 // Breadcrumbs for structured data
 const breadcrumbs = [
 	{ name: "Home", url: SITE.url },
-	{ name: "Posts", url: `${SITE.url}/posts` },
 	{ name: post.title, url: `${SITE.url}/posts/${slug}` },
 ];
 
@@ -101,71 +69,50 @@ const headProps = {
 <Head {...headProps} />
 
 <Document>
-	<main
-		class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 pt-16 pb-8 space-y-8"
-	>
-		<article class="space-y-8 z-10">
-			<header class="space-y-6">
-				<!-- Post title - Fraunces for editorial impact -->
-				<h1
-					class="font-[Fraunces] text-4xl sm:text-5xl font-bold text-gray-50 leading-tight"
-				>
-					{post.title}
-				</h1>
+	<main class="flex-1">
+		<article class="mx-auto max-w-letter px-5 py-12">
+			<h1
+				class="font-display text-4xl font-medium leading-tight tracking-tight text-ink sm:text-5xl"
+			>
+				{post.title}
+			</h1>
 
-				<p class="text-lg text-gray-400 leading-relaxed font-sans">
+			{
+				post.canonicalUrl && (
+					<a
+						href={post.canonicalUrl}
+						target="_blank"
+						rel="noopener noreferrer"
+						class="mt-6 inline-flex items-center gap-2 rounded-md border border-ink px-4 py-2 font-sans text-sm text-ink transition-colors hover:bg-ink hover:text-paper"
+					>
+						Read the original ↗
+					</a>
+				)
+			}
+
+			<blockquote class="mt-10 border-l-2 border-ink pl-5">
+				<p
+					class="font-display text-2xl font-medium italic leading-snug text-ink"
+				>
 					{post.description}
 				</p>
-
-				<!-- Terminal-style metadata -->
-				<div
-					class="flex items-center gap-4 font-mono text-xs text-gray-500 uppercase tracking-wider"
-				>
-					<time datetime={post.publishedAt.toISOString()}>
-						<span class="text-primary-500">◇</span>
-						{format(post.publishedAt, "dd-MM-yyyy")}
-					</time>
-					<span class="text-gray-700">|</span>
-					<span>{formatReadingTime(readingTime)}</span>
-				</div>
-
-				<!-- Tags with internal links -->
-				{post.tags && post.tags.length > 0 && <PostTags tags={post.tags} />}
-			</header>
+			</blockquote>
 
 			<TableOfContents headings={headings} />
 
-			<section class={cn("prose max-w-none")}>
+			<section class="prose mt-10 max-w-none">
 				<Content />
 			</section>
 
-			<!-- Related Posts Section -->
-			{relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
+			{
+				post.tags && post.tags.length > 0 && (
+					<div class="mt-8">
+						<PostTags tags={post.tags} />
+					</div>
+				)
+			}
 
-			<PostNavigation
-				prev={prevPost
-					? { slug: prevPost.slug, title: prevPost.data.title }
-					: null}
-				next={nextPost
-					? { slug: nextPost.slug, title: nextPost.data.title }
-					: null}
-			/>
+			{relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
 		</article>
 	</main>
-
-	<Footer class="max-w-3xl border-t border-gray-800">
-		<div
-			class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
-		>
-			<a
-				class="default-focus mt-4 default-transition group inline-flex items-center justify-center space-x-2 px-3 py-1 font-mono text-xs uppercase tracking-wider text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50"
-				href="/posts"
-			>
-				<ArrowLeft
-					class="w-4 h-4 default-transition transform group-hover:-translate-x-1"
-				/>
-				<span>All posts</span>
-			</a>
-		</div>
-	</Footer>
 </Document>

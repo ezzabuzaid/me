@@ -1,6 +1,16 @@
 ---
 import { ClientRouter } from "astro:transitions";
 
+import "@fontsource-variable/fraunces";
+import "@fontsource-variable/fraunces/wght-italic.css";
+import "@fontsource/ibm-plex-mono/400.css";
+import "@fontsource/ibm-plex-mono/500.css";
+import "@fontsource/ibm-plex-mono/600.css";
+import "@fontsource/ibm-plex-sans/400.css";
+import "@fontsource/ibm-plex-sans/500.css";
+import "@fontsource/ibm-plex-sans/600.css";
+
+import Footer from "~/components/Footer.astro";
 import Navigation from "~/components/Navigation.astro";
 
 import "~/styles/global.css";
@@ -15,13 +25,31 @@ import "~/styles/global.css";
     <slot name="head" />
     <ClientRouter />
 
-    <!-- Fraunces - Bold serif for headlines -->
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,100..900;1,9..144,100..900&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap"
-      rel="stylesheet"
-    />
+    <script is:inline>
+      (() => {
+        const apply = () => {
+          const stored = localStorage.getItem("theme");
+          const theme =
+            stored === "dark" || stored === "light"
+              ? stored
+              : window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light";
+          document.documentElement.dataset.theme = theme;
+        };
+        apply();
+        document.addEventListener("astro:after-swap", apply);
+        document.addEventListener("click", (event) => {
+          if (!event.target.closest("[data-theme-toggle]")) return;
+          const next =
+            document.documentElement.dataset.theme === "dark"
+              ? "light"
+              : "dark";
+          localStorage.setItem("theme", next);
+          document.documentElement.dataset.theme = next;
+        });
+      })();
+    </script>
 
     <script
       defer
@@ -29,12 +57,10 @@ import "~/styles/global.css";
   </head>
 
   <body
-    class="bg-gray-950 font-sans text-gray-50 min-h-screen"
+    class="bg-canvas font-sans text-ink flex min-h-screen flex-col"
   >
-    <!-- Grain overlay for atmosphere -->
-    <div class="grain" aria-hidden="true"></div>
-
     <Navigation />
     <slot />
+    <Footer />
   </body>
 </html>

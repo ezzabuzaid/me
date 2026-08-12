@@ -1,0 +1,63 @@
+---
+interface Props {
+  href: string;
+  title: string;
+  year: number;
+  byline?: string | undefined;
+  kicker?: string | undefined;
+  description?: string | undefined;
+}
+
+const {
+  href,
+  title,
+  year,
+  byline = "Ezz Abuzaid",
+  kicker,
+  description,
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class="group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-paper-hover"
+>
+  <span class="w-10 shrink-0 text-right font-sans text-[12px] tabular text-faint">
+    {year}
+  </span>
+  <span class="flex min-w-0 flex-1 flex-col">
+    <span
+      class="truncate font-display text-[16px] font-medium leading-snug tracking-tight text-ink decoration-line underline-offset-4 group-hover:underline"
+    >
+      {title}
+    </span>
+    <span class="mt-0.5 flex items-center gap-2 font-sans text-[11px] text-faint">
+      <span class="truncate">{byline}</span>
+      {
+        kicker && (
+          <>
+            <span aria-hidden="true" class="text-line">
+              ·
+            </span>
+            <span class="whitespace-nowrap uppercase tracking-[0.12em]">
+              {kicker}
+            </span>
+          </>
+        )
+      }
+    </span>
+  </span>
+  {
+    description && (
+      <span class="hidden max-w-[34%] flex-1 truncate font-sans text-[12px] text-muted lg:block">
+        {description}
+      </span>
+    )
+  }
+  <span
+    aria-hidden="true"
+    class="shrink-0 font-sans text-[11px] text-faint transition-colors group-hover:text-ink"
+  >
+    →
+  </span>
+</a>

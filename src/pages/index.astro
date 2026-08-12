@@ -1,124 +1,63 @@
 ---
-import { Icon } from "astro-icon/components";
 import { getCollection } from "astro:content";
-import { ArrowRight } from "lucide-preact";
 
+import { Directory, type DirectoryPost } from "~/components/Directory";
 import Head from "~/components/Head.astro";
-import List from "~/components/Widgets/List.astro";
-import Timeline from "~/components/Widgets/Timeline.astro";
+import Rosette from "~/components/Rosette.astro";
 import Document from "~/layouts/Document.astro";
 import {
+  calculateReadingTime,
   filterPosts,
-  mapPostToListItem,
+  formatReadingTime,
   sortPostsByFeatured,
 } from "~/utils/content";
 
-const [posts, projects, socialLinks] = await Promise.all([
-  getCollection("posts").then((posts) =>
-    posts
-      .filter(filterPosts({ archived: false }))
-      .sort(sortPostsByFeatured)
-      .map(mapPostToListItem),
-  ),
-  getCollection("projects").then((projects) =>
-    projects
-      .sort((a, b) => b.data.date.valueOf() - a.data.date.valueOf())
-      .map(({ data }) => data),
-  ),
-  getCollection("socialLinks").then((arr) =>
-    arr.sort((a, b) => a.data.name.localeCompare(b.data.name)),
-  ),
-]);
+const posts = await getCollection("posts").then((posts) =>
+  posts
+    .filter(filterPosts({ archived: false }))
+    .sort(sortPostsByFeatured)
+    .map(
+      (post): DirectoryPost => ({
+        slug: post.slug,
+        href: `/posts/${post.slug}`,
+        title: post.data.title,
+        description: post.data.description,
+        tags: post.data.tags,
+        year: post.data.publishedAt.getFullYear(),
+        readingTime: formatReadingTime(calculateReadingTime(post.body)),
+      }),
+    ),
+);
 ---
 
 <Head />
 
 <Document>
-  <main
-    class="flex flex-col h-full mx-auto max-w-3xl px-6 lg:px-8 py-16 space-y-16 pb-24"
-  >
-    <!-- Hero - Compact but bold -->
-    <section class="space-y-6 pt-8">
-      <h1
-        class="font-[Fraunces] text-5xl sm:text-6xl font-bold tracking-tight text-gray-50 leading-[0.9]"
-      >
-        <span class="text-primary-500">Ezz</span>abuzaid
-      </h1>
-
-      <p class="font-mono text-gray-400 text-sm">
-        <span class="text-primary-500">$</span> software engineer building things
-        for the web<span class="animate-[blink_1s_step-end_infinite]">_</span>
-      </p>
-
-      <div class="flex items-center space-x-6">
-        {
-          socialLinks.map(({ data: socialLink }) => (
-            <a
-              href={socialLink.url}
-              target="_blank"
-              rel="noreferrer"
-              class="group flex items-center space-x-2 font-mono text-xs uppercase tracking-[0.1em] text-gray-400 hover:text-primary-500 default-transition"
-              title={socialLink.name}
+  <main class="flex-1">
+    <section class="border-b border-line">
+      <div class="mx-auto max-w-content px-5 py-14 sm:py-20">
+        <div
+          class="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_auto] md:gap-14"
+        >
+          <div class="max-w-letter">
+            <h1
+              class="mt-4 font-display text-5xl font-medium leading-[0.98] tracking-tight text-ink sm:text-6xl"
             >
-              <span class="text-primary-500 opacity-0 group-hover:opacity-100 default-transition">
-                ◇
-              </span>
-              <Icon class="size-4" name={socialLink.icon} />
-              <span class="hidden sm:inline">{socialLink.name}</span>
-            </a>
-          ))
-        }
+              Ezz Abuzaid
+            </h1>
+            <p class="mt-6 text-[15px] leading-relaxed text-ink">
+              I'm a tinkerer software engineer who writes to think.
+            </p>
+          </div>
+          <div class="hidden shrink-0 md:block">
+            <Rosette class="h-[168px] w-[168px] text-ink opacity-90" />
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- Writings Section - Primary content -->
-    <section class="space-y-6">
-      <div class="flex items-center justify-between">
-        <h2
-          class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-400"
-        >
-          <span class="text-primary-500 mr-2">◇</span>
-          Latest Writings
-        </h2>
-        <a
-          href="/posts"
-          class="group flex items-center space-x-2 font-mono text-xs uppercase tracking-[0.1em] text-gray-500 hover:text-primary-500 default-transition"
-        >
-          <span>View All</span>
-          <ArrowRight
-            class="w-3 h-3 group-hover:translate-x-1 default-transition"
-          />
-        </a>
-      </div>
-
-      <List id="posts" items={posts.slice(0, 8)} variant="borderless" />
-    </section>
-
-    <!-- Projects Section -->
-    <section class="space-y-6">
-      <div class="flex items-center justify-between">
-        <h2
-          class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-400"
-        >
-          <span class="text-primary-500 mr-2">◇</span>
-          Projects
-        </h2>
-        <a
-          href="/projects"
-          class="group flex items-center space-x-2 font-mono text-xs uppercase tracking-[0.1em] text-gray-500 hover:text-primary-500 default-transition"
-        >
-          <span>View All</span>
-          <ArrowRight
-            class="w-3 h-3 group-hover:translate-x-1 default-transition"
-          />
-        </a>
-      </div>
-
-      <Timeline
-        id="projects"
-        projects={projects.slice(0, 4)}
-        variant="borderless"
-      />
-    </section>
+    <div class="mx-auto max-w-content px-5 py-10">
+      <Directory client:load posts={posts} />
+    </div>
   </main>
 </Document>

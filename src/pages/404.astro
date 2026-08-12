@@ -1,9 +1,17 @@
 ---
-import { ArrowLeft } from "lucide-preact";
-
-import Footer from "~/components/Footer.astro";
 import Head from "~/components/Head.astro";
 import Document from "~/layouts/Document.astro";
+
+const helpfulLinks = [
+  { href: "/", title: "Directory", description: "Browse every entry" },
+  { href: "/tags", title: "Topics", description: "Entries grouped by subject" },
+  { href: "/projects", title: "Projects", description: "Things I've built" },
+  {
+    href: "/internet",
+    title: "Internet",
+    description: "Links and resources I've found",
+  },
+];
 ---
 
 <Head
@@ -13,99 +21,59 @@ import Document from "~/layouts/Document.astro";
 />
 
 <Document>
-  <main
-    class="flex flex-col h-full mx-auto max-w-3xl px-4 sm:px-6 lg:px-8 py-16 space-y-12 pb-8"
-  >
-    <section class="space-y-6 pt-8 z-10">
-      <p class="font-mono text-xs uppercase tracking-[0.15em] text-gray-500">
-        <span class="text-primary-500 mr-2">◇</span>
-        404
-      </p>
-
+  <main class="flex-1">
+    <article class="mx-auto max-w-letter px-5 py-12">
+      <div class="font-sans text-[11px] uppercase tracking-[0.2em] text-faint">
+        An error · 404
+      </div>
       <h1
-        class="font-[Fraunces] text-5xl sm:text-6xl font-bold tracking-tight text-gray-50 leading-[0.9]"
+        class="mt-5 font-display text-4xl font-medium leading-tight tracking-tight text-ink sm:text-5xl"
       >
         Page not found
       </h1>
-
-      <p class="text-gray-500 text-base">
-        The page you're looking for doesn't exist. Try one of these instead.
+      <p class="mt-4 text-[15px] leading-relaxed text-muted">
+        This entry doesn't exist in the directory. Try one of these instead.
       </p>
-    </section>
 
-    <section class="space-y-4 z-10">
-      <h2
-        class="flex items-center font-mono text-xs uppercase tracking-[0.15em] text-gray-400 border-b border-gray-800 pb-3"
-      >
-        <span class="text-primary-500 mr-2">◇</span>
-        Helpful Links
-      </h2>
+      <section class="mt-10">
+        <h2 class="font-sans text-xs uppercase tracking-[0.15em] text-faint">
+          Helpful links
+        </h2>
+        <div class="mt-3 divide-y divide-line border-y border-line">
+          {
+            helpfulLinks.map((link) => (
+              <a
+                href={link.href}
+                class="group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-paper-hover"
+              >
+                <span class="flex min-w-0 flex-1 flex-col">
+                  <span class="font-display text-[16px] font-medium leading-snug tracking-tight text-ink decoration-line underline-offset-4 group-hover:underline">
+                    {link.title}
+                  </span>
+                  <span class="mt-0.5 font-sans text-[11px] text-faint">
+                    {link.description}
+                  </span>
+                </span>
+                <span
+                  aria-hidden="true"
+                  class="shrink-0 font-sans text-[11px] text-faint transition-colors group-hover:text-ink"
+                >
+                  →
+                </span>
+              </a>
+            ))
+          }
+        </div>
+      </section>
 
-      <div class="space-y-0">
+      <div class="mt-12 border-t border-line pt-6">
         <a
+          class="font-sans text-sm text-muted underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
           href="/"
-          class="group block py-4 px-4 -mx-4 border-b border-gray-800 default-transition hover:bg-gray-900 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0 before:bg-primary-500 before:transition-all before:duration-200 hover:before:w-1"
         >
-          <h3
-            class="font-[Fraunces] text-base text-gray-100 group-hover:text-gray-50 default-transition"
-          >
-            Home
-          </h3>
-          <p class="text-gray-500 text-sm">Return to the main page</p>
-        </a>
-
-        <a
-          href="/posts"
-          class="group block py-4 px-4 -mx-4 border-b border-gray-800 default-transition hover:bg-gray-900 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0 before:bg-primary-500 before:transition-all before:duration-200 hover:before:w-1"
-        >
-          <h3
-            class="font-[Fraunces] text-base text-gray-100 group-hover:text-gray-50 default-transition"
-          >
-            Writings
-          </h3>
-          <p class="text-gray-500 text-sm">Read articles and tutorials</p>
-        </a>
-
-        <a
-          href="/projects"
-          class="group block py-4 px-4 -mx-4 border-b border-gray-800 default-transition hover:bg-gray-900 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0 before:bg-primary-500 before:transition-all before:duration-200 hover:before:w-1"
-        >
-          <h3
-            class="font-[Fraunces] text-base text-gray-100 group-hover:text-gray-50 default-transition"
-          >
-            Projects
-          </h3>
-          <p class="text-gray-500 text-sm">Explore my work and tools</p>
-        </a>
-
-        <a
-          href="/internet"
-          class="group block py-4 px-4 -mx-4 border-b border-gray-800 default-transition hover:bg-gray-900 relative before:absolute before:left-0 before:top-0 before:bottom-0 before:w-0 before:bg-primary-500 before:transition-all before:duration-200 hover:before:w-1"
-        >
-          <h3
-            class="font-[Fraunces] text-base text-gray-100 group-hover:text-gray-50 default-transition"
-          >
-            Internet
-          </h3>
-          <p class="text-gray-500 text-sm">Links and resources I've found</p>
+          ← Back to the directory
         </a>
       </div>
-    </section>
+    </article>
   </main>
-
-  <Footer class="max-w-3xl border-t border-gray-800">
-    <div
-      class="flex items-center justify-center mt-4 md:block md:order-1 md:mt-0"
-    >
-      <button
-        onclick="history.back()"
-class="default-focus mt-4 default-transition group inline-flex items-center justify-center space-x-2 px-3 py-1 font-mono text-xs uppercase tracking-wider text-gray-400 hover:text-primary-500 bg-gray-900 hover:bg-gray-800 border border-gray-800 hover:border-primary-500/50"
-      >
-        <ArrowLeft
-          class="w-4 h-4 default-transition transform group-hover:-translate-x-1"
-        />
-        <span>Go back</span>
-      </button>
-    </div>
-  </Footer>
 </Document>

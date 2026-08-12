@@ -1,32 +1,39 @@
 ---
-// import { getCollection } from 'astro:content';
-// import { Icon } from 'astro-icon/components';
+import { Icon } from "astro-icon/components";
+import { getCollection } from "astro:content";
 
-import { cn } from '~/utils/cn';
-
-export interface Props {
-	class?: string;
-}
-
-const { class: className } = Astro.props;
-
-// const socialLinks = await getCollection('socialLinks').then((arr) =>
-// 	// Sort the social links alphabetically by name
-// 	arr.sort((a, b) => a.data.name.localeCompare(b.data.name)),
-// );
+const socialLinks = await getCollection("socialLinks").then((links) =>
+  links.sort((a, b) => a.data.name.localeCompare(b.data.name)),
+);
+const year = new Date().getFullYear();
 ---
 
-<footer class={cn("h-full mx-auto", className)}>
-	<div class="mx-auto max-w-7xl px-6 pb-16 md:flex md:items-center md:justify-between lg:px-8">
-		<!-- <div class="flex justify-center space-x-2 md:order-2">
-			{socialLinks.map(async ({ data: socialLink }) => (
-				<a aria-label={socialLink.name} class="text-zinc-200 hover:text-gray-500 dark:hover:text-gray-100 bg-white hover:bg-gray-50 dark:bg-gray-950 dark:hover:bg-gray-900 border-2 border-white hover:border-gray-100 dark:border-gray-900 dark:hover:border-gray-800 rounded-md p-2 default-transition default-focus" href={socialLink.url} rel="noreferrer" target="_blank" title={socialLink.name}>
-					<span class="sr-only">{socialLink.name}</span>
-					<Icon class="h-5 w-5" name={socialLink.icon} />
-				</a>
-			))}
-		</div> -->
-
-		<slot />
-	</div>
+<footer class="border-t border-line">
+  <div class="mx-auto max-w-content px-5 py-10">
+    <div
+      class="flex flex-col gap-2 font-sans text-xs text-faint sm:flex-row sm:items-center sm:justify-between"
+    >
+      <span>Written by Ezz Abuzaid.</span>
+      <div class="flex items-center gap-3">
+        {
+          socialLinks.map(({ data: link }, index) => (
+            <>
+              {index > 0 && <span aria-hidden="true">·</span>}
+              <a
+                href={link.url}
+                target="_blank"
+                rel="noopener noreferrer"
+                class="inline-flex items-center gap-1.5 underline decoration-line underline-offset-4 hover:text-ink hover:decoration-ink"
+              >
+                <Icon class="size-3.5" name={link.icon} />
+                {link.name}
+              </a>
+            </>
+          ))
+        }
+        <span aria-hidden="true">·</span>
+        <span>© {year}</span>
+      </div>
+    </div>
+  </div>
 </footer>

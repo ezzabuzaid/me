@@ -1,19 +1,18 @@
 @reference "./global.css";
 
 /* ============================================================================
-   BRUTALIST EDITORIAL PROSE
-   Terminal-inspired typography with editorial flair
+   PARCHMENT PROSE
+   Sans body with serif display accents, paper cards, ink rules; mono is
+   reserved for code.
    ============================================================================ */
 
-/* Base prose - editorial with good readability */
 .prose {
-  font-size: 1.125rem;
+  font-size: 1.0625rem;
   line-height: 1.8;
-  color: var(--color-gray-300);
+  color: var(--ink);
   font-family: var(--font-sans);
 }
 
-/* Paragraph spacing and wrapping */
 .prose p {
   margin-top: 1.5em;
   margin-bottom: 1.5em;
@@ -22,58 +21,60 @@
   text-wrap: pretty;
 }
 
-/* Headings - Fraunces for editorial punch */
+/* Headings — mono caps kickers, like the entry template's section labels */
 .prose h2 {
-  font-family: var(--font-display);
-  font-size: 1.75rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
+  font-family: var(--font-sans);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.15em;
   margin-top: 3em;
   margin-bottom: 1em;
-  color: var(--color-fg);
-  position: relative;
-  padding-left: 1rem;
-  border-left: 3px solid var(--color-coral);
+  color: var(--faint);
 }
 
 .prose h3 {
   font-family: var(--font-display);
   font-size: 1.375rem;
-  font-weight: 600;
+  font-weight: 500;
   letter-spacing: -0.01em;
   margin-top: 2.5em;
   margin-bottom: 0.75em;
-  color: var(--color-fg);
+  color: var(--ink);
 }
 
 .prose h4 {
-  font-family: var(--font-display);
-  font-size: 1.125rem;
+  font-family: var(--font-sans);
+  font-size: 0.75rem;
   font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
   margin-top: 2em;
   margin-bottom: 0.5em;
-  color: var(--color-fg);
+  color: var(--muted);
 }
 
-/* Links - coral accent */
+/* Links — ink with line-colored underline that darkens on hover */
 .prose a {
-  color: var(--color-coral);
+  color: var(--ink);
   text-decoration: underline;
-  text-underline-offset: 3px;
+  text-underline-offset: 4px;
   text-decoration-thickness: 1px;
-  text-decoration-color: var(--color-coral);
-  opacity: 0.9;
-  transition: opacity 0.2s ease-out, text-decoration-thickness 0.2s ease-out;
+  text-decoration-color: var(--line);
+  transition:
+    text-decoration-color 0.2s ease-out,
+    color 0.2s ease-out;
 }
 
 .prose a:hover {
-  opacity: 1;
-  text-decoration-thickness: 2px;
+  text-decoration-color: var(--ink);
 }
 
 .prose a:focus {
   outline: none;
-  box-shadow: 0 0 0 2px var(--color-bg), 0 0 0 4px var(--color-coral);
+  box-shadow:
+    0 0 0 2px var(--canvas),
+    0 0 0 4px var(--faint);
 }
 
 /* Heading anchor links */
@@ -89,7 +90,7 @@
   opacity: 0;
   text-decoration: none;
   transition: opacity 0.2s ease-out;
-  color: var(--color-coral);
+  color: var(--faint);
 }
 
 .prose h1:hover > a,
@@ -107,10 +108,9 @@
 .prose h4 > a .icon-link:before,
 .prose h5 > a .icon-link:before,
 .prose h6 > a .icon-link:before {
-  content: "◇";
+  content: "¶";
 }
 
-/* Lists - diamond bullets */
 .prose ul,
 .prose ol {
   margin-top: 1.25em;
@@ -124,41 +124,49 @@
 }
 
 .prose ul > li::marker {
-  content: "◇ ";
-  color: var(--color-coral);
+  content: "– ";
+  color: var(--faint);
 }
 
 .prose ol > li::marker {
-  color: var(--color-coral);
-  font-family: var(--font-mono);
+  color: var(--faint);
+  font-variant-numeric: tabular-nums;
 }
 
-/* Strong text */
 .prose strong {
   font-weight: 600;
-  color: var(--color-fg);
+  color: var(--ink);
 }
 
-/* Inline code - terminal style */
+/* Inline code — paper chip */
 .prose :where(code):not(:where(pre *)) {
   font-family: var(--font-mono);
   font-size: 0.875em;
   font-weight: 500;
   padding: 0.2em 0.4em;
-  background-color: var(--color-gray-darker);
-  color: var(--color-cyan);
-  border: 1px solid var(--color-border);
+  background-color: var(--paper);
+  color: var(--ink);
+  border: 1px solid var(--line);
+  border-radius: 0.25rem;
 }
 
-/* Blockquotes - brutalist left border */
+.prose :where(code)::before,
+.prose :where(code)::after {
+  content: none;
+}
+
+/* Blockquotes — serif pull-quote, like the entry template */
 .prose blockquote:not(.callout) {
-  font-style: normal;
-  border-left-width: 3px;
-  border-left-color: var(--color-gray-dark);
+  font-family: var(--font-display);
+  font-style: italic;
+  font-size: 1.25rem;
+  line-height: 1.5;
+  border-left-width: 2px;
+  border-left-color: var(--ink);
   padding-left: 1.25em;
   margin-top: 1.5em;
   margin-bottom: 1.5em;
-  color: var(--color-gray);
+  color: var(--ink);
 }
 
 .prose blockquote p:first-of-type::before,
@@ -166,36 +174,34 @@
   content: none;
 }
 
-/* Horizontal rules - subtle divider */
 .prose hr {
   margin-top: 3em;
   margin-bottom: 3em;
   border: none;
-  border-top: 1px solid var(--color-border);
+  border-top: 1px solid var(--line);
 }
 
-/* Images - no rounded corners, sharp brutalist edges */
 .prose img {
   margin-top: 2em;
   margin-bottom: 2em;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
+  background-color: var(--paper);
 }
 
-/* Tables - terminal-inspired */
 .prose table {
   font-size: 0.875em;
   margin-top: 2em;
   margin-bottom: 2em;
   width: 100%;
-  font-family: var(--font-mono);
 }
 
 .prose th {
   font-weight: 600;
   text-align: left;
   padding: 0.75em 1em;
-  border-bottom: 2px solid var(--color-border-strong);
-  color: var(--color-fg);
+  border-bottom: 2px solid var(--ink);
+  color: var(--ink);
   text-transform: uppercase;
   letter-spacing: 0.05em;
   font-size: 0.75em;
@@ -203,17 +209,27 @@
 
 .prose td {
   padding: 0.75em 1em;
-  border-bottom: 1px solid var(--color-border);
-  color: var(--color-gray-300);
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
 }
 
 /* ============================================================================
-   CODE BLOCKS - Terminal aesthetic
+   CODE BLOCKS — paper documents
+   Dual shiki themes: light renders by default, dark kicks in via data-theme.
    ============================================================================ */
 
+/* Shiki dual themes emit tokens with only --shiki-light/--shiki-dark vars —
+   an explicit color mapping per theme is required or tokens inherit. */
+pre[data-theme*=" "],
 code[data-theme*=" "],
 code[data-theme*=" "] span {
   @apply !bg-transparent;
+  color: var(--shiki-light);
+}
+
+[data-theme="dark"] pre[data-theme*=" "],
+[data-theme="dark"] code[data-theme*=" "],
+[data-theme="dark"] code[data-theme*=" "] span {
   color: var(--shiki-dark);
 }
 
@@ -223,12 +239,16 @@ code[data-theme*=" "] span {
   line-height: 1.7;
   padding: 1.25rem 1.5rem;
   overflow-x: auto;
-  background-color: var(--color-gray-darker) !important;
-  border: 1px solid var(--color-border);
+  background-color: var(--cover) !important;
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
   font-family: var(--font-mono);
+  box-shadow: var(--shadow-paper);
 }
 
 figcaption + pre {
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
   border-top: none !important;
 }
 
@@ -239,10 +259,12 @@ figcaption + pre {
   padding: 0.75rem 1rem;
   font-weight: 500;
   font-size: 0.75rem;
-  border: 1px solid var(--color-border);
+  border: 1px solid var(--line);
   border-bottom: none;
-  background-color: var(--color-gray-800);
-  color: var(--color-gray);
+  border-top-left-radius: 0.375rem;
+  border-top-right-radius: 0.375rem;
+  background-color: var(--paper);
+  color: var(--muted);
   font-family: var(--font-mono);
   text-transform: uppercase;
   letter-spacing: 0.1em;
@@ -279,7 +301,6 @@ figcaption[data-language="rust"]::before {
   width: 1rem;
   height: 1rem;
   content: url("/lang/rust.svg");
-  filter: invert(1);
 }
 
 figcaption[data-language="astro"]::before {
@@ -290,18 +311,22 @@ figcaption[data-language="astro"]::before {
 }
 
 /* ============================================================================
-   CALLOUTS - Brutalist style
+   CALLOUTS — paper cards with aged-ink accents
    ============================================================================ */
 
 .prose blockquote.callout,
 .prose .callout {
   font-style: normal;
+  font-size: 0.9375rem;
   margin-top: 1.5rem;
   margin-bottom: 1.5rem;
-  padding: 1rem;
-  background-color: var(--color-gray-darker);
-  color: var(--color-gray-300);
-  border-left: 3px solid var(--color-gray-dark);
+  padding: 1rem 1.25rem;
+  background-color: var(--paper);
+  color: var(--muted);
+  border: 1px solid var(--line);
+  border-left: 2px solid var(--ink);
+  border-radius: 0.375rem;
+  box-shadow: var(--shadow-paper);
 }
 
 .prose blockquote.callout > h5,
@@ -311,13 +336,12 @@ figcaption[data-language="astro"]::before {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 0.75rem;
+  font-size: 0.6875rem;
   font-weight: 600;
   line-height: 1.25;
-  color: var(--color-fg);
-  font-family: var(--font-mono);
+  color: var(--ink);
   text-transform: uppercase;
-  letter-spacing: 0.1em;
+  letter-spacing: 0.15em;
 }
 
 .prose blockquote.callout > div :where(p, ul, ol):first-child,
@@ -337,50 +361,50 @@ figcaption[data-language="astro"]::before {
   content: none;
 }
 
-/* Callout variants - coral accent for most important */
+/* Callout variants — subdued hues that sit well on parchment */
 .prose blockquote.callout.note,
 .prose .callout.note {
-  border-left-color: var(--color-cyan);
+  border-left-color: #5e7b8f;
 }
 .prose blockquote.callout.note > h5,
 .prose .callout.note > h5 {
-  color: var(--color-cyan);
+  color: #5e7b8f;
 }
 
 .prose blockquote.callout.tip,
 .prose .callout.tip {
-  border-left-color: #28ca42;
+  border-left-color: #5f7d5a;
 }
 .prose blockquote.callout.tip > h5,
 .prose .callout.tip > h5 {
-  color: #28ca42;
+  color: #5f7d5a;
 }
 
 .prose blockquote.callout.important,
 .prose .callout.important {
-  border-left-color: var(--color-coral);
+  border-left-color: var(--ink);
 }
 .prose blockquote.callout.important > h5,
 .prose .callout.important > h5 {
-  color: var(--color-coral);
+  color: var(--ink);
 }
 
 .prose blockquote.callout.warning,
 .prose .callout.warning {
-  border-left-color: #ffbd2e;
+  border-left-color: #a5803a;
 }
 .prose blockquote.callout.warning > h5,
 .prose .callout.warning > h5 {
-  color: #ffbd2e;
+  color: #a5803a;
 }
 
 .prose blockquote.callout.caution,
 .prose .callout.caution {
-  border-left-color: #ff5f57;
+  border-left-color: #9c4f3f;
 }
 .prose blockquote.callout.caution > h5,
 .prose .callout.caution > h5 {
-  color: #ff5f57;
+  color: #9c4f3f;
 }
 
 /* ============================================================================
@@ -389,19 +413,31 @@ figcaption[data-language="astro"]::before {
    ============================================================================ */
 
 @keyframes crossfade-out {
-  0%, 40% { opacity: 1; }
-  50%, 100% { opacity: 0; }
+  0%,
+  40% {
+    opacity: 1;
+  }
+  50%,
+  100% {
+    opacity: 0;
+  }
 }
 
 @keyframes crossfade-in {
-  0%, 40% { opacity: 0; }
-  50%, 100% { opacity: 1; }
+  0%,
+  40% {
+    opacity: 0;
+  }
+  50%,
+  100% {
+    opacity: 1;
+  }
 }
 
 .prose .word-swap {
   position: relative;
   display: inline-block;
-  color: var(--color-coral);
+  color: var(--ink);
   font-weight: 600;
 }
 
@@ -417,23 +453,23 @@ figcaption[data-language="astro"]::before {
 
 /* Backtranslation Card */
 .prose .bt-card {
-  background: var(--color-gray-darker);
-  border: 1px solid var(--color-border);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
   padding: 1rem 1.25rem;
-  font-family: var(--font-mono);
   font-size: 0.875rem;
-  color: var(--color-gray-300);
+  color: var(--muted);
   margin: 0;
 }
 
 .prose .bt-card .hl {
-  color: var(--color-coral);
+  color: var(--ink);
   font-weight: 600;
 }
 
 .prose .bt-arrow {
   text-align: center;
-  color: var(--color-gray);
+  color: var(--faint);
   font-size: 1.25rem;
   padding: 0.5rem 0;
   margin: 0;
@@ -448,8 +484,9 @@ figcaption[data-language="astro"]::before {
 }
 
 .prose .pipeline-flow .stage {
-  background: var(--color-gray-darker);
-  border: 1px solid var(--color-border);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
   padding: 0.75rem 1rem;
   display: flex;
   align-items: baseline;
@@ -457,24 +494,23 @@ figcaption[data-language="astro"]::before {
 }
 
 .prose .pipeline-flow .stage .label {
-  font-family: var(--font-mono);
   font-size: 0.75rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
-  color: var(--color-coral);
+  color: var(--ink);
+  font-weight: 600;
   white-space: nowrap;
   min-width: 5rem;
 }
 
 .prose .pipeline-flow .stage .desc {
-  font-family: var(--font-mono);
   font-size: 0.8rem;
-  color: var(--color-gray-300);
+  color: var(--muted);
 }
 
 .prose .pipeline-flow .arrow {
   text-align: center;
-  color: var(--color-gray);
+  color: var(--faint);
   font-size: 1rem;
   padding: 0.25rem 0;
   line-height: 1;
@@ -482,25 +518,26 @@ figcaption[data-language="astro"]::before {
 
 /* Content Graph */
 .prose .content-graph {
-  background: var(--color-gray-darker);
-  border: 1px solid var(--color-border);
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 0.375rem;
   padding: 1.25rem 1.5rem;
   margin: 1.5rem 0;
   font-family: var(--font-mono);
   font-size: 0.8rem;
   line-height: 1.8;
-  color: var(--color-gray-300);
+  color: var(--muted);
   overflow-x: auto;
   white-space: pre;
 }
 
 .prose .content-graph .node {
-  color: var(--color-foreground);
+  color: var(--ink);
   font-weight: 600;
 }
 
 .prose .content-graph .edge {
-  color: var(--color-coral);
+  color: var(--faint);
 }
 
 /* Reduced motion - show both words statically */
@@ -515,6 +552,6 @@ figcaption[data-language="astro"]::before {
   }
   .prose .word-swap .from::after {
     content: " → ";
-    color: var(--color-gray);
+    color: var(--faint);
   }
 }

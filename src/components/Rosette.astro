@@ -1,0 +1,53 @@
+---
+// Engraved guilloché rosette — the site mark. Inline SVG so strokes follow
+// currentColor and the medallion follows the paper token across themes.
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+const ellipses = [
+  { n: 14, rx: 34, ry: 70, offset: 0 },
+  { n: 14, rx: 26, ry: 62, offset: 180 / 14 },
+].flatMap(({ n, rx, ry, offset }) =>
+  Array.from({ length: n }, (_, i) => ({
+    rx,
+    ry,
+    angle: (i / n) * 360 + offset,
+  })),
+);
+---
+
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 168 168"
+  class={className}
+  aria-hidden="true"
+>
+  <circle cx="84" cy="84" r="80" fill="none" stroke="currentColor" stroke-width="0.9"></circle>
+  <circle cx="84" cy="84" r="77" fill="none" stroke="currentColor" stroke-width="0.45"></circle>
+  {
+    ellipses.map(({ rx, ry, angle }) => (
+      <ellipse
+        cx="84"
+        cy="84"
+        rx={rx}
+        ry={ry}
+        fill="none"
+        stroke="currentColor"
+        stroke-width="0.5"
+        opacity="0.7"
+        transform={`rotate(${angle.toFixed(2)} 84 84)`}
+      />
+    ))
+  }
+  <circle cx="84" cy="84" r="24" class="fill-paper" stroke="currentColor" stroke-width="0.9"></circle>
+  <circle cx="84" cy="84" r="21" fill="none" stroke="currentColor" stroke-width="0.45"></circle>
+  <text
+    x="84"
+    y="93"
+    text-anchor="middle"
+    font-family="Fraunces Variable, Georgia, serif"
+    font-size="27"
+    fill="currentColor">&#182;</text>
+</svg>

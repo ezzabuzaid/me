@@ -1,4 +1,4 @@
-import { defineConfig, envField } from "astro/config";
+import { defineConfig } from "astro/config";
 
 // Astro Integrations
 import mdx from "@astrojs/mdx";
@@ -118,15 +118,6 @@ function sitemapSerialize(item: SitemapItem): SitemapItem {
 // https://astro.build/config
 export default defineConfig({
 	adapter: vercel(),
-	env: {
-		schema: {
-			DISCORD_USER_ID: envField.string({
-				access: "public",
-				context: "client",
-				optional: true,
-			}),
-		},
-	},
 
 	integrations: [
 		icon(),
@@ -142,7 +133,6 @@ export default defineConfig({
 			customPages: [
 				// Ensure important pages are included
 				`${site}/`,
-				`${site}/posts`,
 				`${site}/projects`,
 				`${site}/tags`,
 			],
@@ -157,6 +147,9 @@ export default defineConfig({
 	},
 
 	output: "static",
+	redirects: {
+		"/posts": "/",
+	},
 	site,
 
 	vite: {

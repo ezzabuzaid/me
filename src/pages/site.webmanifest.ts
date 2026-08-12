@@ -7,12 +7,12 @@ export const prerender = true;
 
 export const GET: APIRoute = () =>
 	Response.json({
-		background_color: '#ffffff',
+		background_color: '#e7e4dd',
 		description: SITE_DESCRIPTION,
 		display: 'standalone',
 		lang: 'en',
 		name: `${SITE_TITLE} ─ welcome`,
 		short_name: SITE_TITLE,
 		start_url: '/',
-		theme_color: '#ffffff',
+		theme_color: '#e7e4dd',
 	} satisfies Webmanifest);

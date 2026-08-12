@@ -18,8 +18,8 @@ export const SITE = {
 	url: "https://ezz.sh",
 	language: "en",
 	locale: "en_US",
-	themeColor: "#050505",
-	colorScheme: "dark" as const,
+	themeColor: "#e7e4dd",
+	colorScheme: "light dark" as const,
 } as const;
 
 // =============================================================================

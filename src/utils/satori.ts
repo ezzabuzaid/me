@@ -20,20 +20,34 @@ interface FontOptions {
 	lang?: string;
 }
 
-// Note: We have provided local TTF fonts here because WOFF2 fonts
-// are not supported by Vercel's OG Image API yet & the `@fontsource/inter`
-// package we use for the fonts actually loaded on the site does not
-// provide TTF fonts.
+// Note: Satori supports TTF/OTF/WOFF but not WOFF2, and the variable
+// `@fontsource-variable/fraunces` package used on the site ships WOFF2 only,
+// so static WOFF copies live here for build-time OG rendering.
 const FONTS = [
-	{ weight: 100, path: './src/assets/fonts/Inter-Thin.ttf' },
-	{ weight: 200, path: './src/assets/fonts/Inter-ExtraLight.ttf' },
-	{ weight: 300, path: './src/assets/fonts/Inter-Light.ttf' },
-	{ weight: 400, path: './src/assets/fonts/Inter-Regular.ttf' },
-	{ weight: 500, path: './src/assets/fonts/Inter-Medium.ttf' },
-	{ weight: 600, path: './src/assets/fonts/Inter-SemiBold.ttf' },
-	{ weight: 700, path: './src/assets/fonts/Inter-Bold.ttf' },
-	{ weight: 800, path: './src/assets/fonts/Inter-ExtraBold.ttf' },
-	{ weight: 900, path: './src/assets/fonts/Inter-Black.ttf' },
+	{
+		name: 'IBM Plex Sans',
+		weight: 400,
+		style: 'normal',
+		path: './src/assets/fonts/PlexSans-Regular.woff',
+	},
+	{
+		name: 'IBM Plex Sans',
+		weight: 500,
+		style: 'normal',
+		path: './src/assets/fonts/PlexSans-Medium.woff',
+	},
+	{
+		name: 'Fraunces',
+		weight: 500,
+		style: 'normal',
+		path: './src/assets/fonts/Fraunces-Medium.woff',
+	},
+	{
+		name: 'Fraunces',
+		weight: 400,
+		style: 'italic',
+		path: './src/assets/fonts/Fraunces-Italic.woff',
+	},
 ] as const;
 
 interface ImageResponseOptions {
@@ -100,9 +114,9 @@ export async function ImageResponse(
 	const {
 		fonts = FONTS.map(
 			(font): FontOptions => ({
-				name: 'Inter',
+				name: font.name,
 				data: readFileSync(path.resolve(process.cwd(), font.path)),
-				style: 'normal',
+				style: font.style,
 				weight: font.weight,
 			}),
 		),
