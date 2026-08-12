@@ -25,7 +25,7 @@ Once you have a final draft, send it to the people you interviewed and collect c
 
 ## Your audience is the domain expert
 
-Knowing what to write about looks easy until you try. The good news: your audience is already telling you. Tools like Search Console and Google Analytics point you toward what people are searching for; your job is to read the need behind the search — people ask for faster horses when what they need is a car.
+Your audience is already telling you what to write about. Tools like Search Console and Google Analytics point you toward what people are searching for; your job is to read the need behind the search -people ask for faster horses when what they need is a car-
 
 > [!NOTE]
 > Use Search Console to tune a post's keywords and to build internal links between related posts -a keyword graph-. A query performing well is not a reason to rewrite the same piece twice.
@@ -34,4 +34,4 @@ The other signal is what your domain is talking about right now. Use alerting to
 
 There are plenty of ways to generate content ideas; what matters is how relevant they are to your audience, to the product, to the team, and to you.
 
-None of the excludes the others. A post can start from your own notes, get corrected by your team, and aim at what your audience is already searching for. The only real rule is knowing whose expertise the post runs on.
+None of them excludes the others. A post can start from your own notes, get corrected by your team, and aim at what your audience is already looking for. The only real rule is knowing whose expertise the post runs on.
