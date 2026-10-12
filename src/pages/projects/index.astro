@@ -2,8 +2,10 @@
 import { getCollection } from "astro:content";
 import { format } from "date-fns";
 
+import { ArticleArtwork } from "~/components/ArticleArtwork";
 import Head from "~/components/Head.astro";
 import Document from "~/layouts/Document.astro";
+import "~/styles/directory.css";
 
 const projects = await getCollection("projects").then((projects) =>
   projects
@@ -26,83 +28,63 @@ const statusLabels = {
 />
 
 <Document>
-  <main class="flex-1">
-    <section class="border-b border-line">
-      <div class="mx-auto max-w-content px-5 py-14">
-        <div class="max-w-letter">
-          <div
-            class="font-sans text-[11px] uppercase tracking-[0.2em] text-faint"
-          >
-            A workshop · {projects.length}
-            {projects.length === 1 ? "project" : "projects"}
-          </div>
-          <h1
-            class="mt-4 font-display text-5xl font-medium leading-[0.98] tracking-tight text-ink sm:text-6xl"
-          >
-            Projects
-          </h1>
-          <p class="mt-6 text-[15px] leading-relaxed text-muted">
-            Things I've built — from ideas on paper to software in production.
-          </p>
-        </div>
-      </div>
-    </section>
+  <main class="article-directory flex-1" id="main-content" tabindex="-1">
+    <header class="collection-intro">
+      <p class="collection-kicker">
+        A workshop · {projects.length}
+        {projects.length === 1 ? "project" : "projects"}
+      </p>
+      <h1 class="collection-title">Projects</h1>
+      <p class="collection-description">
+        Things I've built — from ideas on paper to software in production.
+      </p>
+    </header>
 
-    <div class="mx-auto max-w-content px-5 py-10">
-      <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+    <div class="directory-content">
+      <div class="featured-articles">
         {
           projects.map((project) => {
             const status = statusLabels[project.status || "development"];
             const Component = project.url ? "a" : "div";
 
             return (
-              <Component
-                href={project.url}
-                target={project.url ? "_blank" : undefined}
-                rel={project.url ? "noopener noreferrer" : undefined}
-                class="group flex h-full flex-col overflow-hidden rounded-md border border-line bg-paper paper-shadow transition-colors"
-              >
-                <div class="flex flex-1 flex-col border-b border-line bg-cover p-5">
-                  <div class="font-sans text-[10px] uppercase tracking-[0.15em] text-faint">
-                    {status}
+              <article class="article-card">
+                <Component
+                  href={project.url}
+                  target={project.url ? "_blank" : undefined}
+                  rel={project.url ? "noopener noreferrer" : undefined}
+                  class="project-card-content"
+                >
+                  <div class="article-artwork">
+                    <ArticleArtwork
+                      slug={project.title}
+                      topic={project.title}
+                    />
                   </div>
-                  <h3 class="mt-4 font-display text-[22px] font-medium leading-[1.15] tracking-tight text-ink decoration-line underline-offset-4 group-hover:underline">
-                    {project.title}
-                  </h3>
+                  <span class="article-tag">{status}</span>
+                  <h2 class="article-title">{project.title}</h2>
                   {project.description && (
-                    <p class="mt-3 text-[12.5px] leading-relaxed text-muted">
-                      {project.description}
-                    </p>
+                    <p class="article-description">{project.description}</p>
                   )}
-                  <div class="mt-auto pt-4">
-                    <div class="h-px w-full bg-line" />
-                    <div class="mt-2 flex items-end justify-between gap-2 font-sans text-[11px] text-muted">
-                      <span>Ezz Abuzaid</span>
-                      <time class="tabular text-faint">
-                        {format(new Date(project.date), "yyyy")}
-                      </time>
-                    </div>
+                  <div class="project-meta">
+                    <span>Ezz Abuzaid</span>
+                    <time datetime={format(project.date, "yyyy-MM-dd")}>
+                      {format(project.date, "yyyy")}
+                    </time>
                   </div>
-                </div>
-                <div class="flex items-center justify-between gap-2 px-4 py-2.5 font-sans text-[11px]">
-                  <span class="uppercase tracking-[0.15em] text-faint">
+                  <span class="project-visit">
                     {project.url ? "Visit" : "Unreleased"}
+                    {project.url && <span aria-hidden="true"> ↗</span>}
                   </span>
-                  {project.url && (
-                    <span class="text-muted transition-colors group-hover:text-ink">
-                      ↗
-                    </span>
-                  )}
-                </div>
-              </Component>
+                </Component>
+              </article>
             );
           })
         }
       </div>
-
       {
         projects.length === 0 && (
-          <p class="py-16 text-center font-sans text-[13px] text-faint">
+          <p class="directory-empty collection-description">
             No projects yet. Check back soon.
           </p>
         )

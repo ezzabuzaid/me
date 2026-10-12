@@ -1,6 +1,7 @@
 import { ChevronDown, Grid2X2, Grid3X3, List, Search, X } from "lucide-preact";
 import { useState } from "preact/hooks";
 import { ArticleArtwork } from "./ArticleArtwork";
+import { BlogListItem } from "./BlogListItem";
 import "~/styles/directory.css";
 
 export interface DirectoryPost {
@@ -183,9 +184,13 @@ export function Directory({ posts }: { posts: DirectoryPost[] }) {
                   <span>Topic</span>
                 </div>
               )}
-              {visible.map((post) => (
-                <ArticleCard key={post.slug} post={post} />
-              ))}
+              {visible.map((post) =>
+                layout === "list" ? (
+                  <PostListItem key={post.slug} post={post} />
+                ) : (
+                  <ArticleCard key={post.slug} post={post} />
+                ),
+              )}
             </div>
             <div class="archive-bottom">
               <span role="status">
@@ -209,7 +214,26 @@ export function Directory({ posts }: { posts: DirectoryPost[] }) {
   );
 }
 
+function PostListItem({ post }: { post: DirectoryPost }) {
+  return (
+    <BlogListItem
+      href={post.href}
+      title={post.title}
+      description={post.description}
+      metadata={
+        <time dateTime={post.publishedAt}>
+          {post.publishedAt.replaceAll("-", ".")}
+        </time>
+      }
+      topic={post.tags[0] ?? "Notes"}
+    >
+      <span class="sr-only"> · {post.readingTime}</span>
+    </BlogListItem>
+  );
+}
+
 function ArticleCard({ post }: { post: DirectoryPost }) {
+  const topic = post.tags[0] ?? "Notes";
   return (
     <article class="article-card">
       <a href={post.href}>
@@ -217,17 +241,16 @@ function ArticleCard({ post }: { post: DirectoryPost }) {
           {post.image ? (
             <img src={post.image} alt="" loading="lazy" />
           ) : (
-            <ArticleArtwork slug={post.slug} topic={post.tags[0] ?? "Notes"} />
+            <ArticleArtwork slug={post.slug} topic={topic} />
           )}
         </div>
-        <span class="article-tag">{post.tags[0] ?? "Notes"}</span>
+        <span class="article-tag">{topic}</span>
         <h2 class="article-title">{post.title}</h2>
         <p class="article-description">{post.description}</p>
         <time class="article-date" dateTime={post.publishedAt}>
           {post.publishedAt.replaceAll("-", ".")}
         </time>
         <span class="sr-only"> · {post.readingTime}</span>
-        <span class="article-list-topic">{post.tags[0] ?? "Notes"}</span>
       </a>
     </article>
   );

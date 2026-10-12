@@ -1,6 +1,8 @@
 ---
+import { BlogListItem } from "~/components/BlogListItem";
 import Head from "~/components/Head.astro";
 import Document from "~/layouts/Document.astro";
+import "~/styles/directory.css";
 
 const links = [
   {
@@ -25,94 +27,48 @@ const links = [
   },
 ];
 
-const groupedLinks = links.reduce(
-  (acc, link) => {
-    const category = link.category;
-    if (!acc[category]) {
-      acc[category] = [];
-    }
-    acc[category].push(link);
-    return acc;
-  },
-  {} as Record<string, typeof links>,
-);
+const groupedLinks = Map.groupBy(links, (link) => link.category);
 ---
 
 <Head title="Internet" />
 
 <Document>
-  <main class="flex-1">
-    <article class="mx-auto max-w-letter px-5 py-12">
-      <a
-        class="font-sans text-[13px] text-muted underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
-        href="/"
-      >
+  <main class="article-directory flex-1" id="main-content" tabindex="-1">
+    <header class="collection-intro">
+      <a class="collection-back" href="/">← Back to the directory</a>
+      <p class="collection-kicker">A collection · {links.length} links</p>
+      <h1 class="collection-title">Internet</h1>
+      <p class="collection-description">
+        Links, tools, articles, and resources worth keeping from around the web.
+      </p>
+    </header>
+
+    <div class="directory-content">
+      {
+        [...groupedLinks].map(([category, categoryLinks]) => (
+          <section class="collection-group" aria-label={category}>
+            <div class="archive-toolbar">
+              <h2>{category}</h2>
+            </div>
+            <div class="view-list resource-list">
+              {categoryLinks.map((link) => (
+                <BlogListItem
+                  href={link.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={link.title}
+                  description={link.description}
+                  metadata={link.category}
+                  topic="Visit ↗"
+                />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+      <a class="collection-back collection-back-bottom" href="/">
         ← Back to the directory
       </a>
-
-      <div
-        class="mt-8 font-sans text-[11px] uppercase tracking-[0.2em] text-faint"
-      >
-        A collection · {links.length} links
-      </div>
-      <h1
-        class="mt-5 font-display text-4xl font-medium leading-tight tracking-tight text-ink sm:text-5xl"
-      >
-        Internet
-      </h1>
-      <p class="mt-4 text-[15px] leading-relaxed text-muted">
-        Links, tools, articles, and resources worth keeping from around the
-        web.
-      </p>
-
-      <div class="mt-10 flex flex-col gap-10">
-        {
-          Object.entries(groupedLinks).map(([category, categoryLinks]) => (
-            <section>
-              <h2 class="font-sans text-xs uppercase tracking-[0.15em] text-faint">
-                {category}
-              </h2>
-              <div class="mt-3 divide-y divide-line border-y border-line">
-                {categoryLinks.map((link) => (
-                  <a
-                    href={link.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    class="group flex items-center gap-4 px-4 py-3 transition-colors hover:bg-paper-hover"
-                  >
-                    <span class="flex min-w-0 flex-1 flex-col">
-                      <span class="truncate font-display text-[16px] font-medium leading-snug tracking-tight text-ink decoration-line underline-offset-4 group-hover:underline">
-                        {link.title}
-                      </span>
-                      <span
-                        class="mt-0.5 truncate font-sans text-[11px] text-faint"
-                        title={link.description}
-                      >
-                        {link.description}
-                      </span>
-                    </span>
-                    <span
-                      aria-hidden="true"
-                      class="shrink-0 font-sans text-[11px] text-faint transition-colors group-hover:text-ink"
-                    >
-                      ↗
-                    </span>
-                  </a>
-                ))}
-              </div>
-            </section>
-          ))
-        }
-      </div>
-
-      <div class="mt-12 border-t border-line pt-6">
-        <a
-          class="font-sans text-sm text-muted underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
-          href="/"
-        >
-          ← Back to the directory
-        </a>
-      </div>
-    </article>
+    </div>
   </main>
 </Document>
