@@ -1,6 +1,5 @@
 ---
 import Head from "~/components/Head.astro";
-import { SITE_TITLE } from "~/constants";
 import Document from "~/layouts/Document.astro";
 
 const links = [
@@ -39,7 +38,7 @@ const groupedLinks = links.reduce(
 );
 ---
 
-<Head title={`${SITE_TITLE} ─ internet`} />
+<Head title="Internet" />
 
 <Document>
   <main class="flex-1">

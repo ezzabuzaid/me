@@ -1,0 +1,47 @@
+@font-face {
+  font-family: "PP Neue Montreal";
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/PPNeueMontreal-Book.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  font-style: normal;
+  font-weight: 500;
+  font-display: swap;
+  src: url("/fonts/PPNeueMontreal-Medium.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url("/fonts/PPNeueMontreal-Bold.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "PP Neue Montreal";
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url("/fonts/PPNeueMontreal-Italic.otf") format("opentype");
+}
+
+@font-face {
+  font-family: "Cascadia Code";
+  font-style: normal;
+  font-weight: 200 700;
+  font-display: swap;
+  src: url("/fonts/CascadiaCode.woff2") format("woff2");
+}
+
+@font-face {
+  font-family: "Cascadia Code";
+  font-style: italic;
+  font-weight: 200 700;
+  font-display: swap;
+  src: url("/fonts/CascadiaCodeItalic.woff2") format("woff2");
+}

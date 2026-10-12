@@ -1,9 +1,9 @@
 ---
 import { getCollection } from "astro:content";
+import { format } from "date-fns";
 
 import { Directory, type DirectoryPost } from "~/components/Directory";
 import Head from "~/components/Head.astro";
-import Rosette from "~/components/Rosette.astro";
 import Document from "~/layouts/Document.astro";
 import {
   calculateReadingTime,
@@ -23,7 +23,8 @@ const posts = await getCollection("posts").then((posts) =>
         title: post.data.title,
         description: post.data.description,
         tags: post.data.tags,
-        year: post.data.publishedAt.getFullYear(),
+        publishedAt: format(post.data.publishedAt, "yyyy-MM-dd"),
+        image: post.data.image,
         readingTime: formatReadingTime(calculateReadingTime(post.body)),
       }),
     ),
@@ -33,31 +34,10 @@ const posts = await getCollection("posts").then((posts) =>
 <Head />
 
 <Document>
-  <main class="flex-1">
-    <section class="border-b border-line">
-      <div class="mx-auto max-w-content px-5 py-14 sm:py-20">
-        <div
-          class="grid items-center gap-10 md:grid-cols-[minmax(0,1fr)_auto] md:gap-14"
-        >
-          <div class="max-w-letter">
-            <h1
-              class="mt-4 font-display text-5xl font-medium leading-[0.98] tracking-tight text-ink sm:text-6xl"
-            >
-              Ezz Abuzaid
-            </h1>
-            <p class="mt-6 text-[15px] leading-relaxed text-ink">
-              I'm a tinkerer software engineer who writes to think.
-            </p>
-          </div>
-          <div class="hidden shrink-0 md:block">
-            <Rosette class="h-[168px] w-[168px] text-ink opacity-90" />
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <div class="mx-auto max-w-content px-5 py-10">
-      <Directory client:load posts={posts} />
-    </div>
+  <main id="main-content" class="flex-1" tabindex="-1">
+    <h1 class="sr-only">
+      Ezz Abuzaid — writing on software and other experiments
+    </h1>
+    <Directory client:load posts={posts} />
   </main>
 </Document>

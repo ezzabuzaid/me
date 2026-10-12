@@ -1,48 +1,64 @@
 ---
-import { getCollection } from "astro:content";
-
-const email = await getCollection("socialLinks").then(
-  (links) => links.find(({ id }) => id === "email")?.data,
-);
+import { Menu, Moon, Search, Sun } from "lucide-preact";
+const path = Astro.url.pathname;
 ---
 
-<header class="sticky top-0 z-40 border-b border-line bg-canvas/90 backdrop-blur">
-  <div class="mx-auto flex max-w-content items-center justify-between px-5 py-3.5">
-    <a class="group flex items-baseline gap-2" href="/">
-      <span class="font-display text-lg font-medium tracking-tight text-ink">
-        Ezz Abuzaid
-      </span>
-    </a>
-
-    <nav class="flex items-center gap-6 font-sans text-[12px] text-muted">
-      <a class="transition-colors hover:text-ink" href="/">Directory</a>
-      <a class="hidden transition-colors hover:text-ink sm:inline" href="/projects">
-        Projects
-      </a>
-      <a class="hidden transition-colors hover:text-ink sm:inline" href="/internet">
-        Internet
-      </a>
-      {
-        email && (
-          <a
-            href={email.url}
-            class="inline-flex items-center gap-1.5 font-sans text-muted underline decoration-line underline-offset-4 transition-colors hover:text-ink hover:decoration-ink"
-          >
-            Say hi
-            <span aria-hidden="true">→</span>
-          </a>
-        )
-      }
-      <button
-        type="button"
-        data-theme-toggle
-        class="transition-colors hover:text-ink"
-        aria-label="Toggle color theme"
-        title="Toggle color theme"
-      >
-        <span class="dark:hidden" aria-hidden="true">☾</span>
-        <span class="hidden dark:inline" aria-hidden="true">☀</span>
-      </button>
-    </nav>
-  </div>
+<header class="site-header">
+  <a class="site-brand" href="/" aria-label="Ezz Abuzaid home">
+    <span class="brand-prompt" aria-hidden="true">›_</span>
+    <span>Ezz Abuzaid</span>
+  </a>
+  <p class="site-tagline">A tinkerer who writes to think.</p>
+  <nav class="header-controls" aria-label="Main navigation">
+    <a
+      class="header-text-link"
+      href="/projects"
+      aria-current={path.startsWith("/projects") ? "page" : undefined}
+      >Projects</a
+    >
+    <a
+      class="header-text-link"
+      href="/internet"
+      aria-current={path.startsWith("/internet") ? "page" : undefined}
+      >Internet</a
+    >
+    <a class="header-icon" href="/#article-search" aria-label="Search articles"
+      ><Search size={20} strokeWidth={1.5} aria-hidden="true" /></a
+    >
+    <button
+      type="button"
+      data-theme-toggle
+      class="header-icon"
+      aria-label="Switch to dark mode"
+      aria-pressed="false"
+      title="Toggle color theme"
+    >
+      <Sun class="dark:hidden" size={21} strokeWidth={1.5} aria-hidden="true" />
+      <Moon
+        class="hidden dark:inline"
+        size={20}
+        strokeWidth={1.5}
+        aria-hidden="true"
+      />
+    </button>
+    <details class="mobile-navigation">
+      <summary class="header-icon" aria-label="Navigation menu">
+        <Menu size={20} strokeWidth={1.5} aria-hidden="true" />
+      </summary>
+      <div class="mobile-navigation-links">
+        <a href="/" aria-current={path === "/" ? "page" : undefined}>Writing</a>
+        <a
+          href="/projects"
+          aria-current={path.startsWith("/projects") ? "page" : undefined}
+          >Projects</a
+        >
+        <a
+          href="/internet"
+          aria-current={path.startsWith("/internet") ? "page" : undefined}
+          >Internet</a
+        >
+        <a href="/rss.xml">RSS feed ↗</a>
+      </div>
+    </details>
+  </nav>
 </header>

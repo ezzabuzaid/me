@@ -5,7 +5,6 @@ import Head from "~/components/Head.astro";
 import PostTags from "~/components/PostTags.astro";
 import RelatedPosts from "~/components/RelatedPosts.astro";
 import TableOfContents from "~/components/TableOfContents.astro";
-import { SITE_TITLE } from "~/constants";
 import { SITE } from "~/config/seo";
 import Document from "~/layouts/Document.astro";
 import { calculateWordCount, filterPosts } from "~/utils/content";
@@ -17,16 +16,16 @@ import type { CollectionEntry } from "astro:content";
 
 // biome-ignore lint/nursery/useExplicitType: Inferred return type
 export async function getStaticPaths() {
-	const posts = await getCollection("posts", filterPosts({ archived: true }));
+  const posts = await getCollection("posts", filterPosts({ archived: true }));
 
-	return posts.map((props) => ({
-		params: { slug: props.slug },
-		props: { ...props, allPosts: posts },
-	}));
+  return posts.map((props) => ({
+    params: { slug: props.slug },
+    props: { ...props, allPosts: posts },
+  }));
 }
 
 export type Props = CollectionEntry<"posts"> & {
-	allPosts: CollectionEntry<"posts">[];
+  allPosts: CollectionEntry<"posts">[];
 };
 
 const { render: renderPost, data: post, body, slug, allPosts } = Astro.props;
@@ -40,79 +39,71 @@ const relatedPosts = findRelatedPosts(currentPost, allPosts, 3);
 
 // Build article data for SEO
 const articleData = {
-	...post,
-	slug,
-	tags: post.tags ?? [],
-	wordCount,
+  ...post,
+  slug,
+  tags: post.tags ?? [],
+  wordCount,
 };
 
 // Breadcrumbs for structured data
 const breadcrumbs = [
-	{ name: "Home", url: SITE.url },
-	{ name: post.title, url: `${SITE.url}/posts/${slug}` },
+  { name: "Home", url: SITE.url },
+  { name: post.title, url: `${SITE.url}/posts/${slug}` },
 ];
 
 // Build Head props, conditionally including optional fields
 const headProps = {
-	title: `${post.title} ─ ${SITE_TITLE}`,
-	description: post.description,
-	publishedAt: post.publishedAt.toISOString(),
-	image: new URL(`/posts/${slug}/og.png`, Astro.site).href,
-	type: "article" as const,
-	article: articleData,
-	breadcrumbs,
-	...(post.lastModifiedAt && { modifiedAt: post.lastModifiedAt.toISOString() }),
-	...(post.tags && post.tags.length > 0 && { keywords: post.tags }),
+  title: post.title,
+  description: post.description,
+  publishedAt: post.publishedAt.toISOString(),
+  image: new URL(`/posts/${slug}/og.png`, Astro.site).href,
+  type: "article" as const,
+  article: articleData,
+  breadcrumbs,
+  ...(post.lastModifiedAt && { modifiedAt: post.lastModifiedAt.toISOString() }),
+  ...(post.tags && post.tags.length > 0 && { keywords: post.tags }),
 };
 ---
 
 <Head {...headProps} />
 
 <Document>
-	<main class="flex-1">
-		<article class="mx-auto max-w-letter px-5 py-12">
-			<h1
-				class="font-display text-4xl font-medium leading-tight tracking-tight text-ink sm:text-5xl"
-			>
-				{post.title}
-			</h1>
+  <main class="flex-1">
+    <article class="post-page">
+      <h1 class="post-title">
+        {post.title}
+      </h1>
 
-			{
-				post.canonicalUrl && (
-					<a
-						href={post.canonicalUrl}
-						target="_blank"
-						rel="noopener noreferrer"
-						class="mt-6 inline-flex items-center gap-2 rounded-md border border-ink px-4 py-2 font-sans text-sm text-ink transition-colors hover:bg-ink hover:text-paper"
-					>
-						Read the original ↗
-					</a>
-				)
-			}
+      {
+        post.canonicalUrl && (
+          <a
+            href={post.canonicalUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="mt-6 inline-flex items-center gap-2 rounded-md border border-ink px-4 py-2 font-sans text-sm text-ink transition-colors hover:bg-ink hover:text-paper"
+          >
+            Read the original ↗
+          </a>
+        )
+      }
 
-			<blockquote class="mt-10 border-l-2 border-ink pl-5">
-				<p
-					class="font-display text-2xl font-medium italic leading-snug text-ink"
-				>
-					{post.description}
-				</p>
-			</blockquote>
+      <p class="post-description">{post.description}</p>
 
-			<TableOfContents headings={headings} />
+      <TableOfContents headings={headings} />
 
-			<section class="prose mt-10 max-w-none">
-				<Content />
-			</section>
+      <section class="prose mt-10 max-w-none">
+        <Content />
+      </section>
 
-			{
-				post.tags && post.tags.length > 0 && (
-					<div class="mt-8">
-						<PostTags tags={post.tags} />
-					</div>
-				)
-			}
+      {
+        post.tags && post.tags.length > 0 && (
+          <div class="mt-8">
+            <PostTags tags={post.tags} />
+          </div>
+        )
+      }
 
-			{relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
-		</article>
-	</main>
+      {relatedPosts.length > 0 && <RelatedPosts posts={relatedPosts} />}
+    </article>
+  </main>
 </Document>

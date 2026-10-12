@@ -1,124 +1,234 @@
-import { useEffect, useRef, useState } from "preact/hooks";
+import { ChevronDown, Grid2X2, Grid3X3, List, Search, X } from "lucide-preact";
+import { useState } from "preact/hooks";
+import { ArticleArtwork } from "./ArticleArtwork";
+import "~/styles/directory.css";
 
 export interface DirectoryPost {
-	slug: string;
-	href: string;
-	title: string;
-	description: string;
-	tags: string[];
-	year: number;
-	readingTime: string;
+  slug: string;
+  href: string;
+  title: string;
+  description: string;
+  tags: string[];
+  publishedAt: string;
+  image?: string | undefined;
+  readingTime: string;
 }
 
 const PAGE_SIZE = 12;
+const layouts = [
+  { value: "list", label: "List view", Icon: List },
+  { value: "grid", label: "Grid view", Icon: Grid2X2 },
+  { value: "dense", label: "Dense view", Icon: Grid3X3 },
+] as const;
 
 export function Directory({ posts }: { posts: DirectoryPost[] }) {
-	const [limit, setLimit] = useState(PAGE_SIZE);
-	const sentinel = useRef<HTMLDivElement>(null);
+  const [tag, setTag] = useState("");
+  const [query, setQuery] = useState("");
+  const [layout, setLayout] = useState<"list" | "grid" | "dense">("list");
+  const [limit, setLimit] = useState(PAGE_SIZE);
+  const categories = [
+    ...new Set(posts.flatMap((post) => post.tags.slice(0, 1))),
+  ].sort();
+  const search = query.trim().toLocaleLowerCase();
+  const filtered = posts.filter(
+    (post) =>
+      (!tag || post.tags.includes(tag)) &&
+      (!search ||
+        `${post.title} ${post.description} ${post.tags.join(" ")}`
+          .toLocaleLowerCase()
+          .includes(search)),
+  );
+  const featured = filtered.slice(0, 6);
+  const remaining = filtered.slice(6);
+  const visible = remaining.slice(0, limit);
 
-	useEffect(() => {
-		const el = sentinel.current;
-		if (!el) return;
-		const observer = new IntersectionObserver(([entry]) => {
-			if (entry?.isIntersecting) setLimit((current) => current + PAGE_SIZE);
-		});
-		observer.observe(el);
-		return () => observer.disconnect();
-	}, []);
+  function filterBy(value: string) {
+    setTag(value);
+    setLimit(PAGE_SIZE);
+  }
 
-	const visible = posts.slice(0, limit);
+  return (
+    <div class="article-directory">
+      <aside class="directory-sidebar" aria-label="Article filters">
+        <fieldset class="desktop-filters">
+          <legend>Filter by</legend>
+          {["", ...categories].map((category) => (
+            <label class="filter-option" key={category}>
+              <input
+                type="radio"
+                name="topic"
+                value={category}
+                checked={tag === category}
+                onChange={() => filterBy(category)}
+              />
+              <span>{category || "All"}</span>
+            </label>
+          ))}
+        </fieldset>
+        <label class="mobile-filters">
+          <span>Filter by</span>
+          <select
+            value={tag}
+            onChange={(event) => filterBy(event.currentTarget.value)}
+          >
+            <option value="">All articles</option>
+            {categories.map((category) => (
+              <option key={category}>{category}</option>
+            ))}
+          </select>
+          <ChevronDown size={12} aria-hidden="true" />
+        </label>
+        <a href="/rss.xml" class="subscribe-link">
+          Subscribe via RSS <span aria-hidden="true">↗</span>
+        </a>
+        <form
+          class="directory-search"
+          role="search"
+          onSubmit={(event) => event.preventDefault()}
+        >
+          <label for="article-search" class="sr-only">
+            Search articles
+          </label>
+          <Search size={15} aria-hidden="true" />
+          <input
+            id="article-search"
+            type="search"
+            placeholder="Search articles…"
+            value={query}
+            onInput={(event) => {
+              setQuery(event.currentTarget.value);
+              setLimit(PAGE_SIZE);
+            }}
+          />
+          {query && (
+            <button
+              type="button"
+              aria-label="Clear search"
+              onClick={() => setQuery("")}
+            >
+              <X size={14} aria-hidden="true" />
+            </button>
+          )}
+        </form>
+        <nav class="directory-links" aria-label="Explore">
+          <a href="/projects">
+            Projects <span aria-hidden="true">↗</span>
+          </a>
+          <a href="/internet">
+            Around the internet <span aria-hidden="true">↗</span>
+          </a>
+        </nav>
+      </aside>
 
-	return (
-		<div>
-			<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-				{visible.map((post) => (
-					<Card key={post.slug} post={post} />
-				))}
-			</div>
+      <div class="directory-content">
+        <p class="sr-only" role="status">
+          {filtered.length} {filtered.length === 1 ? "article" : "articles"}
+          {tag ? ` tagged ${tag}` : ""}
+          {search ? ` matching ${query}` : ""}.
+        </p>
+        {featured.length > 0 ? (
+          <section class="featured-articles" aria-label="Featured articles">
+            {featured.map((post) => (
+              <ArticleCard key={post.slug} post={post} />
+            ))}
+          </section>
+        ) : (
+          <section class="directory-empty">
+            <h2>No articles found.</h2>
+            <p>Try a different topic or search term.</p>
+            <button
+              type="button"
+              class="subscribe-link"
+              onClick={() => {
+                setQuery("");
+                filterBy("");
+              }}
+            >
+              Show all articles
+            </button>
+          </section>
+        )}
 
-			<div class="mt-10 flex flex-col items-center gap-2">
-				{visible.length < posts.length && (
-					<div ref={sentinel} aria-hidden="true" class="h-px w-full" />
-				)}
-				<span class="font-sans text-[11px] text-faint">
-					showing <span class="tabular text-muted">{visible.length}</span> of{" "}
-					<span class="tabular text-muted">{posts.length}</span>
-				</span>
-			</div>
-		</div>
-	);
+        {remaining.length > 0 && (
+          <section class="article-archive" aria-labelledby="archive-heading">
+            <div class="archive-toolbar">
+              <h2 id="archive-heading">
+                More writing <span>({remaining.length})</span>
+              </h2>
+              <div
+                class="layout-options"
+                role="group"
+                aria-label="Article layout"
+              >
+                {layouts.map(({ value, label, Icon }) => (
+                  <button
+                    key={value}
+                    type="button"
+                    aria-label={label}
+                    title={label}
+                    aria-pressed={layout === value}
+                    aria-controls="article-list"
+                    onClick={() => setLayout(value)}
+                  >
+                    <Icon size={16} strokeWidth={1.5} aria-hidden="true" />
+                  </button>
+                ))}
+              </div>
+            </div>
+            <div id="article-list" class={`archive-articles view-${layout}`}>
+              {layout === "list" && (
+                <div class="archive-columns" aria-hidden="true">
+                  <span>— Date</span>
+                  <span>— Name</span>
+                  <span>Topic</span>
+                </div>
+              )}
+              {visible.map((post) => (
+                <ArticleCard key={post.slug} post={post} />
+              ))}
+            </div>
+            <div class="archive-bottom">
+              <span role="status">
+                Showing {featured.length + visible.length} of {filtered.length}{" "}
+                articles
+              </span>
+              {visible.length < remaining.length && (
+                <button
+                  type="button"
+                  class="subscribe-link"
+                  onClick={() => setLimit((value) => value + PAGE_SIZE)}
+                >
+                  Load more <span aria-hidden="true">↓</span>
+                </button>
+              )}
+            </div>
+          </section>
+        )}
+      </div>
+    </div>
+  );
 }
 
-function Card({ post }: { post: DirectoryPost }) {
-	return (
-		<a
-			href={post.href}
-			class="group flex h-full flex-col overflow-hidden rounded-md border border-line bg-paper paper-shadow transition-colors hover:border-faint"
-		>
-			<div class="relative flex flex-1 flex-col overflow-hidden border-b border-line bg-cover p-5">
-				<div class="font-sans text-[10px] uppercase tracking-[0.15em] text-faint">
-					{post.tags[0] ?? "note"}
-				</div>
-				<h3 class="mt-4 line-clamp-4 font-display text-[22px] font-medium leading-[1.15] tracking-tight text-ink decoration-line underline-offset-4 group-hover:underline">
-					{post.title}
-				</h3>
-				<p class="mt-3 line-clamp-3 text-[12.5px] leading-relaxed text-muted">
-					{post.description}
-				</p>
-				<div class="mt-auto pt-6">
-					<div class="h-px w-full bg-line" />
-					<div class="mt-2 flex items-end justify-between gap-2 font-sans text-[11px] text-muted">
-						<span class="line-clamp-1">Ezz Abuzaid</span>
-						<span class="tabular text-faint">{post.year}</span>
-					</div>
-				</div>
-				<Watermark />
-			</div>
-
-			<div class="flex items-center justify-between gap-2 px-4 py-2.5">
-				<span class="truncate font-sans text-[10px] uppercase tracking-[0.15em] text-faint">
-					{post.readingTime}
-				</span>
-				<span
-					aria-hidden="true"
-					class="shrink-0 font-sans text-[11px] text-faint transition-colors group-hover:text-ink"
-				>
-					→
-				</span>
-			</div>
-		</a>
-	);
-}
-
-function Watermark() {
-	const petals = Array.from({ length: 12 }, (_, i) => (i / 12) * 360);
-	return (
-		<svg
-			viewBox="0 0 168 168"
-			aria-hidden="true"
-			class="pointer-events-none absolute -bottom-6 -right-6 h-24 w-24 text-ink opacity-[0.06]"
-		>
-			<circle
-				cx="84"
-				cy="84"
-				r="80"
-				fill="none"
-				stroke="currentColor"
-				stroke-width="2"
-			/>
-			{petals.map((angle) => (
-				<ellipse
-					key={angle}
-					cx="84"
-					cy="84"
-					rx="28"
-					ry="72"
-					fill="none"
-					stroke="currentColor"
-					stroke-width="1.5"
-					transform={`rotate(${angle} 84 84)`}
-				/>
-			))}
-		</svg>
-	);
+function ArticleCard({ post }: { post: DirectoryPost }) {
+  return (
+    <article class="article-card">
+      <a href={post.href}>
+        <div class="article-artwork">
+          {post.image ? (
+            <img src={post.image} alt="" loading="lazy" />
+          ) : (
+            <ArticleArtwork slug={post.slug} topic={post.tags[0] ?? "Notes"} />
+          )}
+        </div>
+        <span class="article-tag">{post.tags[0] ?? "Notes"}</span>
+        <h2 class="article-title">{post.title}</h2>
+        <p class="article-description">{post.description}</p>
+        <time class="article-date" dateTime={post.publishedAt}>
+          {post.publishedAt.replaceAll("-", ".")}
+        </time>
+        <span class="sr-only"> · {post.readingTime}</span>
+        <span class="article-list-topic">{post.tags[0] ?? "Notes"}</span>
+      </a>
+    </article>
+  );
 }

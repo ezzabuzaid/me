@@ -1,34 +1,35 @@
 ---
 import { ClientRouter } from "astro:transitions";
 
-import "@fontsource-variable/fraunces";
-import "@fontsource-variable/fraunces/wght-italic.css";
-import "@fontsource/ibm-plex-mono/400.css";
-import "@fontsource/ibm-plex-mono/500.css";
-import "@fontsource/ibm-plex-mono/600.css";
-import "@fontsource/ibm-plex-sans/400.css";
-import "@fontsource/ibm-plex-sans/500.css";
-import "@fontsource/ibm-plex-sans/600.css";
-
 import Footer from "~/components/Footer.astro";
 import Navigation from "~/components/Navigation.astro";
 
+import "~/styles/fonts.css";
 import "~/styles/global.css";
 ---
 
 <!doctype html>
-<html
-  class="scroll-smooth antialiased"
-  lang="en"
->
+<html id="top" class="scroll-smooth" lang="en">
   <head>
     <slot name="head" />
     <ClientRouter />
 
     <script is:inline>
       (() => {
+        const updateToggle = (theme) => {
+          document.querySelectorAll("[data-theme-toggle]").forEach((button) => {
+            button.setAttribute("aria-pressed", String(theme === "dark"));
+            button.setAttribute(
+              "aria-label",
+              `Switch to ${theme === "dark" ? "light" : "dark"} mode`,
+            );
+          });
+        };
         const apply = () => {
-          const stored = localStorage.getItem("theme");
+          let stored;
+          try {
+            stored = localStorage.getItem("theme");
+          } catch {}
           const theme =
             stored === "dark" || stored === "light"
               ? stored
@@ -36,29 +37,34 @@ import "~/styles/global.css";
                 ? "dark"
                 : "light";
           document.documentElement.dataset.theme = theme;
+          updateToggle(theme);
         };
         apply();
         document.addEventListener("astro:after-swap", apply);
+        document.addEventListener("astro:page-load", apply);
         document.addEventListener("click", (event) => {
-          if (!event.target.closest("[data-theme-toggle]")) return;
+          if (
+            !(event.target instanceof Element) ||
+            !event.target.closest("[data-theme-toggle]")
+          )
+            return;
           const next =
             document.documentElement.dataset.theme === "dark"
               ? "light"
               : "dark";
-          localStorage.setItem("theme", next);
+          try {
+            localStorage.setItem("theme", next);
+          } catch {}
           document.documentElement.dataset.theme = next;
+          updateToggle(next);
         });
       })();
     </script>
 
-    <script
-      defer
-      src="https://assets.onedollarstats.com/stonks.js"></script>
+    <script defer src="https://assets.onedollarstats.com/stonks.js"></script>
   </head>
 
-  <body
-    class="bg-canvas font-sans text-ink flex min-h-screen flex-col"
-  >
+  <body class="bg-canvas font-mono text-ink flex min-h-screen flex-col">
     <Navigation />
     <slot />
     <Footer />

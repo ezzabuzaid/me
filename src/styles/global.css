@@ -7,90 +7,79 @@
 
 @custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
 
-/* ============================================================================
-   PARCHMENT DIRECTORY — Design System
-   Warm paper canvas, ink text, mono-first typography with a serif display face.
-   Runtime-switchable tokens: raw values live on :root and flip via data-theme.
-   ============================================================================ */
-
 :root {
-	--canvas: #e7e4dd;
-	--paper: #f7f5f0;
-	--paper-hover: #f1eee7;
-	--cover: #fcfbf7;
-	--line: #d9d4c8;
-	--ink: #1b1a17;
-	--muted: #6b665b;
-	--faint: #9c968a;
-	--shadow-paper:
-		0 1px 2px rgba(27, 26, 23, 0.04), 0 4px 16px rgba(27, 26, 23, 0.05);
+  color-scheme: light;
+  --canvas: #fff;
+  --paper: #f5f5f5;
+  --paper-hover: #eaf5df;
+  --cover: #fafafa;
+  --line: #dedede;
+  --ink: #111;
+  --muted: #555;
+  --faint: #6b6b6b;
+  --shadow-paper: none;
 }
 
 :root[data-theme="dark"] {
-	--canvas: #171613;
-	--paper: #201e1a;
-	--paper-hover: #262420;
-	--cover: #1c1a16;
-	--line: #37342d;
-	--ink: #e7e4dd;
-	--muted: #a29b8c;
-	--faint: #6f695d;
-	--shadow-paper:
-		0 1px 2px rgba(0, 0, 0, 0.2), 0 4px 16px rgba(0, 0, 0, 0.25);
+  color-scheme: dark;
+  --canvas: #111;
+  --paper: #1a1a1a;
+  --paper-hover: #203219;
+  --cover: #161616;
+  --line: #333;
+  --ink: #f5f5f5;
+  --muted: #aaa;
+  --faint: #999;
+  --shadow-paper: none;
 }
 
 @theme inline {
-	--color-canvas: var(--canvas);
-	--color-paper: var(--paper);
-	--color-paper-hover: var(--paper-hover);
-	--color-cover: var(--cover);
-	--color-line: var(--line);
-	--color-ink: var(--ink);
-	--color-muted: var(--muted);
-	--color-faint: var(--faint);
+  --color-canvas: var(--canvas);
+  --color-paper: var(--paper);
+  --color-paper-hover: var(--paper-hover);
+  --color-cover: var(--cover);
+  --color-line: var(--line);
+  --color-ink: var(--ink);
+  --color-muted: var(--muted);
+  --color-faint: var(--faint);
 }
 
 @theme {
-	/* Shell width and prose (letter) width */
-	--container-content: 1180px;
-	--container-letter: 720px;
+  /* Shell width and prose (letter) width */
+  --container-content: 1180px;
+  --container-letter: 720px;
 
-	/* Sans carries body and UI; serif is for display moments; mono is code-only */
-	--font-sans:
-		"IBM Plex Sans", -apple-system, BlinkMacSystemFont, "Segoe UI",
-		sans-serif;
-	--font-mono:
-		"IBM Plex Mono", ui-monospace, SFMono-Regular, "SF Mono", Menlo, Monaco,
-		Consolas, monospace;
-	--font-display: "Fraunces Variable", Georgia, "Times New Roman", serif;
+  /* Sans headlines, monospace labels and metadata. */
+  --font-sans: "PP Neue Montreal", sans-serif;
+  --font-mono:
+    "Cascadia Code", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas,
+    "Liberation Mono", monospace;
+  --font-display: "PP Neue Montreal", sans-serif;
 }
 
 @layer base {
-	*,
-	::after,
-	::before,
-	::backdrop,
-	::file-selector-button {
-		border-color: var(--line);
-	}
+  *,
+  ::after,
+  ::before,
+  ::backdrop,
+  ::file-selector-button {
+    border-color: var(--line);
+  }
 
-	html {
-		-webkit-font-smoothing: antialiased;
-		-moz-osx-font-smoothing: grayscale;
-		text-rendering: optimizeLegibility;
-		background-color: var(--canvas);
-	}
+  html {
+    background-color: var(--canvas);
+  }
 
-	body {
-		background-color: var(--canvas);
-		color: var(--ink);
-		font-family: var(--font-sans);
-	}
+  body {
+    background-color: var(--canvas);
+    color: var(--ink);
+    font-family: var(--font-mono);
+  }
 
-	::selection {
-		background-color: var(--ink);
-		color: var(--paper);
-	}
+  ::selection {
+    background-color: var(--ink);
+    color: var(--paper);
+  }
 }
 
 /* ============================================================================
@@ -99,27 +88,310 @@
 
 /* Soft double shadow that lifts paper off the canvas */
 @utility paper-shadow {
-	box-shadow: var(--shadow-paper);
+  box-shadow: var(--shadow-paper);
 }
 
 /* Lining, equal-width numerals for dates, years, and counts */
 @utility tabular {
-	font-variant-numeric: tabular-nums;
+  font-variant-numeric: tabular-nums;
 }
 
 @utility default-focus {
-	@apply focus:outline-none focus:border-faint;
+  @apply focus:outline-none focus:border-faint;
 }
 
 @utility default-transition {
-	@apply transition duration-200 ease-out;
+  @apply transition duration-200 ease-out;
 }
 
 @utility scrollbar-hidden {
-	-ms-overflow-style: none;
-	scrollbar-width: none;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
 
-	&::-webkit-scrollbar {
-		display: none;
-	}
+  &::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Shared publication shell */
+html {
+  scroll-padding-top: 6rem;
+}
+body {
+  min-height: 100dvh;
+  font-weight: 400;
+  line-height: normal;
+}
+:where(a, button, input, select):focus-visible {
+  outline: 2px solid #237ae2;
+  outline-offset: 5px;
+}
+button,
+select,
+label:has(input[type="radio"]) {
+  cursor: pointer;
+}
+.site-header {
+  display: grid;
+  grid-template-columns: 1fr auto 1fr;
+  align-items: center;
+  gap: 1.875rem;
+  padding: 1.5rem 1.875rem;
+  position: sticky;
+  top: 0;
+  z-index: 40;
+  background: color-mix(in srgb, var(--canvas) 94%, transparent);
+  backdrop-filter: blur(12px);
+}
+.site-brand {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+  width: fit-content;
+  font-family: var(--font-sans);
+  font-size: 24px;
+  font-weight: 400;
+  line-height: 1;
+  letter-spacing: -0.3px;
+  white-space: nowrap;
+}
+.brand-prompt {
+  font-family: var(--font-mono);
+  font-weight: 600;
+  font-size: 1.8rem;
+  letter-spacing: -0.12em;
+}
+.site-tagline {
+  font: 400 12px/1.5 var(--font-mono);
+  text-align: center;
+  white-space: nowrap;
+}
+.header-controls {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 0.6rem;
+}
+.header-text-link {
+  font: 0.6875rem var(--font-mono);
+  margin-right: 0.65rem;
+}
+.header-text-link:hover,
+.header-text-link[aria-current="page"] {
+  text-decoration: underline;
+  text-underline-offset: 5px;
+}
+.header-icon {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  transition: background 160ms;
+}
+.header-icon:hover {
+  background: var(--paper);
+}
+.site-footer {
+  display: flex;
+  flex-direction: column;
+  gap: 19px;
+  margin-top: auto;
+  padding: 60px 30px 30px;
+}
+.footer-wordmark {
+  display: block;
+  width: fit-content;
+  font-family: var(--font-sans);
+  font-size: clamp(3.5rem, 14.6vw, 20rem);
+  font-weight: 400;
+  letter-spacing: -0.075em;
+  line-height: 1.1;
+  padding-bottom: clamp(8px, 1vw, 18px);
+  white-space: nowrap;
+}
+.footer-wordmark > span {
+  font-family: var(--font-mono);
+  letter-spacing: -0.15em;
+}
+.footer-contact {
+  display: grid;
+  grid-template-columns: 1fr 4fr 2fr 1fr;
+  min-height: 7.625rem;
+  border: 1px solid var(--line);
+}
+.footer-pattern {
+  background:
+    linear-gradient(
+      to top right,
+      transparent calc(50% - 0.5px),
+      var(--line) 50%,
+      transparent calc(50% + 0.5px)
+    ),
+    linear-gradient(
+      to bottom right,
+      transparent calc(50% - 0.5px),
+      var(--line) 50%,
+      transparent calc(50% + 0.5px)
+    );
+}
+.footer-cta {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  font-family: var(--font-sans);
+  font-size: 56px;
+  font-weight: 500;
+  line-height: 62px;
+  letter-spacing: -0.88px;
+  border-inline: 1px solid var(--line);
+  min-width: 0;
+  transition: background 160ms;
+}
+.footer-cta:hover {
+  background: var(--paper-hover);
+}
+.footer-projects {
+  padding: 24px;
+  border-right: 1px solid var(--line);
+  font: 400 12px/16px var(--font-mono);
+}
+.footer-projects ul {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding-left: 16px;
+  list-style: disc;
+}
+.footer-projects a:hover {
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+.footer-bottom {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: 24px;
+  font: 400 12px/16px var(--font-mono);
+  color: var(--muted);
+}
+.footer-bottom nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+}
+.footer-bottom a:hover {
+  color: var(--ink);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+}
+@media (max-width: 1024px) {
+  .header-text-link {
+    display: none;
+  }
+  .footer-contact {
+    grid-template-columns: 1fr;
+  }
+  .footer-pattern {
+    display: none;
+  }
+  .footer-cta {
+    border-inline: 0;
+    padding: 24px;
+  }
+  .footer-projects {
+    border-right: 0;
+    border-top: 1px solid var(--line);
+  }
+  .footer-bottom {
+    gap: 12px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1024px) {
+  .site-header {
+    padding-inline: 24px;
+    gap: 20px;
+  }
+  .site-tagline {
+    font-size: 11px;
+  }
+  .site-footer {
+    padding: 60px 24px 30px;
+  }
+}
+@media (max-width: 767px) {
+  .site-header {
+    grid-template-columns: 1fr auto;
+    padding-inline: 16px;
+    gap: 16px;
+  }
+  .site-tagline {
+    display: none;
+  }
+  .site-footer {
+    padding: 40px 16px 20px;
+  }
+  .footer-wordmark {
+    font-size: 14vw;
+    padding-bottom: 6px;
+  }
+  .footer-cta {
+    min-height: 104px;
+    padding: 20px 16px;
+  }
+  .footer-projects {
+    padding: 18px 16px;
+  }
+  .footer-bottom {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0s !important;
+    animation-duration: 0s !important;
+  }
+}
+
+.mobile-navigation {
+  display: none;
+  position: relative;
+}
+.mobile-navigation summary {
+  list-style: none;
+  cursor: pointer;
+}
+.mobile-navigation summary::-webkit-details-marker {
+  display: none;
+}
+.mobile-navigation-links {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.75rem);
+  display: flex;
+  flex-direction: column;
+  min-width: 11rem;
+  padding: 0.5rem;
+  border: 1px solid var(--line);
+  background: var(--canvas);
+  font: 0.8125rem/1.5 var(--font-mono);
+}
+.mobile-navigation-links a {
+  padding: 0.75rem;
+}
+.mobile-navigation-links a:hover,
+.mobile-navigation-links a[aria-current="page"] {
+  background: var(--paper-hover);
+}
+@media (max-width: 1024px) {
+  .mobile-navigation {
+    display: block;
+  }
 }
